@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+		<title></title>
+		<style type="text/css">
+			.num {
+				margin: 10px 5px;
+			}
+			
+			.num,.next,.prev {
+				text-decoration: none;
+				color: #f00;
+				padding: 0px 8px;
+				border: 1px solid gray;
+			}
+			
+			.current:after {
+				content: '页';
+			}
+			
+			.current:before {
+				content: '第';
+			}
+		</style>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+		<script type="text/javascript">
+			function change(start, ship_id) {
+				$.post('__CONTROLLER__/change', 'start=' + start + '&ship_id=' + ship_id, function(re) {
+					if(re == 2) {
+						alert('操作失败');
+					} else {
+						$('#a' + ship_id + ' img').attr('src', '__PUBLIC__/admin/images/' + re + '.gif');
+						$('#a' + ship_id).attr('href', 'javascript:change(' + re + ',' + ship_id + ')');
+					}
+
+				});
+			}
+			$(function(){
+				$('#page').blur(function(){
+						var url = window.location.href;
+						var value = $('#page').val();
+						if(value>0){
+							$.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+								window.location.href = url;
+							});
+						}
+						
+					});
+				$("#page").keydown(function(event){
+			　　　　if(event.keyCode == 13){
+			　　　　　　var url = window.location.href;
+						var value = $('#page').val();
+						if(value>0){
+							$.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+								window.location.href = url;
+							});
+						}
+			　　　　}
+			　　});
+			});
+			
+		</script>
+	</head>
+
+	<body>
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 中台系统 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 管理员列表 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+		<a href="{:U('admin/adminuser/add')}"  class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加管理员</a>
+		</span> 
+		<span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span> 
+		</div>
+		<table class="table table-border table-bordered table-bg mt-20">
+			<tr>
+				<th>用户名</th>
+				<th>加入时间</th>
+				<th>最后登录时间</th>
+				<th>最后登录IP</th>
+				<th>用户权限列表</th>
+				<th>操作</th>
+			</tr>
+			{foreach name="list" item="v"}
+			<tr>
+				<td>{$v.user_name}</td>
+				<td>{$v.add_time|date="y-m-d H:i:s",###}</td>
+				<td>{$v.last_login|date="y-m-d H:i:s",###}</td>
+				<td>{$v.last_ip}</td>
+				<td>
+					{foreach name="v.nav_list" item="v1"}
+					{$v1.action_name} |
+					{foreach name="v1.child" item="v2"}
+					{$v2.action_name},
+					{/foreach}<br />
+					{/foreach}
+					
+				</td>
+				<td>
+					<!--<a href="{:U('admin/adminuser/priv/user_id/'.$v['user_id'])}"><img src="__PUBLIC__/admin/images/icon_priv.gif" title="分派权限"/></a>&nbsp;&nbsp;-->
+					<a href="{:U('admin/adminlog/lists/user_id/'.$v['user_id'])}"><img src="__PUBLIC__/admin/images/icon_view.gif" title="查看日志"/></a>&nbsp;&nbsp;
+					<a href="{:U('admin/adminuser/edit/user_id/'.$v['user_id'])}"><img src="__PUBLIC__/admin/images/icon_edit.gif" title="编辑"/></a>&nbsp;&nbsp;
+					<a href="{:U('admin/adminuser/delete/user_id/'.$v['user_id'])}"><img src="__PUBLIC__/admin/images/icon_drop.gif" title="移除"/></a>
+				</td>
+			</tr>
+			{/foreach}
+			<tr>
+				<td colspan="6" align="center">
+					{$show}
+				</td>
+			</tr>
+		</table>
+	</body>
+
+</html>

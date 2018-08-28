@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <style type="text/css">
+      input {
+        width: 30%;
+      }
+    </style>
+    <title></title>
+    <link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+  </head>
+    <script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+    <script type="text/javascript">
+      function back(){
+        window.history.go(-1);
+      }
+    </script>
+  <body>
+    <nav class="breadcrumb"><a href="javascript:back()">返回上一页</a> <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <form action="{:U('admin/category/saveAdd')}" enctype="multipart/form-data" method="post" style="margin-left: 2%;">
+      <table  class="table table-border table-bordered table-bg mt-20">
+        <tr>
+          <th colspan="2">后台系统 - 分类列表 - 编辑分类</th>
+        </tr>
+        <tr>
+          <td><b>分类名称</b></td>
+          <td>
+            <input type="text" name="cat_name" value="{$category_list.cat_name}"/>
+            <input type="hidden" name="cat_id" value="{$category_list.cat_id}"/>
+          </td>
+        </tr>
+        <tr>
+          <td><b>类型关键字：</b></td>
+          <td>
+            <input type="text" name="cat_desc" value="{$category_list.cat_desc}"/>
+          </td>
+        </tr>
+        <tr>
+          <td><b>类型排序：</b></td>
+          <td>
+            <input type="text" name="cat_desc" value="{$category_list.cat_desc}"/>
+          </td>
+        </tr>
+        <tr>
+          <td><b>父类ID：</b></td>
+          <td>
+            <input type="text" name="parent_id" value="{$category_list.parent_id}"/>
+          </td>
+        </tr>
+      <tr>
+        <td colspan="2"  style="padding-left: 40%; "><input type="submit" class="btn btn-success radius" value="确认编辑" /></td>
+      </tr>
+    </table>
+    </form>
+  </body>
+</html>

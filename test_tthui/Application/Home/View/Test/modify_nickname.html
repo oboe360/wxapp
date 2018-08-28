@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>设置</title>
+	<!-- <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/Test/css/api.css" /> -->
+	<link href="__PUBLIC__/Home/Test/css/ectouch.css" rel="stylesheet" type="text/css">
+  	<link rel="stylesheet" href="__PUBLIC__/Home/Test/css/common.css?v=20160520">
+<!--   	<script type="text/javascript" src="jquery-1.10.1.min.js"></script>
+	<script type="text/javascript" src="alertPopShow.js"></script> -->
+</head>
+
+<body>
+	<div id="page">
+		<header id="header">
+			<div class="header_l">
+				<a class="ico_10" onclick="back()"> 返回 </a>
+			</div>
+			<h1 id="title"></h1>
+		</header>
+	</div>
+	<div class="list_box padd1" id="list_boxs" style="margin-top:90px;">
+		<div class="iconn" style="font-size: 14px; color: #7c7c7c;">请编写昵称</div>
+		<div class="mediaa" id="mediaa">
+			<input type="text" id="nicheng" placeholder="请编写昵称" value="{$shop_info}" class="nicheng" /><em id="words">8个字符以内</em>
+		</div>
+		<button onclick="modify('{$type}');" id="btn3" class="c-btn3 bc" style="margin-top:30px;">保存</button>
+	</div>
+</body>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/api.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/masonry-docs.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/alertPopShow.js"></script>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/ghost.js"></script> -->
+<script type="text/javascript">
+	$(document).ready(function() {
+		var value = $(".nicheng").val();
+		var title = $("#title").val();
+		type = "{$type}";
+		if (type == "shopname") {
+			$("#words").remove();
+			$(".nicheng").attr("placeholder", "请输入店铺名");
+			$(".iconn").html("请输入店铺名");
+		} else if (type == "tuoke_tel") {
+			$("#words").remove();
+			$(".nicheng").attr("placeholder", "请输入手机号");
+			$(".iconn").html("请输入手机号");
+		} else if (type == "tuoke_shop_notice") {
+			$("#words").remove();
+			$(".nicheng").attr("placeholder", "请输入店铺公告");
+			$(".iconn").html("请输入店铺公告");
+		}else if (type == "tuoke_shop_img") {
+			$("#words").remove();
+			// $(".nicheng").attr("placeholder", "请上传头像");
+			$(".nicheng").hide();
+			$("#btn3").hide();
+			$("#mediaa").append('<form name="addForm" id="addForm" action="{:U('Home/Test/shop_img_upload')}"  method="post" enctype="multipart/form-data"><input type="file" enctype="multipart/form-data" name="shop_img" id="shop_img" /><button onclick="modify2();" class="c-btn3 bc" style="margin-top:30px;">保存</button></form>');
+
+			// $("#mediaa").append('<input type="file" accept="application/zip" name="shop_img" id="shop_img" />');
+			$(".iconn").html("请上传头像");
+		}
+		$(".nicheng").val(value);
+		$("#title").html(title);
+	});
+  function back(){
+    // alert('返回');
+    javascript:window.location.href='{:U('Home/Test/modify_tuoke_data')}';
+  }
+	function modify(type) {
+		if (type == "shopname") {
+			modifyNickName();
+		}else if(type == "tuoke_tel") {
+			modifyTuokeTel();
+		}else if(type == "tuoke_shop_notice") {
+			modifyTuokeShopNotice();
+		}else if(type == "tuoke_shop_img") {
+			modifyTuokeShopImg();
+		}else{
+			modifyWx();
+		}
+	}
+	function modify2() {
+		modifyTuokeShopImg();
+	}
+	function modifyNickName() {
+		var nickName = $(".nicheng").val();
+		// alert(nickName);
+		if (nickName == '') {
+			// alert('店铺名不能为空');
+			webToast("店铺名不能为空","middle",3000);
+		} else {
+			$.ajax({
+				url: '{:U('Home/Test/store_update')}',
+				type: 'post',
+				data: 　{
+					nickname: nickName
+				},  
+	             success: function(data){
+	             	// alert('修改成功22');
+	             	// window.location.reload();
+	             	webToast("修改成功","middle",3000);
+	             	window.setTimeout("window.location='{:U('Home/Test/modify_tuoke_data')}'",3000);
+	             }
+			})
+		}
+	}
+
+	function modifyWx() {
+		var wx = $(".nicheng").val();
+		if (wx == '') {
+			ghost().toast('微信号不能为空');
+		} else {
+			$.ajax({
+				url: '{:U('Home/Test/update')}',
+				method: 'post',
+				data: 　{
+					values: {
+						weixin: wx
+					}
+				}
+			}, function(ret, err) {
+				//coding...
+				if (ret) {
+					switch (ret.error) {
+						case 1:
+							ghost().toast('修改微信号成功');
+							api.execScript({
+								name: 'modify_data',
+								script: 'window.location.reload();'
+							});
+							ghost().close();
+							break;
+						case 2:
+							ghost().toast('修改微信号失败');
+							break;
+					}
+				} else {
+					ghost().toast(err.msg);
+				}
+			});
+		}
+	}
+
+
+	function modifyTuokeShopNotice() {
+		var shop_notice = $(".nicheng").val();
+		// alert(nickName);
+		if (shop_notice == '') {
+			// alert('昵称不能为空');
+			webToast("店铺公告不能为空","middle",3000);
+		} else {
+			$.ajax({
+				url: '{:U('Home/Test/store_update')}',
+				type: 'post',
+				data: 　{
+					shop_notice: shop_notice
+				},  
+	             success: function(data){
+	             	// alert('修改成功');
+	             	webToast("修改成功","middle",3000);
+	             	window.setTimeout("window.location='{:U('Home/Test/modify_tuoke_data')}'",3000);
+	             	// window.location.reload();
+	             }
+			})
+		}
+	}
+	function modifyTuokeShopImg(){
+		// var shop_notice = $(".nicheng").val();
+		// alert(nickName);
+		var form=document.getElementById("addForm");
+		// console.log(form)
+		if ($("#shop_img").is("empty")) {
+			alert('请上传图片')
+		}else{
+	    	var fd =new FormData(form);
+	        // var formData = new FormData();
+	        // formData.append("myfile", document.getElementById("shop_img").files[0]);
+			// var formData = new FormData(document.getElementById("addForm"));
+			// alert(img);
+			// $.post('{:U('Home/Test/store_update')}', {
+			// 	shop_img: 'shop_img'
+			// }, function(data){
+			// 	alert('修改成功');
+			// })
+			$.ajax({
+				url: '{:U('Home/Test/shop_img_upload')}',
+				type: "POST",  
+			    async: false,  
+			    cache: false, 
+			    processData: false,// 告诉jQuery不要去处理发送的数据
+			    contentType: false,// 告诉jQuery不要去设置Content-Type请求头
+			    data:fd,
+	             success: function(data){
+	             	// alert('修改成功');
+	             	webToast("上传成功","middle",3000);
+	             	window.setTimeout("window.location='{:U('Home/Test/modify_tuoke_data')}'",3000);
+	             	// window.location.reload();
+	             }
+			})			
+		}
+	}
+
+	// $("form[name=addForm]").submit(function(){
+	// 	var shop_notice = $(".nicheng").val();
+	// 	// alert(nickName);
+	// 	// alert($("#shop_img").val());
+	// 	// var img =  $("#shop_img").val();
+	// 	// var img = document.getElementById('shop_img').files[0];
+	// 	var formData = new FormData(document.getElementById("addForm"));
+	// 	// alert(img);
+	// 	// $.post('{:U('Home/Test/store_update')}', {
+	// 	// 	shop_img: 'shop_img'
+	// 	// }, function(data){
+	// 	// 	alert('修改成功');
+	// 	// })
+	// 	$.ajax({
+	// 		url: '{:U('Home/Test/store_update')}',
+	// 		type: "POST",  
+	// 	    async: false,  
+	// 	    cache: false, 
+	// 	    processData: false,// 告诉jQuery不要去处理发送的数据
+	// 	    contentType: false,// 告诉jQuery不要去设置Content-Type请求头
+	// 	    data: formData,
+ //             success: function(data){
+ //             	alert('修改成功');
+ //             	// window.location.reload();
+ //             }
+	// 	})
+	// })
+
+	function modifyTuokeTel() {
+		var shop_phone = $(".nicheng").val();
+		// alert(shop_phone);
+		if (shop_phone == '') {
+			// alert('手机号码不能为空');
+			webToast("手机号码不能为空","middle",3000);
+		} else {
+			$.ajax({
+				url: '{:U('Home/Test/store_update')}',
+				type: 'post',
+				data: 　{
+					shop_phone: shop_phone
+				},  
+	             success: function(data){
+	             	// alert('修改成功');
+	             	webToast("修改成功","middle",3000);
+	             	window.setTimeout("window.location='{:U('Home/Test/modify_tuoke_data')}'",3000);
+	             	// window.location.reload();
+	             }
+			})
+		}
+	}
+</script>
+
+</html>

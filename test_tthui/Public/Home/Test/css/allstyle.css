@@ -1,0 +1,140 @@
+.hd {
+	width: 45%;
+	margin: 100px auto 0;
+}
+
+/* 登录页面  s*/
+
+.dlbj {
+	background: url(../image/bg.png) no-repeat;
+	width: 100%;
+	height: 100%;
+	background-size: cover;
+}
+.inputBg {
+	height: 46px;
+	width: 94%;
+	border: none;
+	outline: none;
+	padding: 0 3%;
+	color: #333;
+	font-size: 14px;
+	border-radius: 30px;
+	background: #fff;
+	text-align: center;
+}
+
+.borderBottom {
+	padding-bottom: 4px;
+	margin-left: 5%;
+}
+.wrap {
+	padding: 0;
+	position: relative;
+}
+.loginBox {
+	margin: 0;
+}
+.loginBox .hd img {
+	margin: 0;
+	width: 100%;
+}
+.table_box dl {
+	display: table;
+	width: 88%;
+	margin: auto;
+}
+.table_box .borderBottom {
+	margin-bottom: 14px;
+	border: 0;
+}
+.c-btn3 {
+	color: #fff;
+	border: 0;
+	line-height: 40px;
+	width: 100%;
+	-webkit-box-flex: 1;
+	-webkit-user-select: none;
+	font-size: 0.9 rem;
+	background: #ffba42;
+	display: block;
+	margin: auto;
+	text-align: center;
+	border-radius: 20px;
+}
+
+.red {
+	background: #E84545;
+}
+.dengl {
+	float: left;
+	font-size: 14px;
+	color: #f2f1f1;
+	border-bottom: 1px solid #ccc;
+}
+.f6 {
+	font-size: 14px;
+	padding: 0;
+	border: none;
+	background: none;
+	float: right;
+	color: #f2f1f1;
+}
+.third_login{
+	width: 88%;
+	margin: 50px auto 0;
+/*     position: absolute;
+    bottom: -90px;
+    left: 6%; */
+}
+.other_login{
+	text-align:center;
+	margin-bottom: 30px;
+}
+.other_login .other {
+    width: 25%;
+    height: 8px;
+    border-bottom: 1px solid #fff;
+}
+.other_login .other, .other_login span {
+    display: inline-block;
+    vertical-align: middle;
+    color:#fff;
+}
+.other_login span {
+    width: 45%;
+    margin-top: 4px;
+    font-size:14px;
+}
+.wq{
+	display: flex;
+    flex-wrap: wrap;
+}
+.wq .thirds{
+	flex: 1;
+	color:#f2f1f1;
+	text-align: center;
+	font-size: 14px;
+	box-sizing: border-box;
+	height: 21px;
+    line-height: 20px;
+    overflow: hidden;
+}
+.weChat{
+	/* border-right: 1px solid #f2f1f1; */
+}
+.wq .thirds:before{
+	content: "";
+	width: 24px;
+	height: 24px;
+	background: url(../res/weChat.png) no-repeat;
+    display: inline-block;
+    background-size: cover;
+    vertical-align: middle;
+    margin-right: 6px;
+}
+.wq .thirds.QQ:before{
+	background: url(../res/QQ.png) no-repeat;
+	background-size: cover;
+}
+/* 登录页面  end*/

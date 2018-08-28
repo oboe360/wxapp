@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+		<title></title>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+	</head>
+
+	<body>
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 后台系统 <span class="c-gray en">&gt;</span> 配置管理 <span class="c-gray en">&gt;</span>  <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+		<a href="{:U('admin/config/add')}"  class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加配置信息</a>
+		</span> 
+	<!-- 	<span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span>  -->
+	</div>
+		<table class="table table-border table-bordered table-bg mt-20">
+			<tr>
+				<th>编号</th>
+				<th>中台APPID</th>
+				<th>中台APP密钥</th>
+				<th>用户在环球美淘的uid</th>
+				<th>用户的真实名字</th>
+				<th>推荐码</th>
+				<th>电话号码</th>
+				<th>添加时间</th>
+				<th>操作</th>
+			</tr>
+			{foreach name="configArr" item="v"}
+			<tr>
+				<td>{$v.id}</td>
+				<td>{$v.appid}</td>
+				<td>{$v.appkey}</td>
+				<td>{$v.buyid}</td>
+				<td>{$v.realname}</td>
+				<td>{$v.code}</td>
+				<td>{$v.tel}</td>
+				<td>
+					{$v.time|date="y-m-d h:i:s",###}
+				</td>
+				<td>
+					<a href="{:U('admin/config/add/id/'.$v['id'])}"><img src="__PUBLIC__/admin/images/icon_edit.gif" title="编辑"/></a>
+					<!-- &nbsp;|&nbsp;
+					<a href="{:U('admin/config/delete/id/'.$v['id'])}"><img src="__PUBLIC__/admin/images/icon_drop.gif" title="移除"/></a> -->
+				</td>
+			</tr>
+			{/foreach}
+		</table>
+	</body>
+</html>

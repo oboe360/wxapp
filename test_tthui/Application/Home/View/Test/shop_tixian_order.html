@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>提现信息</title>
+  <link href="__PUBLIC__/Home/Test/css/ectouch.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="__PUBLIC__/Home/Test/css/common.css?v=20160520">
+  <style>
+    .tuoke_status {
+      background: #666;
+      height: 80px;
+      position: relative;
+    }
+    .tuoke_status_record {
+      background: rgba(255, 255, 255, 0.1);
+      text-align: center;
+      margin-top: 54px;
+    }
+    .tuoke_status_record_content {
+      width: 25%;
+      display: inline-block;
+      text-align: center;
+      padding:10px 0;
+    }
+    .tuoke_menus {
+      margin-bottom: 5px;
+    }
+		.tuoke_menus_item {
+			display: inline-block;
+      width: 25%;
+      margin: 0 12%;
+      height: 2.2rem;
+      line-height: 2.2rem;
+      text-align: center;
+		}
+    .active {
+      color: #ff5340;
+      border-bottom: 0.2rem solid #ff5340;
+    }
+    .tuoke_menus_title {
+      padding:10px 10px 10px 15px;
+      border-bottom: 1px solid #dedede;
+      background: white;
+    }
+		.tuoke_no_data {
+			color: #7c7c7c;
+			margin: 20px 0;
+			text-align: center;
+		}
+		.tuoke_menus_title img{
+      width: 17px;
+			height: 14px;
+			margin-right: 8px;
+			vertical-align: middle;
+    }
+    .font_style_light_white {
+      color: #ccc;
+      font-size: 1.0em;
+    }
+		.font_style_white {
+      color: white;
+      font-size: 1.2em;
+    }
+    .font_style_black {
+      font-size: 1.2em
+    }
+    .font_large {
+      font-size: 50px;
+    }
+    .div_vertical {
+      display: inline-block;
+      background: #666;
+      width: 1px;
+      height: 28px;
+      margin: 0 4%;
+    }
+	.status {
+		width: 20%;
+		position: absolute;
+		right: 0;
+		top: 0;
+	}
+  </style>
+</head>
+<body>
+	<header id="header">
+  		<div class="header_l">
+  			<!-- <a class="ico_10" onclick="javascript :history.back(-1);" href="javascript:;"> 返回 </a> -->
+        <a class="ico_10" href="{:U('Home/Test/shop_tixian')}"> 返回 </a>
+  		</div>
+  		<h1> 提现订单 </h1>
+  	</header>
+  <div class="tuoke_status">
+    <div class="tuoke_status_record">
+        <div class="tuoke_status_record_content">
+          <p id="tuoke_fans" class="font_style_white" v-html="tuoke_fans">{$income_count.count_money}</p>
+          <p class="font_style_light_white">共有收益金额</p>
+        </div>
+        <div class="div_vertical"></div>
+        <div class="tuoke_status_record_content">
+          <p class="font_style_white">{$income_count.to_money}</p>
+          <p class="font_style_light_white">已经提现金额</p>
+        </div>
+        <div class="div_vertical"></div>
+        <div class="tuoke_status_record_content" >
+			<p class="font_style_white">{$income_count.no_money}</p>
+          	<p class="font_style_light_white">末提现金额</p>
+        </div>
+
+    </div>
+    <form method="post"  id="formid" action="{:U('Home/test/shop_tixian')}">
+		<div class="tuoke_menus font_style_black">
+	    <p class="tuoke_menus_title"><img src="__PUBLIC__/Home/Test/image/icon_Order@2x.png" >末提现收益</p>
+       {empty name="res_order"}
+				<p class="tuoke_no_data">暂无数据</p>
+			{else /}
+				<ul class="tab_content fans_lists">
+					{foreach name="res_order" item="val" key="key"}
+							<li class="tab_contentli mediaL bod" id="fans_list" v-cloak>
+								<ul class="con_list">
+									<li class="list_items" v-for="item in order_sn">
+										<div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;">
+											<div class="media_left">
+												<input type="checkbox" style="float:left; zoom:130%" onclick="onClickHander(this, '{$val.money}', '{$val.order_sn}')" name="vehicle[]" value="{$val.order_sn}" checked=checked />
+												<input type="hidden" name="type" value="tixian_order">
+												<img class="icon_name1" src="{$val.headimgurl}" alt="" />
+											</div>
+											<div class="media_right">
+												<p class="border1" style="padding-top: 12px;">昵称：<span style="color: black;font-size: 16px;font-weight: bold;">{$val.nickname}</span></p>
+												<p style="padding:10px 0;">账号：{$val.phone}</p>
+											</div>
+										</div>
+										<div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
+											<span style="color: #444444;float: left;">订单号：{$val.order_sn}</span>
+											<span style="color: #444444;float: right;">ID: {$val.buyid}</em>
+										</div>
+										<div class="media_foot">
+											<span style="color: #444444; font-size: 1.1em;float: left;">订单金额: ¥ {$val.order_money}</span>
+											<span style="color: #ff5340; font-size: 1.1em;float:right;">获利: ¥ {$val.money}</em>
+										</div>
+										<if condition="$val.is_tixian eq '0'">
+											<img class="status" src="__PUBLIC__/Home/Test/image/withdrawn.png" />
+										<else />
+											<img class="status" src="__PUBLIC__/Home/Test/image/withdraw.png" />
+										</if>
+									</li>
+								</ul>
+							</li>
+					{/foreach}
+				</ul>
+			{/empty}
+		</div>
+		<button class="c-btn3 bc1" style="position:fixed;bottom:0;left: 0;right: 0;height: 48px;border-radius: 0;" type="submit" >确定&nbsp;&nbsp; - &nbsp;&nbsp; 金额 : ( <span id="income_count">{$income_count.no_money}</span> )</button>
+  	</div>
+  	</from>
+</body>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery-1.10.1.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/alertPopShow.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/masonry-docs.min.js"></script>
+<script type="text/javascript">
+
+	function onClickHander(obj, money, order_sn){
+		if(obj.checked){
+            var in_tixian = $('#income_count').html();
+            var to_tixian = parseFloat(in_tixian) + parseFloat(money);
+            to_tixian = to_tixian.toFixed(2);
+            //console.log(to_tixian);
+            $('#income_count').html(to_tixian)
+        }else{
+            var in_tixian = $('#income_count').html();
+            var to_tixian = parseFloat(in_tixian) - parseFloat(money);
+            to_tixian = to_tixian.toFixed(2);
+            $('#income_count').html(to_tixian)
+        }
+	}
+	
+</script>
+</html>

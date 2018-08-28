@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+	<style type="text/css">
+		.num {
+        margin: 10px 5px;
+      }
+      
+      .num,.next,.prev {
+        text-decoration: none;
+        color: #f00;
+        padding: 0px 8px;
+        border: 1px solid gray;
+      }
+      
+      .current:after {
+        content: '页';
+      }
+      
+      .current:before {
+        content: '第';
+      }
+	</style>
+	<head>
+		<meta charset="UTF-8">
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+		<title></title>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+		<script type="text/javascript">
+			$(function() {
+		        $('#page').blur(function(){
+		            var url = window.location.href;
+		            var value = $('#page').val();
+		            if(value>0){
+		              $.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+		                window.location.href = url;
+		              });
+		            }
+		            
+		          });
+		        $("#page").keydown(function(event){
+		      　　　　if(event.keyCode == 13){
+		      　　　　　　var url = window.location.href;
+		            var value = $('#page').val();
+		            if(value>0){
+		              $.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+		                window.location.href = url;
+		              });
+		            }
+		      　　　　}
+		      　　});
+		        //指定key更新数据
+		        $('#ztdata').click(function(){
+			      var key = $('#key').val();
+			      var value = $('#value').val();
+			      if(value == ''){
+			        return ;
+			      }
+			      var act = '{:U('admin/goods/goodsData')}';
+			      // if(key == 'goods_key'){
+			      //   act = 'goods.php?act=goodsData';
+			      // }
+			      // if(key == 'material_key'){
+			      //   act = 'sucai.php?act=materialData';
+			      // }
+			      // if(key == 'sucaigroup_key'){
+			      //   act = 'sucaigroup.php?act=sucaiData';
+			      // }
+			      // if(key == 'class_key'){
+			      //   act = 'class.php?act=classroomData';
+			      // }
+			      update(act, key, value, 0);
+			    });
+		      });
+			//重新同步更新数据
+		  function update(act, key, value, id){
+		    $.post(act,'key='+key+'&value='+value+'&id='+id,function(msg){
+		        var data = JSON.parse(msg);
+		        if(data.code == 1){
+		          alert(data.msg);
+		          if(id != 0){
+		            location.reload();
+		          }
+		        }else{
+		          alert(data.msg);
+		        }
+		    },'text');
+		  }
+		</script>
+	</head>
+
+	<body>
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 后台系统 <span class="c-gray en">&gt;</span> 同步管理 <span class="c-gray en">&gt;</span>  <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+
+	    类型：<select name="key" id="key">
+	    <option value="goods_key">商品信息</option>
+	    <!-- <option value="material_key">素材信息</option> -->
+	    <!-- <option value="sucaigroup_key">素材分类</option> -->
+	    <!-- <option value="class_key">小课堂信息</option> -->
+	    </select>
+	    <!-- 关键字 -->
+	    中台KEY <input type="text" name="value" size="15" id="value" />&emsp;
+	    <input type="button" value="更新" class="btn btn-success radius r mr-20" id="ztdata">
+		</span> 
+		<span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span> 
+	</div>
+		<table class="table table-border table-bordered table-bg mt-20">
+			<tr>
+			  <th>编号</th>
+		      <th>表名</th>
+		      <th>错误位置</th>
+		      <th>添加时间</th>
+		      <th>操作</th>
+			</tr>
+			{foreach name="syncDataArr" item="v"}
+			<tr>
+		      <td>{$v.id}</td>
+		      <td>{$v.table_name}</td>
+		      <td>{$v.act}</td>
+		      <td>{$v.add_time}</td>
+		      <td align="center">
+		        <a href="javascript:void(0);" onclick="update('{$v.act}','{$v.key}','{$v.value}','{$v.id}')" title="重新同步">重新同步</a></td>
+		    </tr>
+			{/foreach}
+			<tr>
+	        <td colspan="20" align="right">
+	          {$show}
+	        </td>
+	      </tr>
+		</table>
+	</body>
+</html>

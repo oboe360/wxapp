@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<title>登录</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="format-detection" content="telephone=no">
+	<link href="__PUBLIC__/Home/Test/css/ectouch.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/Test//css/allstyle.css" />
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/Test//css/common.css" />
+</head>
+
+<body class="dlbj">
+	<div id="page">
+		<header id="header" style="padding:0;height: 60px;background: none;">
+			<!-- <div class="header_l">
+				<a class="fh_f" href="javascript:history.back(-1);"> 返回 </a>
+			</div> -->
+		</header>
+	</div>
+	<section class="wrap" id="wrap" style="padding-top: 1px;">
+		<div id="leftTabBox" class="loginBox">
+			<div class="hd">
+				<img src="__PUBLIC__/Home/Test/image/logo.png" alt="登录图">
+			</div>
+			<div class="bd login">
+				<ul>
+					<div class="table_box">
+						<form id="denlu" name="denlu">
+							<dl class="borderBottom">
+								<dd>
+									<input placeholder="输入手机号" onkeyup="(this.v=function(){this.value=this.value.replace(/[^\d.]/g,'');}).call(this)" name="username" type="number" class="inputBg" id="username" value="">
+								</dd>
+							</dl>
+							<dl class="borderBottom">
+								<dd>
+									<input placeholder="输入密码" id="password" name="password" type="password" class="inputBg" value="">
+								</dd>
+							</dl>
+							<dl class="borderBottom">
+								<dd>
+									<!--<input type="hidden" name="act" class="act" value="">
+										<input type="hidden" name="back_act" value="">-->
+									<input type="button" name="submit" id="login" value="登陆" style="height:46px;border-radius: 30px;" class="c-btn3" onclick="loginAccount();">
+									</input>
+								</dd>
+							</dl>
+							<dl class="borderBottom">
+								<dd>
+									<span class="dengl"> 没有账号?立即<em class="gray">注册</em> </span>
+									<a onclick="forget_password()" class="f6">忘记密码</a>
+								</dd>
+							</dl>
+						</form>
+					</div>
+				</ul>
+			</div>
+			<div class="bd register" style="display:none">
+				<ul>
+					<form>
+						<div class="table_box">
+							<dl class="borderBottom input11">
+								<dd>
+									<input placeholder="请输入手机号码" onkeyup="(this.v=function(){this.value=this.value.replace(/[^\d.]/g,'');}).call(this)" class="inputBg " name="mobile" id="mobile_phone" type="number">
+								</dd>
+							</dl>
+							<dl class="borderBottom">
+								<dd>
+									<input placeholder="请输入帐号密码" class="inputBg " name="password" id="mobile_pwd" type="password">
+								</dd>
+							</dl>
+							<dl class="borderBottom">
+		<!-- 						<dd>
+									<input type="text" id="code_input" class="inputBg" value="" placeholder="请输入验证码" style="width:60%;" />
+									<div style="width: 32%;float:right;height:46px;"><img style="height:100%;" id="yanzm" onclick="yzm()" /></div> -->
+									<!-- <div id="v_container" style="width: 32%;float:right;height:40px;"></div> -->
+								<!-- </dd> -->
+							</dl>
+							<dl class="borderBottom">
+								<dd>
+									<input type="button" name="submit" value="下一步" onClick="sendSms();" style="height:46px;border-radius: 30px;" class="c-btn3" />
+									<input type="hidden" id="flag" value="register" />
+								</dd>
+							</dl>
+							<dl class="borderBottom">
+								<dd>
+									<span class="dengl"> 已有账号?立即<em class="gray">登录</em> </span>
+								</dd>
+							</dl>
+						</div>
+					</form>
+				</ul>
+			</div>
+			<div class="bd yanzhengma" style="display:none">
+				<ul>
+					<form>
+						<div class="table_box">
+							<dl class="borderBottom">
+								<dd>
+									<input placeholder="请输入手机验证码" class="inputBg" name="mobile_code" id="mobile_code" type="text" style="width:60%;" />
+									<input id="zphone" name="sendsms" type="button" value="获取手机验证码" onClick="sendSms();"  class="c-btn3 input33" style="width: 32%;font-size: 12px;" />
+								</dd>
+								<dd></dd>
+							</dl>
+							<dl class="borderBottom">
+								<dd>
+									<input placeholder="请输入推荐号(推荐号必填)" class="inputBg " name="recommend_code" id="recommendCode" type="text">
+								</dd>
+							</dl>
+							<dl class="borderBottom">
+								<dd>
+									<a href="javascript:;" style="float:left;color: #fff;font-size:14px;"><input checked="checked" style="vertical-align: middle;margin: 0 10px 0 4px;" name="ydfwxy" id="igrai" type="checkbox"><span onclick="openWindow({name:'clause',url:'../html/clause.html'})">我已阅读并同意遵守 <em style="color: #084f8f;">服务条款</em></span></a>
+								</dd>
+							</dl>
+							<dl class="borderBottom">
+								<dd>
+									<input name="act" type="hidden" id="act" value="act_register">
+									<input name="enabled_sms" id="enabled_sms" type="hidden" value="1">
+									<input type="hidden" name="back_act" id="back_act" value="http://webapp.hqmt360.com/mobile/index.php">
+									<input name="Submit" type="button" id="submit" value="注册" style="height:46px;border-radius: 30px;" class="c-btn3" onclick="registry();">
+								</dd>
+							</dl>
+							<dl class="borderBottom">
+								<dd>
+									<span class="dengl"> 已有账号?立即<em class="gray">登录</em> </span>
+								</dd>
+							</dl>
+						</div>
+					</form>
+				</ul>
+			</div>
+			<!-- <div class="third_login">
+				<div class="other_login">
+					<div class="other"></div>
+					<span>第三方账号快速登录</span>
+					<div class="other"></div>
+				</div>
+				<div class="wq">
+					<a class="thirds weChat" href="javascript:;">微信登录</a>
+					<a class="thirds QQ" href="javascript:;">QQ登录</a>
+				</div>
+			</div> -->
+	</section>
+	<div style="width:1px; height:1px; overflow:hidden">
+		<a href="http://www.ecshop.com" target="_blank" style=" font-family:Verdana; font-size:11px;">Powered&nbsp;by&nbsp;<strong><span style="color: #3366FF">ECShop</span>&nbsp;<span style="color: #FF9966">v2.7.3</span></strong></a>&nbsp;
+	</div>
+</body>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/sms.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/common.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/user.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/utils.js"></script>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/api.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/controllermanager.js"></script>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/ghost.js"></script> -->
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/loading.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery-1.10.1.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/alertPopShow.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/gVerify.js"></script>
+<script type="text/javascript">
+	function yzm() {
+		api.ajax({
+			url: '{:U('Home/Test/ajaxyangzhengma')}',
+			cache: false
+		}, function(ret, err) {
+			if (ret) {
+				$("#yanzm").attr("src", ret.yanzheng);
+			}
+		});
+	}
+
+	function openindex(){
+
+		/*ghost('root').exec(function() {
+			api.setFrameGroupIndex({
+				name: 'homegroup',
+				index: 0,
+				reload: true
+			});
+			NVTabBar.setSelect({
+				index: 0,
+				selected: true
+			});
+		});
+		ghost().close();*/
+
+	}
+
+	jQuery(function() { /*切换登录注册页面 --gui 3-4*/
+		var action = "login";
+		if (action == "register") {
+			var header_g = $('.gray').html();
+			var h1 = $("#header h1").html();
+			$('.loginBox .register').show();
+			$('.loginBox .login').hide();
+			$("#header h1").html(header_g);
+		} else {
+			$('.hd img').show();
+		}
+		$('.dengl').click(function() {
+			//获取当前按钮的值
+			//alert(123)
+			var header_g = $(this).find('.gray').html();
+			//console.log(header_g);
+			var h1 = $("#header h1").html();
+			if (header_g == "注册") {
+				$('.loginBox .register').show();
+				$('.loginBox .login').hide();
+				$(".yanzhengma").hide();
+			} else {
+				$('.loginBox .login').show();
+				$('.loginBox .register').hide();
+				$(".yanzhengma").hide();
+			}
+			$("#header h1").html(header_g);
+		})
+	})
+</script>
+<script type="text/javascript">
+	$(document).ready(function(){
+
+		// alert(getCookie('cname'));
+		var username1 = getCookie('username');
+		var password1 = getCookie('password');
+		// var sss = 2222;
+		// $('#email').varlue = 
+		$("#username").val(username1);
+		$("#password").val(password1);
+		// $("#email1").value = sss;
+		// alert(getCookie('cname'));
+	})
+
+	function getCookie(name)
+	{
+		 var arr = document.cookie.split("; ");
+		 for(i=0;i<arr.length;i++)
+			 if (arr[i].split("=")[0] == name)
+				return unescape(arr[i].split("=")[1]);
+		 return null;
+	}
+	function setCookie(name,value) {
+	   var today = new Date();
+	   var expires = new Date();
+	   expires.setTime(today.getTime() + 1000*60*60*60*24*365);//一年超时
+	   document.cookie = name + "=" + escape(value) + "; expires=" + expires.toGMTString();
+	}
+	function loginAccount() {
+		
+		var username = $('#username').val();
+		var password = $('#password').val();
+		var back_act = $('#back_act').val();
+		var act = $('.act').val();
+		//console.log(username);
+		setCookie('username',username);
+		setCookie('password',password);
+
+		if (username.length == '') {
+			//alert(username)
+
+			// alert('请填写手机号码');
+			webToast("请填写手机号码","middle",3000);
+			return false;
+		}
+
+		if (username && /^1[2|3|4|5|6|7|8|9]\d{9}$/.test(username)) {
+			//对的
+			// alert(21)
+		} else {
+			//不对
+			// alert('请填写正确的手机号码');
+			webToast("请填写正确的手机号码","middle",3000);
+			return false;
+		}
+
+		if (password.length == '') {
+			// ghost().toast('请填写登录密码');
+			webToast("请填写登录密码","middle",3000);
+			return false;
+		}
+		if (password.length < 6) {
+			// ghost().toast('密码不能少于6个字符');
+			webToast("密码不能少于6个字符","middle",3000);
+			return false;
+		} else {
+			var reg = new RegExp("\\s");
+			var r = password.substr(1).match(reg);
+			if (r != null) {
+				// ghost().toast('密码不能有空格');
+				webToast("密码不能有空格","middle",3000);
+				return false;
+			}
+		}
+		var loginType = 'cart';
+		if (loginType == 'cart') {
+			// showLoading();
+			$.ajax({
+				url: '{:U('Home/Test/login')}',
+				method: "post",
+				dataType: "json",
+				data: {
+					"username": username,
+					"password": password
+				},success: function(data){
+             	if (data == 1) {
+					webToast("登录成功！","middle",3000);
+					// javascript:window.location.href='{:U('Home/Test/my_tuoke')}';
+					window.setTimeout("window.location='{:U('Home/Test/my_tuoke')}'",2000);
+             	}else if(data == 2){
+             		// alert('账号不存在！');
+             		webToast("账号不存在！","middle",3000);
+             	}else if(data == 3){
+             		// alert('密码不正确！');
+             		webToast("密码不正确！","middle",3000);
+             	}else if (data == 4) {
+             		window.setTimeout("window.location='{:U('Home/Test/shop_check?is_check=0')}'",800);
+             	}else if (data == 5) {
+             		window.setTimeout("window.location='{:U('Home/Test/shop_check?is_check=2')}'",800);
+             	}
+             }
+			})
+		} else {
+
+			showLoading();
+			$.ajax({
+				url: phpUrl + '/login.php?act=act_login',
+				method: "post",
+				dataType: "json",
+				data: {
+					values: {
+						"username": username,
+						"password": password
+					}
+				},
+			}, function(ret, err) {
+				if (ret) {
+					if (ret.error == 1) {
+						api.setPrefs({
+							key: 'user_id',
+							value: ret.user_id
+						});
+						ghost('root').exec("user_id=" + ret.user_id + ";api.setFrameAttr({name:'title',hidden:true});");
+						ghost('root', 'cart').exec(function() {
+							window.location.reload();
+						});
+						// api.execScript({
+						// 	name : 'root',
+						// 	frameName : 'home',
+						// 	script : "hehe();api.pageUp({top:true});api.closeFrame({name:'title'});"
+						// });
+//						alert(api.pageParam.from)
+						if (api.pageParam.from == "message_center") { //消息中心
+							ghost().win('message_center');
+						}else if(api.pageParam.from == "tuoke") { //首页拓客宝
+							ghost('root','home').exec(function() {
+								openTuoke();
+							});
+						}else {
+							ghost('root', 'mine').exec(function() {
+								hehe();
+							});
+							ghost('root').exec(function() {
+							//	alert(2)
+								api.setFrameGroupIndex({
+									name: 'homegroup',
+									index: 3
+								});
+							})
+							ghost('root', 'home').exec(function() {
+								vmm.items = [];
+								vmm.itemss = [];
+								data_con();
+								api.pageUp({
+									top: true
+								});
+							})
+
+							setTimeout(function() {
+								stopLoading();
+								ghost().closeTo('root');
+							}, 1000)
+
+						}
+
+					} else if (ret.error == 2) {
+						setTimeout(function() {
+							stopLoading();
+							ghost().toast('用户名错误');
+						}, 1000);
+					} else {
+						setTimeout(function() {
+							stopLoading();
+							ghost().toast({
+								msg: '密码错误',
+								location: 'middle'
+							});
+						}, 1000)
+					}
+				} else {
+					stopLoading();
+					ghost().toast(err.msg);
+				}
+			});
+		}
+	}
+	function sendSms(){	
+		console.log(123);
+		var mobile = $('#mobile_phone').val();
+		// alert(mobile);
+		var password = $('#mobile_pwd').val();
+		// var yanzhengma=$("#code_input").val();
+		var yanzhengma = '6666';
+		//console.log(mobile);
+		var flag = $('#flag').val();
+		if (mobile.length == '') {
+		  $(".alert-select-multiple").show();
+	      $(".alert-msg").html("请填写手机号码");	
+		  return false;
+		}
+		if (mobile && /^1[2|3|4|5|6|7|8|9]\d{9}$/.test(mobile)) {
+			//对的
+			// alert(21)
+		} else {
+			//不对
+
+			$(".alert-select-multiple").show();
+	        $(".alert-msg").html("请填写正确的手机号码");	
+			return false;
+		}
+		if (password.length == '') {
+
+			$(".alert-select-multiple").show();
+	        $(".alert-msg").html("请填写登录密码");
+			//alert('请填写登录密码');
+			return false;
+
+		}
+		if (password.length < 6) {
+
+		$(".alert-select-multiple").show();
+        $(".alert-msg").html("密码不能少于6个字符");
+		return false;
+
+		//alert("密码不能少于6个字符")
+		} else {
+			var reg = new RegExp("\\s");
+			var r = password.substr(1).match(reg);
+			if (r != null) {
+				$(".alert-select-multiple").show();
+	        	$(".alert-msg").html("密码不能有空格");
+				return false;
+
+				//alert('不能有空格');
+			}
+		}
+		// if(yanzhengma == ''){
+		// 	$(".alert-select-multiple").show();
+	 //        $(".alert-msg").html("请填写验证码");
+		// 	return;
+		// }
+		$.post("{:U('Home/Test/send')}", {"mobile": mobile,"password":password,"yanzhengma":yanzhengma,"flag":"register"},function(data){
+			if(data.code==1){
+				$(".register").hide();
+				$(".yanzhengma").show();
+				RemainTime();
+				//alert('手机验证码已经成功发送到您的手机');
+			}else if (data.code == 3){
+				yzm();
+				$("#code_input").val('');
+				// alert(data.msg);
+				webToast(data.msg,"middle",3000);
+			}else{
+				if(data.msg){
+				//RemainTime();
+					webToast(data.msg,"middle",3000);
+					// alert(data.msg);
+				}else{
+					webToast('手机验证码发送失败',"middle",3000);
+					// alert('手机验证码发送失败');
+				}
+			}
+		}, "json");
+}
+function sendSms2(){	
+	var mobile = $('#mobile_phone').val();
+	// alert(mobile);
+	var password = $('#mobile_pwd').val();
+	// var yanzhengma=$("#code_input").val();
+	var yanzhengma = '6666';
+	//console.log(mobile);
+	var flag = $('#flag').val();
+	if (mobile.length == '') {
+	  $(".alert-select-multiple").show();
+      $(".alert-msg").html("请填写手机号码");	
+	  return false;
+	}
+	if (mobile && /^1[3|4|5|7|8]\d{9}$/.test(mobile)) {
+		//对的
+		// alert(21)
+	} else {
+		//不对
+
+		$(".alert-select-multiple").show();
+        $(".alert-msg").html("请填写正确的手机号码");	
+		return false;
+	}
+	$.post("{:U('Home/Test/forget')}", {"mobile": mobile,"password":password,"yanzhengma":yanzhengma,"flag":"forget"},function(data){
+		if(data.code==1){
+			$(".register").hide();
+			$(".yanzhengma").show();
+			RemainTime();
+			//alert('手机验证码已经成功发送到您的手机');
+		}else if (data.code == 3){
+			yzm();
+			$("#code_input").val('');
+			alert(data.msg);
+			// webToast(data.msg,"middle",3000);
+		}else{
+			if(data.msg){
+			//RemainTime();
+				// webToast(data.msg,"middle",3000);
+				alert(data.msg);
+			}else{
+				// webToast('手机验证码发送失败',"middle",3000);
+				alert('手机验证码发送失败');
+			}
+		}
+	}, "json");
+}
+function register2(){
+	var status = true;
+	var mobile = $('#mobile_phone').val();
+	var mobile_pwd = $('#mobile_pwd').val();
+	var mobile_code = $('#mobile_code').val();
+	if(mobile.length == ''){
+		// alert('请填写手机号码');
+		webToast('请填写手机号码',"middle",3000);
+		return false;
+	}
+	if(mobile_pwd.length == ''){
+		// alert('请填写登录密码');
+		webToast('请填写登录密码',"middle",3000);
+		return false;
+	}
+	if(mobile_code.length == ''){
+		// alert('请填写手机验证码');
+		webToast('请填写手机验证码',"middle",3000);
+		return false;
+	}
+	// if(!$("#agreement").attr("checked")){
+	// 	alert('请阅读用户协议并同意');
+	// 	return false;
+	// }
+	$.ajax({
+		type: "POST",
+		url: "sms.php?act=check",
+		data: "mobile="+mobile+"&mobile_code="+mobile_code+"&flag=register",
+		dataType: "json",
+		async: false,
+		success: function(result){
+			if (result.code!=2){
+				alert(result.msg);
+				status = false;
+			}
+		}
+	});
+	return status;
+}
+
+function submitForget(){
+	var status = true;
+	var mobile = $('#mobile_phone').val();
+    var mobile_code = $('#mobile_code').val();
+	if(mobile.length == ''){
+		// alert('请填写手机号码');
+		webToast('请填写手机号码',"middle",3000);
+		return false;
+	}
+	if(mobile_code.length == ''){
+		// alert('请填写手机验证码');
+		webToast('请填写手机验证码',"middle",3000);
+		return false;
+	}
+	$.ajax({
+		type: "POST",
+		url: "sms.php?act=check",
+		data: "mobile="+mobile+"&mobile_code="+mobile_code,
+		dataType: "json",
+		async: false,
+		success: function(result){
+			if (result.code!=2){
+				alert(result.msg);
+				status = false;
+			}
+		}
+	});
+	return status;
+}
+		
+var iTime = 59;
+var Account;
+function RemainTime(){
+  document.getElementById('zphone').disabled = true;
+  var iSecond,sSecond="",sTime="";
+  if (iTime >= 0){
+    iSecond = parseInt(iTime%60);
+    if (iSecond >= 0){
+      sSecond = iSecond + "秒";
+    }
+    sTime=sSecond;
+    if(iTime==0){
+      clearTimeout(Account);
+      sTime='获取手机验证码';
+      iTime = 59;
+      document.getElementById('zphone').disabled = false;
+    }else{
+      Account = setTimeout("RemainTime()",1000);
+      iTime=iTime-1;
+    }
+  }else{
+    sTime='没有倒计时';
+  }
+  document.getElementById('zphone').value = sTime;
+}
+</script>
+<script>
+	function forget_password() {
+		javascript:window.location.href='{:U('Home/Test/forget_password')}';
+	}
+	function registry() {
+		//console.log(123);
+		var status = true;
+		var mobile_code = $('#mobile_code').val();
+		var mobile = $('#mobile_phone').val();
+		var password = $('#mobile_pwd').val();
+		var recommendCode = $('#recommendCode').val();
+		var act = $('#act').val();
+		var back_act = $('#back_act').val();
+		var enabled_sms = $('#enabled_sms').val();
+		var stuta = $("#igrai").attr("checked");
+		if (mobile_code.length == '') {
+			// alert('请填写手机验证码');
+			webToast("请填写手机验证码","middle",3000);
+			return false;
+		}
+		if (recommendCode.length == 0) {
+			// alert('请填写推荐码');
+			webToast("请填写推荐码","middle",3000);
+			return false;
+		}
+
+		if (recommendCode == '0') {
+			// alert('推荐号不能为0');
+			webToast("推荐号不能为0","middle",3000);
+			return false;
+		}
+
+		/*手机验证码验证功能*/
+
+		if (stuta == false) {
+
+			// alert('你还未同意条款');
+			webToast("你还未同意条款","middle",3000);
+			return false;
+
+		}
+		// showLoading();
+
+
+		$.ajax({
+			url: '{:U('Home/Test/check')}',
+			method: 'post',
+			data: {
+				// values: {
+					mobile: mobile,
+					mobile_code: mobile_code,
+					password: password,
+					recommendCode: recommendCode,
+					flag: 'register'
+				// }
+			},  
+             success: function(data){
+             	if (data == 1) {
+	             	webToast("注册成功！","middle",3000);
+	             	window.setTimeout("window.location='{:U('Home/Test/shop_check')}?is_check=0'",3000);
+	             }else if (data == 2) {
+	             	webToast("注册失败！","middle",3000);
+	             }else if (data == 3) {
+	             	webToast("上级推荐号不存在！","middle",3000);
+	             }else if (data == 4) {
+	             	webToast("手机号码已经注册！","middle",3000);
+	             	// window.setTimeout("window.location='{:U('Home/Test/zhuce')}'",2000);
+	             }else if(data == 5){
+	             	webToast("验证码不正确，请重新获取！","middle",3000);
+	             }
+             	// window.location.reload();
+             }
+		}, function(ret, err) {
+			//coding...
+			// alert(JSON.stringify(ret));
+			if (ret.code != 1) {
+				setTimeout(function() {
+					stopLoading();
+					alert(ret.msg);
+				}, 1000);
+				status = false;
+			} else {
+				$.ajax({
+					url: phpUrl + '/register.php?act=register',
+					method: "post",
+					dataType: "json",
+					data: {
+						values: {
+							"mobile": mobile,
+							"password": password,
+							"recommendCode": recommendCode,
+							"back_act": back_act,
+							"enabled_sms": enabled_sms
+						}
+					}
+				}, function(ret, err) {
+					// alert(JSON.stringify(err));
+					if (ret) {
+						if (ret.error == 1) {
+							api.setPrefs({
+								key: 'user_id',
+								value: ret.user_id
+							});
+
+							ghost('root').exec("user_id=" + ret.user_id);
+							ghost('root', 'mine').exec(function() {
+								api.setFrameGroupIndex({
+									name: 'homegroup',
+									index: 3
+								});
+								hehe();
+							});
+
+							ghost('root', 'home').exec(function() {
+								vmm.items = [];
+								vmm.itemss = [];
+								data_con();
+								api.pageUp({
+									top: true
+								});
+								api.closeFrame({
+									name: 'title'
+								});
+							})
+							setTimeout(function() {
+								stopLoading();
+								ghost().close();
+							}, 1000);
+
+
+						} else if (ret.error == 2) {
+
+							setTimeout(function() {
+								stopLoading();
+								ghost().toast('注册失败');
+							}, 1000);
+
+
+							return false;
+
+						} else if (ret.error == 3) {
+							setTimeout(function() {
+								stopLoading();
+								ghost().toast('推荐号不存在');
+							}, 1000);
+
+							return false;
+
+						} else if (ret.error == 4) {
+
+							setTimeout(function() {
+								stopLoading();
+								ghost().toast('该手机号已存在');
+							}, 1000);
+
+							return false;
+
+						}
+					}
+				});
+			}
+		});
+	}
+</script>
+
+</html>

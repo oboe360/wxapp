@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+
+		<title></title>
+		<style type="text/css">
+			.num {
+				margin: 10px 5px;
+			}
+			
+			.num,.next,.prev {
+				text-decoration: none;
+				color: #f00;
+				padding: 0px 8px;
+				border: 1px solid gray;
+			}
+			
+			.current:after {
+				content: '页';
+			}
+			
+			.current:before {
+				content: '第';
+			}
+			#form input{
+				width: 250px;
+			}
+		</style>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$('[name="income_uid"]').val('{$data.income_uid}');
+				$('[name="nickname"]').val('{$data.nickname}');
+				$('[name="start"]').val('{$data.start}');
+				$('[name="end"]').val('{$data.end}');
+				$('#page').blur(function(){
+						var url = window.location.href;
+						var value = $('#page').val();
+						if(value>0){
+							$.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+								url = url+'?'+$('#form').serialize();
+								window.location.href = url;
+							});
+						}
+						
+					});
+				$("#page").keydown(function(event){
+			　　　　if(event.keyCode == 13){
+			　　　　　　var url = window.location.href;
+						var value = $('#page').val();
+						if(value>0){
+							$.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+								url = url+'?'+$('#form').serialize();
+								window.location.href = url;
+							});
+						}
+			　　　　}
+			　　});
+			});
+
+		</script>
+	</head>
+
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 后台系统 <span class="c-gray en">&gt;</span> 订单管理 <span class="c-gray en">&gt;</span> 用户钱包流水表 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+			<div class="pd-20">
+			<form action="{:U('admin/qianbao/lists')}" id="form" method="post">
+				<input type="text" name="income_uid" placeholder="收益用户ID" class="input-text"/>
+				<input type="text" name="nickname" placeholder="收益用户名称" class="input-text"/></br></br>
+				开始：<input type="datetime-local" name="start" placeholder="开始时间" class="input-text"/>
+				结束：<input type="datetime-local" name="end" placeholder="结束时间" class="input-text"/>
+				<input type="submit" value="搜索" style="width: 100px;" class="btn btn-success radius"/>
+			</form>
+			<div class="cl pd-5 bg-1 bk-gray mt-20">
+		<span class="l">
+			<!-- &nbsp;&nbsp;&nbsp; -->
+			当前条件下用户总数为 <span style="color:red;">{$count_data.count}</span> , 全部流水总金额为 <span style="color:red;">{$count_data.money}</span> , 全部总收益为 <span style="color:red;">{$count_data.income_money}</span>
+		</span> 
+		<span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span> 
+		</div>
+			<table class="table table-border table-bordered table-bg mt-20">
+			<thead>
+			<tr>
+				<th>收益用户ID</th>
+				<th>流水总金额</th>
+				<th>收益总金额</th>
+				<th>一级佣金订单数量</th>
+				<th>二级级佣金订单数量</th>
+				<th>操作</th>
+			</tr>
+			</thead>
+			<tbody id="info">
+			{foreach name="arr" item="v"}
+			<tr>
+				<td>{$v.nickname}({$v.income_uid})</td>
+				<td>{$v.money}</td>
+				<td>{$v.income_money}</td>
+				<td>{$v.first_count}</td>
+				<td>{$v.two_count}</td>
+				<td>
+					<button class="btn btn-primary radius" onclick="member_edit('钱包流水详情','{:U('admin/qianbao/qianbaoDetail')}?income_uid={$v.income_uid}')">查看详情</button>
+				</td>
+			</tr>
+			{/foreach}
+			<tr>
+				<td colspan="20" align="center">
+					{$show}
+				</td>
+			</tr>
+			</tbody>
+		</table>
+		</div>
+	</body>
+	<script type="text/javascript" src="__PUBLIC__/static/admin/js/1.9.3/layer.js"></script>
+ 
+  <script type="text/javascript">
+    /*用户-编辑*/
+      function member_edit(title, url){
+        var index = layer.open({
+          type: 2,
+          title: title,
+          content: url
+        });
+        layer.full(index);
+      }
+  </script>
+</html>

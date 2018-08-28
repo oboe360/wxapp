@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>title</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link href="../css/ectouch.css" rel="stylesheet" type="text/css" />
+</head>
+<style>
+	.margin_top_80 {
+		margin-top: 100px;
+	}
+
+	.tuoke_info {
+		padding: 5px 15px 10px 15px;
+		background: white;
+		margin-bottom: 5px;
+	}
+
+	.tuoke_purchase {
+		display: inline-block;
+		text-align: center;
+		margin-top: 15px;
+		padding-bottom: 10px;
+	}
+
+	.tuoke_buy_info {
+		border-bottom: 1px solid #dedede;
+		padding-bottom: 8px;
+		font-size: 1.2em;
+	}
+
+	#tuoke_total_info {
+		display: none;
+		margin-top: 10px;
+		font-size: 1.2em;
+		color: #7c7c7c;
+	}
+
+	#tuoke_total {
+		color: black;
+		font-size: 1.2em;
+	}
+
+	#my_tuoke_num {
+		color: #ff5340;
+		font-size: 30px;
+		margin: 0 20px;
+	}
+
+	#tuoke_buy_num {
+		vertical-align: middle;
+		margin-left: 5px;
+		width: 55%;
+		border: 0;
+		height: 30px;
+	}
+
+	#purchase_tuoke {
+		color: #ff5340;
+		background: white;
+		display: block;
+		width: 100%;
+		height: 45px;
+		text-align: center;
+		border-radius: 0;
+		border: 0;
+		font-size: 1.2em;
+		border-bottom: 1px solid #dedede;
+	}
+
+	#purchase_tuoke img{
+		width: 17px;
+		height: 14px;
+		vertical-align: middle;
+		margin-left: -8px;
+		margin-right: 8px;
+	}
+
+	#confirm {
+		display: block;
+		margin: 20px auto 0 auto;
+		background: #ff5340;
+		color: white;
+		width: 80%;
+		height: 40px;
+		border-radius: 0;
+		border: 0;
+		font-size: 1.2em;
+	}
+
+	.font_style_black {
+		color: #2e2e2e;
+		font-size: 1.3em;
+		font-weight: normal;
+	}
+
+	.large {
+		font-size: 2.2em;
+	}
+
+	.font_style_gray {
+		color: #7c7c7c;
+		font-size: 1.2em;
+	}
+
+	.div_vertical {
+		display: inline-block;
+		width: 1px;
+		height: 30px;
+		margin: 0 50px;
+		background: #dedede;
+	}
+
+	.assign {
+		font-size: 1.3em;
+		background: #fff;
+		border: 0;
+		display: block;
+		width: 95%;
+		margin: 0 auto;
+		padding:12px 0 2px 0;
+		border-top: 1px solid #dedede;
+	}
+</style>
+
+<body>
+	<div id="page">
+		<header id="header">
+			<h1 style="text-indent: 5rem;"> 拓客宝进货仓 </h1>
+			<div class="header_r" style="margin-right: 5px;">
+				<a style="font-size: 1.4em;color: black;width:5rem;" onclick="ghost().win('tuoke_gift_record');" href="javascript:;"> 转让记录 </a>
+			</div>
+		</header>
+	</div>
+	<div class="tuoke_info margin_top_80" id="list_boxs">
+		<div class="tuoke_num"><span class="font_style_black">我的拓客宝数量:</span><span id="my_tuoke_num">0</span><span class="font_style_gray">个</span></div>
+		<div style="text-align: center;">
+			<div class="tuoke_purchase" onclick="ghost().win('tuoke_history_buy');">
+				<p id="tuoke_buy_count" class="font_style_black">0</p>
+				<p class="font_style_gray">历史进货量(个)</p>
+			</div>
+			<div class="div_vertical"></div>
+			<div class="tuoke_purchase" onclick="ghost().win('tuoke_history_income');">
+				<p id="tuoke_income" class="font_style_black">0.00</p>
+				<p class="font_style_gray">累计收益(元)</p>
+			</div>
+			<button class="assign" onclick="ghost().win({name:'tuoke_gift',url:'tuoke_gift.html',pageParam:{myInventory:myInventory}});">转让拓客宝 ></button>
+		</div>
+	</div>
+	<button id="purchase_tuoke"><img src="../image/icon_Order@2x.png" />我要进货</button>
+	<div class="tuoke_info" style="padding-top:15px;">
+		<p class="font_style_black">请输入进货数量</p>
+		<div class="tuoke_buy_info"><span class="font_style_black large">个</span><input id="tuoke_buy_num" name="tuoke_buy_num" onkeyup="(this.v=function(){this.value=this.value.replace(/[^\d.]/g,'');}).call(this)" placeholder="建议购买数量为10个以上" /></div>
+		<p id="tuoke_total_info">最高可购买<span id="tuoke_total">0</span>个,需要更多可联系上级代理</p>
+	</div>
+	<button id="confirm" onclick="buyTuoke();">确认进货</button>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/ghost.js"></script>
+<script type="text/javascript" src="../script/loading.js"></script>
+<script type="text/javascript">
+	apiready = ghostInit(function() {
+		var header = $api.dom('header');
+		var headerH = $api.fixStatusBar(header);//这里会返回整个header的高度
+		// $api.fixStatusBar($api.byId('header'));
+		$api.byId('list_boxs').style.marginTop = headerH + 10 + 'px';
+		isNoInventory = false;
+		myInventory = "";
+		api.ajax({
+			url:phpUrl+"/tk_sale.php?act=tk_sale"
+		},function(ret, err) {
+			if(ret) {
+				myInventory = ret.my_inventory;
+				document.getElementById("my_tuoke_num").innerHTML = myInventory;
+				if(ret.sum_buynum) {
+					document.getElementById("tuoke_buy_count").innerHTML = ret.sum_buynum;
+				}
+				if(ret.sum_income) {
+					document.getElementById("tuoke_income").innerHTML = ret.sum_income;
+				}
+				inventory = "";
+				if(ret.inventory) {
+					inventory = ret.inventory;
+					document.getElementById("tuoke_total_info").style.display = "block";
+					document.getElementById("tuoke_total").innerHTML = inventory;
+				}
+			}else {
+				api.toast({
+						msg: err.msg,
+						duration: 2000,
+						location: 'middle'
+				});
+			}
+		});
+	});
+
+	function buyTuoke() {
+		var num = Number(document.getElementById("tuoke_buy_num").value);
+		if(inventory && inventory >= num) {
+			isNoInventory = false;
+		}
+		var reg = /^[0-9]*[1-9][0-9]*$/;
+		if(!reg.test(num)) {
+			ghost().toast('请输入正整数');
+			return;
+		}
+		if(isNoInventory) {
+			ghost().toast('上级库存不足');
+			return;
+		}
+		showLoading();
+		api.ajax({
+		    url: phpUrl + '/tk_sale.php?act=tk_buy',
+		    method: 'post',
+		    data: {
+		      values: {
+		          num: num
+		      }
+		    }
+		},function(ret, err){
+			stopLoading();
+			if(ret) {
+				switch (ret.code) {
+					case 1:
+						var wxpay = api.require('wxPay');
+						// alert(ret.orderInfo)
+						var orderInfo = JSON.parse(ret.orderInfo);
+						wxpay.payOrder({
+							apiKey : orderInfo.appid,
+							mchId : orderInfo.partnerid,
+							nonceStr : orderInfo.noncestr,
+							orderId : orderInfo.prepayid,
+							package : orderInfo.package,
+							timeStamp : orderInfo.timestamp,
+							sign : orderInfo.sign
+						}, function(ret, err) {
+							//coding...
+							if (ret.status) {
+								showLoading();
+								setTimeout(function() {
+									stopLoading();
+									ghost().toast('支付成功');
+									setTimeout(function() {
+										window.location.reload();
+									},3000);
+									api.execScript({
+											name: 'tuoke_backstage',
+											frameName: 'my_tuoke',
+											script: 'window.location.reload();'
+									});
+									api.execScript({
+											name: 'tuoke_backstage',
+											script: 'NVTabBar.setSelect({index: 0});'
+									});
+									api.setFrameGroupIndex({
+											name: 'tuoke_backstage',
+											index: 0,
+									});
+								},1000);
+								return;
+							} else {
+								switch(err.code) {
+									case 1:
+										ghost().toast('程序错误,apiKey值非法！');
+										break;
+									case -1:
+										ghost().toast('未知错误！');
+										break;
+								}
+							}
+						});
+						break;
+					case 2:
+						isNoInventory = true;
+						ghost().toast(ret.msg);
+					default:
+						ghost().toast(ret.msg);
+						break;
+
+				}
+		  }else {
+		    ghost().toast(err.msg);
+		  }
+		});
+	}
+</script>
+</html>

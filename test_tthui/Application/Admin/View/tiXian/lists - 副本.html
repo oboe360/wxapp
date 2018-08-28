@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <title></title>
+    <style type="text/css">
+      .num {
+        margin: 10px 5px;
+      }
+      
+      .num,.next,.prev {
+        text-decoration: none;
+        color: #f00;
+        padding: 0px 8px;
+        border: 1px solid gray;
+      }
+      
+      .current:after {
+        content: '页';
+      }
+      
+      .current:before {
+        content: '第';
+      }
+      #imgModal{
+        position: relative;
+        margin-left: 250px;
+        margin-top: -300px;
+        width: 500px;
+        height: 500px;
+        overflow: hidden;
+      }
+      #close{
+        cursor:pointer;
+        position: absolute;
+        padding: 10px;
+        right: 0;
+        top: 0;
+        font-size: 20px;
+      }
+    </style>
+    <script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+    <script src="__PUBLIC__/static/admin/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        //二维码图片popover浮层
+        $("[data-toggle='popover']").popover();
+        $('[name="all_order_sn"]').val('{$data.all_order_sn}');
+        $('[name="uid"]').val('{$data.uid}');
+        $('[name="start"]').val('{$data.start}');
+        $('[name="end"]').val('{$data.end}');
+        $('#a{$data.status}').attr('selected','selected');
+        $('#page').blur(function(){
+            var url = window.location.href;
+            var value = $('#page').val();
+            if(value>0){
+              $.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+                url = url+'?'+$('#form').serialize();
+                window.location.href = url;
+              });
+            }
+            
+          });
+        $("#page").keydown(function(event){
+      　　　　if(event.keyCode == 13){
+      　　　　　　var url = window.location.href;
+            var value = $('#page').val();
+            if(value>0){
+              $.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+                url = url+'?'+$('#form').serialize();
+                window.location.href = url;
+              });
+            }
+      　　　　}
+      　　});
+      });
+
+    </script>
+  </head>
+
+  <body>
+  <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 后台系统 <span class="c-gray en">&gt;</span> 订单管理 <span class="c-gray en">&gt;</span> 提现列表 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+  <br/>
+      <form action="{:U('admin/tixian/lists')}" id="form" method="post">
+        订单状态：<select name="status" id="status">
+                    <option value="0" id="a0">全部</option>
+                    <option value="1" id="a1">未审核</option>
+                    <option value="2" id="a2">已审核</option>
+                  </select>
+        <input type="text" name="all_order_sn" placeholder="平台订单号"/>
+        <input type="text" name="uid" placeholder="收款用户ID"/>
+        开始：<input type="date" name="start" placeholder="开始时间"/>
+        结束：<input type="date" name="end" placeholder="结束时间"/>
+        <input type="submit" value="搜索" class="btn btn-success radius"/>
+      </form>
+    <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+    <!-- <a href="{:U('admin/tixian/add')}"  class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加商品品牌</a> -->
+    </span> 
+    <span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span> 
+    </div>
+
+      <table class="table table-border table-bordered table-bg mt-20">
+      <tr>
+          <th> <input onclick='selectAll(this)' type="checkbox" />
+              编号 </th>
+          <th>用户ID</th>
+          <th>用户名称</th>
+          <th>用户电话</th>
+          <th>二维码(点击放大)</th>
+          <th>提现金额</th>
+          <th>提现类型</th>
+          <th>提现单号</th>
+          <th>订单总笔数</th>
+          <th>提现备注</th>
+          <th>审核备注</th>
+          <th>提现时间</th>
+          <th>提现状态</th>
+          <th>操作</th>
+        </tr>
+      {foreach name="arr" item="suppliers"}
+      <tr>
+          <td>
+            {$suppliers.id}</td>
+          <td>{$suppliers.uid}</td>
+          <td>{$suppliers.user_name}</td>
+          <td>{$suppliers.phone}</td>
+          <td>
+            {if condition = "$suppliers['code_img']"}
+              <img src="{$suppliers.code_img}?imageView2/1/w/100/h/100" class="img-responsive"  onclick="showBigImg('{$suppliers.code_img}')" style="cursor:pointer;"  alt="提现二维码">
+
+
+            {/if}
+          </td>
+          <td>{$suppliers.money}</td>
+          <td>{$suppliers.type}</td>
+          <td>
+          <div style="width: 200px;">{$suppliers.all_order_sn}</div>
+          </td>
+          <td>{$suppliers.order_number}</td>
+          <td>{$suppliers.remarks}</td>
+          <td>{$suppliers.audit_remarks}</td>
+          <td>{$suppliers.add_time|date="y-m-d h:i:s",###}</td>
+          <td>
+          {if condition="$suppliers.status == 1"}
+          未审核
+          {elseif  condition="$suppliers.status == 2"/}
+          审核成功
+          {elseif  condition="$suppliers.status == 3"/}
+          审核失败
+          {/if}
+          </td>
+          <td align="center">
+            <!-- <a href="suppliers.php?act=edit&id={$suppliers.suppliers_id}" title="{$lang.edit}">{$lang.edit}</a> | -->
+            {if condition="$suppliers.status == 1"}
+            <a href="javascript:member_edit('审核留言','{:U('admin/tixian/shenhe')}?id={$suppliers.id}&order_sn={$suppliers.all_order_sn}&status=2')">通过审核</a><br/>
+            <a href="javascript:member_edit('审核留言','{:U('admin/tixian/shenhe')}?id={$suppliers.id}&order_sn={$suppliers.all_order_sn}&status=3')">拒绝审核</a>
+            <!-- <a href="{:U('admin/tixian/shenhe')}?id={$suppliers.id}" >通过审核</a> -->
+            {/if}
+            </td>
+      {/foreach}
+      <tr>
+        <td colspan="15" align="right">
+          {$show}
+        </td>
+      </tr>
+    </table>
+    <div class="modal fade bs-example-modal-lg text-center" id="imgModal"  >
+        <div class="modal-content">
+          <span id="close" onclick="showBigImg('')">关闭X</span>
+          <img  id="imgInModalID" src="" width="100%" height="100%">
+        </div>
+    </div>
+  </body>
+  <script type="text/javascript" src="__PUBLIC__/static/admin/js/1.9.3/layer.js"></script>
+ 
+  <script type="text/javascript">
+    /*用户-编辑*/
+      function member_edit(title, url){
+        var index = layer.open({
+          type: 2,
+          title: title,
+          content: url
+        });
+        layer.full(index);
+      }
+      //模拟弹框
+      function showBigImg(src){
+        if(src){
+          $("#imgInModalID").attr("src", src);
+        }
+        
+        $('#imgModal').modal('toggle');
+      }
+  </script>
+</html>

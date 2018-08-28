@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+		<title></title>
+		<style type="text/css">
+			.num {
+				margin: 10px 5px;
+			}
+			
+			.num,.next,.prev {
+				text-decoration: none;
+				color: #f00;
+				padding: 0px 8px;
+				border: 1px solid gray;
+			}
+			
+			.current:after {
+				content: '页';
+			}
+			
+			.current:before {
+				content: '第';
+			}
+		</style>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$('[name="ip_address"]').val('{$data.ip_address}');
+				$('[name="start"]').val('{$data.start}');
+				$('[name="end"]').val('{$data.end}');
+				$('[name="user_id"]').val('{$data.user_id}');
+				$('#page').blur(function(){
+						var url = window.location.href;
+						var value = $('#page').val();
+						if(value>0){
+							$.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+								window.location.href = url;
+							});
+						}
+						
+					});
+				$("#page").keydown(function(event){
+			　　　　if(event.keyCode == 13){
+			　　　　　　var url = window.location.href;
+						var value = $('#page').val();
+						if(value>0){
+							$.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+								window.location.href = url;
+							});
+						}
+			　　　　}
+			　　});
+			});
+		</script>
+	</head>
+
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 用户中台 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 管理员日志 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav><br/>
+			<form id="form" action="{:U('admin/adminlog/lists')}" method="post">
+				<input type="text" name="ip_address" placeholder="用户ip地址"/>
+				开始：<input type="date" name="start" placeholder="开始时间"/>
+				结束：<input type="date" name="end" placeholder="结束时间"/>
+				<input type="hidden" name="user_id" id="user_id"/>
+				<input type="submit" value="搜索"  class="btn btn-success radius"/>
+			</form>
+			<div   class="cl pd-5 bg-1 bk-gray mt-20">
+		<span class="l">
+<!-- 		<a href="{:U('admin/sucai/add')}"  class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加素材分类</a> -->
+		</span> 
+		<span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span> 
+		</div>
+			<table class="table table-border table-bordered table-bg mt-20">
+			<tr>
+				<th>序号ID</th>
+				<th>操作者</th>
+				<th>操作日期</th>
+				<th>IP地址</th>
+				<th>操作记录</th>
+				<!--<th>操作备注</th>-->
+			</tr>
+			{foreach name="arr" item="v"}
+			<tr>
+				<td>{$v.log_id}</td>
+				<td style="color: red;">{$v.user_name}({$v.user_id})</td>
+				<td>{$v.log_time|date="y-m-d H:i:s",###}</td>
+				<td>{$v.ip_address}</td>
+				<td>{$v.log_info}</td>
+				
+			</tr>
+			{/foreach}
+			<tr>
+				<td colspan="6" align="center">
+					{$show}
+				</td>
+			</tr>
+		</table>
+		<!--<input type="button" id="jisuan" value="计算订单"/>-->
+		<!--<input type="button" id="jiesuan" value="结算订单"/>-->
+		<!--<input type="button" id="tijiao" value="提交万里牛"/>-->
+		<!--<input type="button" id="huoqu" value="获取万里牛信息"/>-->
+	</body>
+
+</html>

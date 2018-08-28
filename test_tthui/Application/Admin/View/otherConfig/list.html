@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+		<title></title>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+	</head>
+
+	<body>
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 后台系统 <span class="c-gray en">&gt;</span> 配置管理 <span class="c-gray en">&gt;</span>  <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+		<a href="javascript:member_edit('添加配置信息','{:U('admin/otherconfig/add/parent_id/'.$parent_id)}')"  class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加配置信息</a>
+		</span> 
+	<!-- 	<span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span>  -->
+	</div>
+		<table class="table table-border table-bordered table-bg mt-20">
+			<tr>
+				<th>编号</th>
+				<th>配置名称</th>
+				<th>父类ID</th>
+				<th>变量key</th>
+				<th>变量值</th>
+				<th>图片</th>
+				<th>操作</th>
+			</tr>
+			{foreach name="otherConfigArr" item="v"}
+			<tr>
+				<td>{$v.id}</td>
+				<td>{$v.configname}</td>
+				<td>{$v.parent_id}</td>
+				<td>{$v.key}</td>
+				<td>{$v.value}</td>
+				<td>
+					{foreach name="v['img_path']" item="vv"}
+						<img src="{$vv}" width="50" height="50">
+					{/foreach}
+				</td>
+				<td>
+					<a href="javascript:member_edit('下级列表','{:U('admin/otherconfig/lists/parent_id/'.$v['id'])}')">查看下级</a>
+					&nbsp;|&nbsp;
+					<a href="javascript:member_edit('添加配置信息','{:U('admin/otherconfig/add/parent_id/'.$v['id'])}')">添加下级</a>
+					&nbsp;|&nbsp;
+					<a href="javascript:member_edit('添加配置信息','{:U('admin/otherconfig/add/id/'.$v['id'])}')">编辑</a>
+					<!-- 		&nbsp;|&nbsp;
+					<a href="{:U('admin/otherconfig/delete/id/'.$v['id'])}">移除</a> -->
+					{if condition="$v['key'] == 'marketing_program' and $v['value'] == ''"}
+					&nbsp;|&nbsp;
+					<a href="javascript:member_edit('配置营销方案','{:U('admin/otherconfig/config/parent_id/'.$v['id'])}')">配置营销方案</a>
+					{/if}
+				</td>
+			</tr>
+			{/foreach}
+		</table>
+	</body>
+	<script type="text/javascript" src="__PUBLIC__/static/admin/js/1.9.3/layer.js"></script>
+	<script type="text/javascript">
+    /*用户-编辑*/
+      function member_edit(title, url){
+      	url += '?url='+window.location.href;
+        var index = layer.open({
+          type: 2,
+          title: title,
+          content: url
+        });
+        layer.full(index);
+      }
+  </script>
+</html>

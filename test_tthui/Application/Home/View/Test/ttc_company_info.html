@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>title</title>
+  <!-- <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/Test/css/api.css"/> -->
+  <link href="__PUBLIC__/Home/Test/css/ectouch.css" rel="stylesheet" type="text/css" />
+</head>
+<style>
+  /*.tuoke_menus {
+    border-top: 1px solid #dedede;
+    margin-top: 68px;
+    background: white;
+    margin-bottom: 5px;
+  }
+  .tuoke_menus li {
+    display: inline-block;
+    width: 48%;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    text-align: center;
+  }*/
+	.tuoke_no_data {
+		color: #7c7c7c;
+		font-size: 1.2em;
+		margin: 80px 0;
+		text-align: center;
+	}
+  .active {
+    color: #ff5340;
+  }
+  .font_style_black {
+    font-size: 1.2em
+  }
+  .loading-wrap{
+    bottom: 50px;
+    width: 100%;
+    height: 35px;
+    text-align: center;
+    display: none;
+  }
+  .loading {
+    padding: 4px 3% 4px 3%;
+    height: 32px;
+    line-height: 28px;
+    color: #FFF;
+    font-size: 12px;
+    border-radius: 5px;
+    background: 10px center rgba(0,0,0,.7);
+  }
+</style>
+<body>
+  <div id="page">
+    <header id="header">
+      <div class="header_l">
+        <a class="ico_10" onclick="back()" href="javascript:;"> 返回 </a>
+      </div>
+      <h1> 基础信息</h1>
+    </header>
+  </div>
+  <!-- <div class="tuoke_menus font_style_black">
+		<ul>
+			<li class="active">直接粉丝</li>
+			<li>间接粉丝</li>
+		</ul>
+  </div> -->
+
+	<ul class="tab_content fans_lists" id="list_boxs" style="margin-top: 95px;">
+<!--     <empty name="fans_list">
+      <p class="tuoke_no_data">暂无数据</p>
+    <else />  -->
+		<li class="tab_contentli mediaL bod" id="fans_list" v-cloak>
+			<ul class="con_list" id="con_list">
+        <foreach name="fans_list" item="vo" >
+				<li id="list_items" class="list_items font_style_black" style="width:95%" v-for="item in tk_fans">
+					<div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;">
+						<div class="media_right" style="width: 95%;">
+							<p class="border1" style="padding-top: 12px;">区块链底层链：<span style="color: black;font-size: 16px;font-weight: bold;">腾讯区块链</span></p>
+              <p class="border1" style="padding-top: 12px;">项目方：<span style="color: black;font-size: 16px;font-weight: bold;">广州莱利斯生物科技有限公司
+              <p class="border1" style="padding-top: 12px;">数量：<span style="color: black;font-size: 16px;font-weight: bold;">{$vo.amount}
+              <p class="border1" style="padding-top: 12px;">数字资产名称：<span style="color: black;font-size: 16px;font-weight: bold;">天天美淘消费券
+              <p class="border1" style="padding-top: 12px;">资产作用：<span style="color: black;font-size: 16px;font-weight: bold;">天天美淘区块链专用
+              <p class="border1" style="padding-top: 12px;">账本ID：<span style="color: black;font-size: 16px;font-weight: bold;">ldw326zccixkms6ffx
+              </span></p>
+              <p class="border1" style="padding-top: 12px;">TTC发行总量：<span style="color: black;font-size: 16px;font-weight: bold;">1000万
+              </span></p>
+              <p class="border1" style="padding-top: 12px;">锁仓量：<span style="color: black;font-size: 16px;font-weight: bold;">50万
+              </span></p>
+              <p class="border1" style="padding-top: 12px;">锁仓地址：<span style="color: black;font-size: 16px;font-weight: bold;">1DNqrXwcvDPFEeJEYtQ8nDEWdA2Wn8XtFY
+              </span></p>
+              <p class="border1" style="padding-top: 12px;">回收池量：<span style="color: black;font-size: 16px;font-weight: bold;">50万
+              </span></p>
+              <p class="border1" style="padding-top: 12px;">回收地址：<span style="color: black;font-size: 16px;font-weight: bold;">1DNqrXwcvDPFEeJEYtQ8nDEWdA2Wn8XtFY
+              </span></p>
+              <p class="border1" style="padding-top: 12px;">项目方持有量：<span style="color: black;font-size: 16px;font-weight: bold;">1000万
+              </span></p>
+              <p class="border1" style="padding-top: 12px;">项目方地址：<span style="color: black;font-size: 16px;font-weight: bold;">1DNqrXwcvDPFEeJEYtQ8nDEWdA2Wn8XtFY
+              </span></p>
+              <p class="border1" style="padding-top: 12px;">节点信息：<span style="color: black;font-size: 16px;font-weight: bold;">ndd4ff7j3783ptywwm
+              </span></p>
+						</div>
+					</div>
+        </li>
+        </foreach>
+      </ul>
+      <!-- </empty> -->
+    </li>
+  </ul>
+</body>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/api.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/vue.min.js"></script>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/loading.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/masonry-docs.min.js"></script>
+<script>
+  function back(){
+    // alert('返回');
+    javascript:window.location.href='http://localhost/test/index.php/Home/Test/my_tuoke';
+  }
+</script>
+</html>

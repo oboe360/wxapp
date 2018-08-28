@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>title</title>
+  <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+  <link href="../css/ectouch.css" rel="stylesheet" type="text/css" />
+</head>
+<style>
+	.tuoke_no_data {
+		color: #7c7c7c;
+		font-size: 1.2em;
+		margin: 90px 0;
+		text-align: center;
+	}
+  .font_style_black {
+    font-size: 1.2em
+  }
+</style>
+<body>
+  <div id="page">
+    <header id="header">
+      <h1 style="text-indent:0"> 拓客裂变 </h1>
+    </header>
+  </div>
+	<ul class="tab_content fans_lists" id="list_boxs" style="margin-top: 95px;">
+		<li class="tab_contentli mediaL bod" id="fans_list" v-cloak>
+			<template v-if="tk_shop_fans.length == 0"><p class="tuoke_no_data">暂无数据</p></template>
+			<ul class="con_list">
+				<li class="list_items font_style_black" v-for="item in tk_shop_fans">
+					<div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;">
+						<div class="media_left">
+							<img class="icon_name1" :src="item.header_img" alt="" />
+						</div>
+						<div class="media_right">
+							<p class="border1" style="padding-top: 12px;">微信昵称：<span style="color: black;font-size: 16px;font-weight: bold;">{{item.nickname}}</span></p>
+							<p style="padding:10px 0;">账号：{{item.user_name}}</p>
+						</div>
+					</div>
+					<div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
+						<span style="color: #444444;float: left;">拓客宝店名：{{item.shopname}}</span>
+						<span style="color: #444444;float: right;">ID: {{item.uid}}</em>
+					</div>
+					<div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
+						<span style="color: #444444;float: left;">历史业绩：<em style="color: #ff5340; font-size: 1.1em;">¥ {{item.sale}}</em></span>
+						<span style="color: #444444;float: right;">粉丝: {{item.fan_num}}</em>
+          </div>
+				</li>
+			</ul>
+		</li>
+	</ul>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript" src="../script/ghost.js"></script>
+<script>
+  apiready = ghostInit(function() {
+		var header = $api.dom('header');
+		var headerH = $api.fixStatusBar(header);//这里会返回整个header的高度
+		// $api.fixStatusBar($api.byId('header'));
+		$api.byId('list_boxs').style.marginTop = headerH + 10 + 'px';
+    api.ajax({
+        url: phpUrl + '/tk_sale.php?act=tk_fission'
+    },function(ret, err){
+			// alert(JSON.stringify(ret));
+        if(ret) {
+            new Vue({
+    					el:"#fans_list",
+    					data:{
+    						tk_shop_fans:[]
+    					},
+    					created: function() {
+    						this.tk_shop_fans = ret.tk_shop_fans;
+    					}
+    				})
+        }else {
+            ghost().toast(err.msg);
+        }
+    });
+  });
+</script>
+</html>

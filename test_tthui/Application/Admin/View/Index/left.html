@@ -1,0 +1,21 @@
+<aside class="Hui-aside">
+	<input runat="server" id="divScrollValue" type="hidden" value="" />
+	<div class="menu_dropdown bk_2" id="menu_list">
+	{foreach name="arr" item="v"}
+		<dl id="{$v.action_id}">
+			<dt><i class="Hui-iconfont">&#xe616;</i> {$v.action_name}<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			
+			<dd>
+				<ul>
+				{foreach name="v.child" item="vv"}
+					<li>
+					<a _href="{$vv.action_code}" href="javascript:void(0)">{$vv.action_name}</a>
+					</li>
+				{/foreach}
+				</ul>
+			</dd>
+			
+		</dl>
+	{/foreach}
+	</div>
+</aside>

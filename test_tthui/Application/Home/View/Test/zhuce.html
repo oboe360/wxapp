@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery.min.js"></script>
+    <style>
+    *{
+    	margin: 0;
+    	padding: 0;
+    }
+ #header {
+    z-index: 999;
+    background: #fff;
+    position: fixed;
+    height: 3rem;
+    display: block;
+    width: 100%;
+    top: 0;
+    left: 0;
+}
+
+#header .header_l {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+#header .header_l a {
+    background: url(__PUBLIC__/Home/Test/image/jiantou.png) no-repeat 50% 50%;
+    -webkit-background-size: 0.8rem 1.2rem;
+    -moz-background-size: 0.8rem 1.2rem;
+    background-size: 0.8rem 1.2rem;       
+    width: 3rem;
+    height: 3rem;
+    display: block;
+    padding: 0 0.2rem;
+    text-indent: -999em;
+    overflow: hidden;
+    color: #8d8d8d;
+    text-decoration: none;
+}
+#header h1 {
+    color: #000;
+    font-size: 20px;
+    line-height: 3rem;
+    text-align: center;
+    font-weight: normal;
+    margin: 0;
+}
+.hd{
+    width: 45%;
+    margin: 80px auto 0;
+}
+  .hd .goods_slider_mask{
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 12px 2% 8px 4%;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 999;
+    width: 94%;
+  }
+  .hd .goods_slider_mask .APPfiring img{
+    width: 44px;
+    height: 44px;
+    margin: 0;
+  }
+  .hd .goods_slider_mask .right{
+    float: right;
+  }
+  .hd .goods_slider_mask .mask-text{
+    vertical-align: 14px;
+    font-size: 16px;
+    color: #fff;
+    margin-left: 10px;
+    font-family: 苹方;
+    margin-top: 10px;
+  }
+  .hd .goods_slider_mask .register1{
+    height: 44px;
+    border: 0;
+    width: 36%;
+    float: right;
+    margin-right: 12px;
+    border-radius: 8px;
+    background-color: #f54479;
+    color: #fff;
+  }
+  .hd .goods_slider_mask .close img{
+    width: 22px;
+    margin: 12px 0 0 0;
+  }
+  .table_box {
+    margin-top: 2rem;
+}
+.table_box .borderBottom {
+    border: 0;
+}
+.table_box .borderBottom {
+    border: 1px solid #ddd;
+    padding: 0.3rem 0;
+    padding-left: 10px;
+    margin-bottom: 14px;
+}
+
+.table_box dl {
+    display: table;
+    width: 80%;
+    margin: auto;
+}
+.table_box dd {
+    display: table-cell;
+}
+.inputBg {
+    height: 40px;
+    width: 94%;
+    border: none;
+    outline: none;
+    padding: 0 3%;
+    color: #333;
+    font-size: 14px;
+    border-radius: 20px;
+    background: #fff;
+    text-align: center;
+    text-indent: 0;
+}
+.dlbj {
+    background: url(__PUBLIC__/Home/Test/image/bg2.png) no-repeat;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+}
+   .wrap{
+    padding: 0;
+   }
+   .loginBox {
+    margin: 0;
+   }
+   .loginBox .hd img{
+    margin: 0;
+    width: 100%;
+   }
+   .table_box dl {
+    display: table;
+    width: 80%;
+    margin: auto;
+  }
+  .table_box .borderBottom{
+    border: 1px solid #ddd;
+    padding: 0.3rem 0;
+    padding-left: 10px;
+    margin-bottom: 14px;
+  }
+  .c-btn3 {
+    color: #fff;
+    border: 0;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    width: 94%;
+    -webkit-box-flex: 1;
+    -webkit-user-select: none;
+    font-size: 0.9rem;
+    background: #ff98bd;
+    display: block;
+	margin: auto;
+    text-align: center;
+    border-radius: 20px;
+}
+
+.input4{
+  background: url(themes/default/images/ob/suo@2x.png) no-repeat left center;
+  background-size: 12px 20px;
+}
+.red{
+  background: #E84545;
+}
+.dengl {
+    float: left;
+    font-size: 14px;
+    color: #f2f1f1;
+    border-bottom: 1px solid #ccc;
+}
+    .inputBg {
+    height: 40px;
+    width: 94%;
+    border: none;
+    outline: none;
+    padding: 0 3%;
+    color: #333;
+    font-size: 14px;
+    border-radius: 20px;
+    background: #fff;
+    text-align: center;
+    text-indent: 0;
+}
+.table_box .borderBottom {
+    border: 0;
+}
+.c-btn3 {
+    color: #fff;
+    border: 0;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    width: 94%;
+    -webkit-box-flex: 1;
+    -webkit-user-select: none;
+    font-size: 0.9rem;
+    background: #ff98bd;
+    display: block;
+    margin: auto;
+    text-align: center;
+    border-radius: 20px;
+}
+</style>
+</head>
+<body class="dlbj">
+<!-- 弹窗s -->
+<section class="alert alert-select-multiple">
+    <div class="alert-content">
+      <div class="alert-msg"></div>
+      <div class="alert-action">
+        <a class="action-item" href="#">确定</a>
+      </div>
+    </div>
+  </section>
+<style>
+.dlbj {
+    background: url(__PUBLIC__/Home/Test/image/bg2.png) no-repeat;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+}
+.alert {display: none;position: fixed;top: 0;right: 0;bottom: 0;left: 0;z-index: 5000;}
+.alert-action{display: flex;position: absolute;bottom: 0;width: 100%;}
+.alert-msg{text-align: center;margin-top: 34px;padding: 0 10px;font-size: 14px;}
+.alert .alert-content {border-radius: 9px;background-color: white;box-shadow: 0px 0px 51px 0px rgba(0, 0, 0, 0.37);position: absolute;left: 50%;margin-left: -100px; top: 50%;margin-top: -3.4875rem;width: 200px;height: 150px;z-index: 44;overflow: hidden;}
+.alert .action-item {display: inline-block;width: 100%;height: 40px;font-size: 14px;color: #fff;text-align: center;line-height: 40px;background: #e53b3b;}
+</style>
+<script>
+$(".action-item").click(function(){
+  $(".alert-select-multiple").hide();
+})
+</script>
+<!-- 弹窗end -->
+<div id="page">
+    <header id="header">
+      <div class="header_l">
+        <a class="ico_10"  href="javascript:history.back(-1)"> 返回 </a>
+      </div>     
+      <h1> 注册账号 </h1>
+    </header>
+  </div>
+	<section class="wrap" style="padding-top:50px">
+  <div id="leftTabBox" class="loginBox">
+<div class="hd">          
+       <img src="__PUBLIC__/Home/Test/image/logo2.png" alt="登录图">   
+    </div>
+    <div class="bd register" style="">
+      <ul style="height:25rem">
+        <form>
+          <input type="hidden" name="flag" id="flag" value="register">
+          <div class="table_box">
+            <dl class="borderBottom input11">
+              <dd>
+                <input placeholder="请输入手机号码" class="inputBg " name="mobile" id="mobile_phone" type="text">
+              </dd>
+            </dl>
+            <dl class="borderBottom">
+              <dd>
+                <input placeholder="请输入帐号密码" class="inputBg " name="password" id="mobile_pwd" type="password">
+              </dd>
+            </dl>
+          <!--  <dl class="borderBottom">
+              <dd>
+                <input placeholder="请输入验证码" style="width:60%;" class="inputBg input3" name="mobile_code" id="mobile_code" type="text">
+                 <input id="zphone" name="sendsms" type="button" value="获取手机验证码" onclick="sendSms();" class="c-btn3 input33" style="width:32%;font-size: 12px;background:#ffba42;float: right;">
+              </dd>
+              <dd>
+             
+              </dd>
+            </dl> -->
+               <!-- {if $code} -->
+            <dl class="borderBottom">
+              <dd>
+                <input placeholder="请输入推荐号(注册必须填注册码)" class="inputBg " name="recommend_code" id="recommendCode" type="text" value="{$code}"  />
+              </dd>
+            </dl>
+          <!-- {else} -->
+<!--              <dl class="borderBottom">
+              <dd>
+                <input placeholder="请输入推荐号(注册必须填注册码)" class="inputBg " name="recommend_code" id="recommendCode" type="text" value="{$code}" />
+              </dd>
+            </dl> -->
+            <!-- {/if} -->
+           <dl>
+             <dl>
+              <dd>
+                <input name="act" type="hidden" id="act" value="act_register">
+                <input name="enabled_sms" id="enabled_sms" type="hidden" value="1">
+                <input name="Submit" type="button" style="background: #ffffff;" id="submit" value="注册" class="c-btn3">
+                
+              </dd> 
+            </dl>			    
+          </div>
+        </form>
+       
+      </ul>
+    </div>
+  </div>
+</section>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/sms.js"></script>
+<script>
+  $("#submit").click(function(){
+        
+        var status = true;
+        var mobile = $('#mobile_phone').val();
+        var mobile_code = $('#mobile_code').val();
+        var password = $('#mobile_pwd').val();
+        var recommendCode = $('#recommendCode').val();
+        var act = $('#act').val();
+        var back_act = $('#back_act').val();
+        var enabled_sms = $('#enabled_sms').val();
+        var url = "{$url}";
+        //alert(url);
+        if(mobile.length == ''){
+          $(".alert-select-multiple").show();
+          $(".alert-msg").html("请填写手机号码");
+          //alert('请填写手机号码');
+          return false;
+        }
+
+        if(mobile && /^1[3|4|5|7|8|6]\d{9}$/.test(mobile)){
+            //对的
+            // alert(21)
+        }else{
+          //不对
+          $(".alert-select-multiple").show();
+          $(".alert-msg").html("请填写正确的手机号码");
+          return false;
+        }
+        if(password.length == ''){
+          $(".alert-select-multiple").show();
+          $(".alert-msg").html("请填写登录密码");
+          //alert('请填写登录密码');
+          return false;
+        }
+       if(recommendCode=='0'){
+          $(".alert-select-multiple").show();
+          $(".alert-msg").html("推荐号不能为0！");
+           return false;
+        }
+        if(recommendCode==''){
+          $(".alert-select-multiple").show();
+          $(".alert-msg").html("推荐号不能为空！如果没有推荐号请填写1。");
+           return false;
+        }
+        if(password.length<6){
+          $(".alert-select-multiple").show();
+          $(".alert-msg").html("密码不能少于6个字符");
+          return false;
+          //alert("密码不能少于6个字符")
+        }else{
+          var reg = new RegExp("\\s");
+          var r = password.substr(1).match(reg);
+          if (r != null) {
+            $(".alert-select-multiple").show();
+            $(".alert-msg").html("密码不能有空格");
+            return false;
+             //alert('不能有空格');
+          }
+        }
+        /*手机验证码验证功能*/
+        // if(mobile_code.length == ''){
+        //   alert('请填写手机验证码');
+        //   return false;
+        // }
+
+        // $.ajax({
+        //   type: "POST",
+        //   url: "sms.php?act=check",
+        //   data: "mobile="+mobile+"&mobile_code="+mobile_code+"&flag=register",
+        //   dataType: "json",
+        //   async: false,
+        //   success: function(result){
+        //    //alert(result.code);
+        //     if (result.code!=2){
+        //         $(".alert-select-multiple").show();
+        //         $(".alert-msg").html(result.msg);
+        //           return false;
+        //     }else{
+           
+               $.ajax({
+                    url:'{$Think.server.SCRIPT_NAME}/Home/Test/'+act,
+                    type:'post',
+                    data:{"mobile":mobile,"password":password,"recommendCode":recommendCode,"back_act":back_act,"enabled_sms":enabled_sms},
+                    success:function(data){
+                       
+                        if(data==1){
+                            //alert(url);
+                          // $(".alert-select-multiple").show();
+                          // $(".alert-msg").html("注册成功");
+                            if(url){
+                                 window.location.href="{:U('Home/Test/my_tuoke')}";                            
+                            }else{
+                                window.location.href="{:U('Home/Test/my_tuoke')}";    
+                            }
+                          
+                        }else if(data==2){
+                           $(".alert-select-multiple").show();
+                           $(".alert-msg").html("注册失败!");
+                            return false;
+                          //alert('注册失败！');
+                        }else if(data==4){
+                           $(".alert-select-multiple").show();
+                           $(".alert-msg").html("手机号码已存在，请更换手机号码");
+                            return false;
+                        }else if(data==3){
+                          $(".alert-select-multiple").show();
+                           $(".alert-msg").html("您输入的推荐号不存在！");
+                            return false;
+                        }
+                    } 
+              })
+        //     }
+        //   }
+        // });
+        
+
+        })
+        </script>
+</body>
+</html>

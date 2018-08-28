@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<style type="text/css">
+			input {
+				width: 30%;
+			}
+		</style>
+		<title></title>
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+	</head>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+		<script type="text/javascript">
+			function back(){
+				window.history.go(-1);
+			}
+		</script>
+	<body>
+		<nav class="breadcrumb"><a href="javascript:back()">返回上一页</a> <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<form action="{:U('admin/ship/saveAdd')}" method="post">
+			<table   class="table table-border table-bordered table-bg mt-20">
+				<tr>
+					<th colspan="2">后台系统 - 申通快递 - 配送区域</th>
+				</tr>
+				<tr>
+					<td width="20%"><b>配送省份名称</b></td>
+					<td width="80%"><input type="text" name="province" /></td>
+				</tr>
+				<tr>
+					<td><b>配送市区名称</b></td>
+					<td><input type="text" name="city" /></td>
+				</tr>
+				<tr>
+					<td><b>配送快递名称</b></td>
+					<td>
+						<select name="touch_id" id="touch">
+							{foreach name="touchShipArr" item="v"}
+								<option value="{$v.touch_id}">{$v.shipping_name}</option>
+							{/foreach}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td><b>费用计算方式</b></td>
+					<td>按重量(KG)计算</td>
+				</tr>
+				<tr>
+					<td><b>首重(KG)</b></td>
+					<td>
+						<input type="number" name="first_weigt" /></td>
+			</tr>
+			<tr>
+				<td><b>首重价格(元)</b></td>
+				<td><input type="text" name="first_price" /></td>
+			</tr>
+			<tr>
+				<td><b>续重价格(元)</b></td>
+				<td><input type="text" name="con_price"/></td>
+			</tr>
+			<tr>
+				<td><b>是否启动</b></td>
+				<td style="padding-left: 0 "><input type="checkbox" name="start"/></td>
+			</tr>
+			<tr>
+				<td colspan="2 " style="padding-left: 20%; "><input type="submit"  value="确认添加" class="btn btn-primary radius"/></td>
+			</tr>
+		</table>
+		</form>
+	</body>
+</html>

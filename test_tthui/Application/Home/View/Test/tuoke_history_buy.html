@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>title</title>
+  <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+  <link href="../css/ectouch.css" rel="stylesheet" type="text/css" />
+  <style>
+    .tuoke_history_buy {
+      margin-top: 95px;
+    }
+    .tuoke_history_buy li {
+      font-size: 1.25em;
+      background: white;
+      margin-bottom: 5px;
+      padding: 15px 5px;
+    }
+    .tuoke_history_buy span {
+      font-size: 1.25em;
+      color: #ffba42;
+    }
+  </style>
+</head>
+<body>
+  <div id="page">
+		<header id="header">
+			<div class="header_l">
+					<a class="ico_10" onclick="api.closeWin();" href="javascript:;"> 返回 </a>
+			</div>
+			<h1> 我的历史进货量 </h1>
+		</header>
+	</div>
+  <ul class="tuoke_history_buy" id="list_boxs">
+    <li v-for="item in history_buy" v-cloak>
+      <p>进货时间: {{item.add_time}}</p>
+      <p>进货数量: <span>{{item.num}}</span></p>
+      <p>金额: <span style="font-size:1.1em;">{{item.money}}</span></p>
+    </li>
+  </ul>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/ghost.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script>
+  apiready = ghostInit(function() {
+		var header = $api.dom('header');
+		var headerH = $api.fixStatusBar(header);//这里会返回整个header的高度
+		// $api.fixStatusBar($api.byId('header'));
+		$api.byId('list_boxs').style.marginTop = headerH + 10 + 'px';
+    api.ajax({
+        url: phpUrl + '/tk_sale.php?act=history_buy'
+    },function(ret, err){
+        if(ret) {
+            // alert(JSON.stringify(ret));
+            new Vue({
+    					el:".tuoke_history_buy",
+    					data:{
+    						history_buy:[]
+    					},
+    					created: function() {
+    						this.history_buy = ret.history_buy;
+    					}
+    				})
+        }else {
+            ghost().toast(err.msg);
+        }
+    });
+
+  });
+</script>
+</html>

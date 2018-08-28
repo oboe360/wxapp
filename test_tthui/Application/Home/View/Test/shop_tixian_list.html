@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>提现列表</title>
+  <link href="__PUBLIC__/Home/Test/css/ectouch.css" rel="stylesheet" type="text/css" />
+  <link rel="stylesheet" href="__PUBLIC__/Home/Test/css/common.css?v=20160520">
+  <script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery-1.10.1.min.js"></script>
+  <script type="text/javascript" src="__PUBLIC__/Home/Test/script/alertPopShow.js"></script>
+  <style>
+		#tuoke_withdraw_content {
+			margin-top: 54px;
+		}
+    .tuoke_balance {
+			padding: 15px 0;
+			background: white;
+			font-size: 1.1em;
+			color: black;
+			padding-left: 10px;
+			margin-bottom: 5px;
+    }
+		.tuoke_withdraw_item {
+			padding: 15px 10px;
+			background: white;
+			margin-bottom: 5px;
+		}
+		.tuoke_withdraw_info {
+			display: inline-block;
+		}
+		.tuoke_withdraw_info p {
+			font-size: 1.1em;
+		}
+		.tuoke_withdraw_info span {
+			font-size: 1.2em;
+			color: #ffba42;
+		}
+		.tuoke_withdraw_status {
+			float: right;
+			font-size: 1.3em;
+			margin-right: 5px;
+			color: #ffba42;
+		}
+		.tuoke_remarks {
+			/*display: none;*/
+			background: #eeeeee;
+			padding: 8px 8px 8px 10px;
+			margin-top: 5px;
+			margin-right: 5px;
+		}
+		#tuoke_balance_money {
+			color: #ffba42;
+			margin: 0 5px;
+			font-size: 1.1em;
+			float: right;
+    		margin-right: 25px;
+		}
+		#yuan {
+			/*font-size: 0.9em;*/
+			color: #ffba42;
+		}
+		.bc1 {
+			/*position: fixed;*/
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 48px;
+			width: 88%;
+			border-radius: 10px;
+			margin-left: 6%;
+		}
+		.tuoke_no_data {
+			color: #7c7c7c;
+			margin: 20px 0;
+			text-align: center;
+		}
+  </style>
+</head>
+<body>
+  <div id="page">
+		<header id="header">
+			<div class="header_l">
+				<!-- <a class="ico_10" onclick="javascript :history.back(-1);" href="javascript:;"> 返回 </a> -->
+				<a class="ico_10" href="{:U('Home/Test/shop_tixian')}"> 返回 </a>
+			</div>
+			<h1> 提现记录 </h1>
+			<!-- <a style="color: #ffba42; width: 70px; margin-top: 10px; margin-right: 15px;">提现记录</a> -->
+		</header>
+	</div>
+	<div id="tuoke_withdraw_content">
+		<div class="tuoke_balance" width="100%">
+			<span style="width:50%;">现有店铺收益: <span id="yuan" v-cloak>{if condition="$earnings"}{$earnings}{else /}0.00{/if}</span></span>
+			&nbsp;&nbsp;<span style="color: #000" v-cloak>总提现：<span id="yuan" v-cloak>{if condition="$earnings"}{$earnings}{else /}0.00{/if} </span></span>
+		</div>
+<!-- 		<div class="tuoke_balance" >
+			<span style="width:50%;">实际到账金额: <span id="tuoke_balance_money" v-cloak>{if condition="$earnings"}{$earnings}{else /}0.00{/if} </span></span>
+		</div> -->
+<!-- 		<div class="tuoke_balance" >
+			<span style="width:50%;">到账银行卡:&nbsp;&nbsp;<span style="color: #7c7c7c;">{$bank_info.bank_name}({$bank_info.coop_bank})</span> <span id="tuoke_balance_money" v-cloak>添加银行卡</span></span>
+		</div> -->
+		<ul style="margin-bottom: 53px;">
+			{empty name="tixian"}
+				<p class="tuoke_no_data">暂无数据</p>
+			{else /}
+			{foreach name="tixian" item="val" key="key"}
+			    <li class="tuoke_withdraw_item" v-for="item in tixian_record" v-cloak>
+					<div>
+						<div class="tuoke_withdraw_info">
+							<p>提现时间: {$val.time}</p>
+				      		<p>提现金额: <span>{$val.money}</span></p>
+						</div>
+						<span class="tuoke_withdraw_status">{if condition="$val.status eq '1'"}待审核{/if}{if condition="$val.status eq 2"}待收款{/if}{if condition="$val.status eq '3'"}已到帐{/if}{if condition="$val.status eq '4'"}已拒绝{/if}</span>
+					</div>
+					{if condition="$val.status eq '4'"}<p class="tuoke_remarks">拒绝备注: <span style="margin-left: 5px;font-size:1.1em;">{$val.remarks}</span></p>{/if}
+			    </li>
+			{/foreach}
+			
+			{/empty}
+	  	</ul>
+	</div>
+	<!-- <button class="c-btn3 bc1" onclick="withdrawTuoke();">我要提现</button> -->
+</body>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/masonry-docs.min.js"></script>
+
+<script>
+	function back(){
+    // alert('返回');
+    javascript:window.location.href="{:U('Home/Test/index')}";
+  }
+	function withdrawTuoke() {
+		$.ajax({
+			type: "POST",
+	        url:"{:U('Home/Test/shop_tixian_list')}",
+	        data: {style:'tixian'},
+	        //dataType: "json",
+	        success: function(data){
+	        	//console.log(data);return ;
+			   	if(data.error == '0') {
+			      	window.location.href="{:U('Home/Test/shop_tixian')}";
+				}else if(data.error == '1'){
+				    bounced(data.str, '1500');
+					return;
+				}else if(data.error == '2'){
+					//确定银行卡信息
+					var bank_card = data.bank;
+					bounced_list('确定银行卡信息', '银行卡号: '+bank_card.coop_bank+'<br />姓名: '+bank_card.bank_name+'<br />绑定号码: '+bank_card.bank_phone+'<br />开户详细地址: '+bank_card.coop_bank+'<br />开户市: '+bank_card.bank_city);
+				}else if(data.error == '3'){
+					window.location.href="{:U('Home/Test/bank_card')}";
+				}
+			}
+		});
+	}
+	//弹框提示信息
+	function bounced(str, str_time=3000){
+		webToast(str,"middle",str_time);
+	}
+	//信息框
+	function bounced_list(title, content, lsok = '确定', canels = '去修改'){
+		popTipShow.confirm(title,content,[lsok,canels],
+				function(e){
+				  //callback 处理按钮事件
+				  var button = $(e.target).attr('class');
+				  if(button == 'ok'){
+					//按下确定按钮执行的操作
+					this.hide();
+					/*setTimeout(function() {
+						webToast("操作成功","top", 2000);
+					}, 300);*/
+					window.location.href="{:U('Home/Test/shop_tixian')}";
+				  }
+
+				  if(button == 'cancel') {
+					//按下取消按钮执行的操作
+					this.hide();
+					window.location.href="{:U('Home/Test/bank_card')}";
+					/*setTimeout(function() {
+						webToast("您选择“取消”了","bottom", 2000);
+					}, 300);*/
+				  }
+				}
+		);
+	}
+
+</script>
+</html>

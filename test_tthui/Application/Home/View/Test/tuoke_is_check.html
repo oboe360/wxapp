@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>审核页面</title>
+  <!-- <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/Test/css/api.css"/> -->
+  <link href="__PUBLIC__/Home/Test/css/ectouch.css" rel="stylesheet" type="text/css" />
+</head>
+<style>
+	#qrcode {
+		display: block;
+		margin: 58px auto;
+		width: 100%;
+		height: 100%;
+	}
+	#header .header_l .back_white {
+		width: 20px;
+		height: 20px;
+		z-index: 9999;
+		background: rgba(0,0,0,0) url(__PUBLIC__/Home/Test/image/back_white@2x.png) no-repeat center;
+	}
+	.btn_tuoke {
+		font-size: 1.2em;
+		/*display: none;*/
+		border-radius: 0;
+		height: 50px;
+		position: fixed;
+		bottom: 0;
+
+	}
+	.wx_share_bg {
+		display: none;
+		background: rgba(0,0,0,0.3);
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+	.wx_share {
+		text-align: center;
+		background-color: white;
+		border-radius: 1.0rem;
+		position: absolute;
+		top: 30%;
+		left: 7%;
+		width: 80%;
+		height: 23%;
+		padding: 1.5rem 0.8rem;
+	}
+	.wx_share h1 {
+		font-size: 1.3em;
+		margin-bottom: 1.5rem;
+	}
+	.wx_share p {
+		padding: 5px 0;
+	}
+	.wx_share li {
+		font-size: 1.1em;
+		display: inline-block;
+		margin: 0 5%;
+	}
+	.wx_share img {
+		width: 40px;
+		height: 40px;
+	}
+	span {
+		font: 20px;
+	}
+</style>
+<body>
+<div style="width:auto;height:auto; padding-top: 80px;">
+  <div style="text-align: center;"><img width="188px" height="188px" src="__PUBLIC__/Home/Test/image/is_check.png" /></div>
+  <div style="text-align: center; color: #ffba42; font-size: 20px;"><span>审核中</span></div>
+  <div style="text-align: center; font-size: 20px;"><span>请耐心等待2~3个工作日</span></div>
+</div>
+</body>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/api.js"></script> -->
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/ghost.js"></script> -->
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/loading.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/vango.js"></script>
+<script>
+	// vango.drawContent('#qrcode_merge','#qrcode');
+	apiready = function() {
+		var header = $api.dom('header');
+		var headerH = $api.fixStatusBar(header);//这里会返回整个header的高度
+		// $api.fixStatusBar($api.byId('header'));
+		$api.byId('qrcode').style.marginTop = headerH + 0 + 'px';
+		api.getPrefs({
+		    key: 'user_id'
+		}, function(ret, err){
+		    if( ret ){
+						$("#uid").html(ret.value)
+		    }
+		});
+
+		api.addEventListener({
+		  name: 'keyback'
+		}, function(ret, err){
+			if($('.wx_share_bg').css('display') != 'none') {
+				$('.wx_share_bg').hide();
+				return;
+			}
+			api.closeWin();
+		});
+
+		var shop_id = api.pageParam.shop_id;
+		var fs = api.require("fs");
+		fs.exist({ // 查看是否存在二维码分享图片缓存，如果存在则直接读取缓存，缓存会在退出登录时删除
+		  path: 'fs://img/qrcode.jpg'
+		},function(ret,err){
+		  if(ret.exist){
+				$("#qrcode").attr("src",api.fsDir + "/img/qrcode.jpg");
+				$(".btn_tuoke").show();
+		  }else{ // 缓存不存在，则生成二维码分享图片
+		    getQRCodeImg(shop_id);
+		  }
+		});
+	// 生成二维码分享图片
+	function getQRCodeImg(shop_id) {
+		showLoading();
+		api.ajax({
+			  url: phpUrl + '/tk_qrcode.php',
+			  method: 'post',
+			  data: {
+			    values: {
+			    	path: 'pages/index/index?shop_id=' + shop_id
+			    }
+			  }
+			},function(ret, err){
+				stopLoading();
+			  if(ret) {
+					// alert(ret[0])
+					$('#qrcode_image').attr("src",ret[0]);
+					vango.onload = function(src) {
+						$("#qrcode").attr("src",src);
+						$(".btn_tuoke").show();
+						showLoading();
+						var base64Str = src.split(',')[1];
+						var trans = api.require("trans");
+						trans.saveImage({
+						    base64Str: base64Str,
+								album: false,
+								imgPath:"fs://img/",
+				    		imgName:"qrcode.jpg"
+						}, function(ret, err){
+							stopLoading();
+						  if(!ret.status){
+						    ghost().toast(err.msg);
+						  }
+						});
+					};
+					vango.draw('#qrcode_merge');
+			  }else {
+			    ghost().toast(err.msg)
+			  }
+			});
+		};
+	}
+	// 弹出分享窗口
+	function shareImg() {
+		$(".wx_share_bg").show();
+	}
+	function back(){
+		alert('返回');
+		javascript:window.location.href='{:U('Home/Test/my_tuoke')}';
+	}
+	function test1() {
+		alert("生成二维码");
+		var shop_id = '3';
+		$.ajax({
+			url: '{:U('Home/Test/create_qrcode')}',
+			type: 'post',
+		    data: {
+		    	path: 'pages/home/home?shop_id=' + shop_id
+			},  
+             success: function(data){
+             	alert('修改成功');
+             	// window.location.reload();
+             }
+		})
+	}
+	// 分享图片
+	function share(shareImg, shareType) {
+			$(".wx_share_bg").hide();
+			var wx = api.require('wx');
+			//alert(shareUrl);
+			wx.shareImage({
+			    scene : shareType,
+			    contentUrl : shareImg
+			}, function(ret, err){
+			  if(ret.status){
+			    api.toast({
+			        msg: '分享成功',
+			        duration: 2000,
+			        location: 'middle'
+			    });
+			  }else{
+			    switch (err.code) {
+			      case 2:
+							api.toast({
+									msg: '分享取消',
+									duration: 2000,
+									location: 'middle'
+							});
+			      	break;
+			      default:
+							api.toast({
+									msg: '分享失败',
+									duration: 2000,
+									location: 'middle'
+							});
+							break;
+			    }
+			  }
+			});
+
+	}
+</script>
+</html>

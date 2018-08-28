@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/layer.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/admin/css/style.css" rel="stylesheet" type="text/css" />
+		<title></title>
+		<style type="text/css">
+			.num {
+				margin: 10px 5px;
+			}
+			.num,.next,.prev {
+				text-decoration: none;
+				color: #f00;
+				padding: 0px 8px;
+				border: 1px solid gray;
+			}
+			
+			.current:after {
+				content: '页';
+			}
+			
+			.current:before {
+				content: '第';
+			}
+		</style>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/vue.min.js"></script> 
+		<script type="text/javascript" src="__PUBLIC__/admin/js/H-ui.js"></script> 
+		<script type="text/javascript" src="__PUBLIC__/admin/js/H-ui.admin.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/static/admin/js/1.9.3/layer.js"></script> 
+		<script type="text/javascript" src="__PUBLIC__/static/admin/js/1.2/laypage.js"></script> 
+		<script type="text/javascript">
+			$(function() {
+				$('[name="id"]').val('{$data.id}');
+				$('[name="shop_name"]').val('{$data.shop_name}');
+				$('[name="sj_id"]').val('{$data.sj_id}');
+				$('[name="user_name"]').val('{$data.user_name}');
+				$('#a{$data.is_check}').attr('selected','selected');
+				$('[name="start"]').val('{$data.start}');
+				$('[name="end"]').val('{$data.end}');
+				$('#page').blur(function(){
+						var url = window.location.href;
+						var value = $('#page').val();
+						if(value>0){
+							$.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+								url = url+'?'+$('#form').serialize();
+								window.location.href = url;
+							});
+						}
+						
+					});
+				$("#page").keydown(function(event){
+			　　　　if(event.keyCode == 13){
+			　　　　　　var url = window.location.href;
+						var value = $('#page').val();
+						if(value>0){
+							$.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+								url = url+'?'+$('#form').serialize();
+								window.location.href = url;
+							});
+						}
+			　　　　}
+			　　});
+			});
+		</script>
+	</head>
+
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 后台系统 <span class="c-gray en">&gt;</span> 用户管理 <span class="c-gray en">&gt;</span> 店铺列表 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<br />
+			<form action="{:U('admin/thestore/lists_xj')}" id="form" method="get">
+			审核状态：<select name="is_check" id="is_check">
+                    <option value="" id="a">全部</option>
+                    <option value="0" id="a0">未审核</option>
+                    <option value="1" id="a1">已审核</option>
+                    <option value="2" id="a2">已拒绝</option>
+                  </select>
+				<input type="text" name="id" placeholder="店铺id"/>
+				<input type="text" name="shop_name" placeholder="店铺名称"/>
+				<input type="text" name="sj_id" placeholder="店铺上级id"/>
+				<input type="text" name="user_name" placeholder="用户登录名"/>
+				开始：<input type="date" name="start" placeholder="开始时间"/>
+				结束：<input type="date" name="end" placeholder="结束时间"/>
+				<input type="submit" value="搜索"  class="btn btn-success radius"/>
+			</form>
+			<div  class="cl pd-5 bg-1 bk-gray mt-20">
+		<span class="l">
+		<a href="{:U('admin/Shopuser/lists_xj')}"  class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 店铺用户列表</a>
+		</span> 
+		<span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span> 
+		</div>
+			<table  class="table table-border table-bordered table-bg mt-20">
+			<tr>
+				<th>店铺ID</th>
+				<th>店铺等级</th>
+				<th>所属联盟店铺</th>
+				<th>店铺名称</th>
+				<th>店主头像</th>
+				<th>用户登录名</th>
+				<th>app平台的id号</th>
+				<th>店铺的类型</th>
+				<th>注册时间</th>
+
+			</tr>
+			{foreach name="arr" item="v"}
+			<tr>
+				<td>{$v.id}</td>
+				<td>({$v.shop_rank}){$v.shop_rank_name}</td>
+				<td>({$v.zd_shop_id}){$v.zd_shop_name}</td>
+				<td>{$v.shop_name}</td>
+				<td>
+				{if condition="$v['shop_img'] neq  ''"}
+				<img src="{$v.shop_img}" width="60px" height="60px" style="border-radius:50%;">
+				{/if}
+				</td>
+				<td>{$v.user_name}</td>
+				<td>
+				{if condition="$v['platform_id'] eq 0"}
+				没有
+				{else /}
+				{$v.platform_id}
+				{/if}
+				</td>
+				<td>
+				{if condition="$v['shop_type'] eq 0"}
+				纯web
+				{elseif condition="$v['shop_type'] eq 1" /}
+				纯app
+				{elseif condition="$v['shop_type'] eq 2" /}
+				app和wed
+				{elseif condition="$v['shop_type'] eq 3" /}
+				已注销
+				{/if}
+				</td>
+				<td>{$v.add_time|date="y-m-d H:i:s",###}</td>
+
+			<!-- 	<td align="center">
+					{if condition="$v['is_check'] eq 1 and $v['shop_rank'] neq 3 "}
+						<a href="javascript:change({$v.id},3)" id="a2"><img src="__PUBLIC__/admin/images/0.gif"></a>
+					{/if}
+				</td> -->
+			</tr>
+
+			{/foreach}
+			<tr>
+				<td colspan="9" align="center">
+					{$show}
+				</td>
+			</tr>
+		</table>
+	</body>
+	<script type="text/javascript">
+			//审核通过店铺
+			function approved(id){
+				var user_id = prompt("请写入该用户的会员ID号！警告，只能修改一次!请注意修改");
+				if(user_id == ''){
+					layer.msg('请写入该用户的会员ID号！',{icon: 5,time:2000});
+					return ;
+				}
+				if(user_id){
+					if(!isNaN(user_id)){
+						window.location.href="{:U('admin/thestore/relationship_list')}?id="+id+"&user_id="+user_id;
+					}else{
+						layer.msg('请写入正确的会员ID号！',{icon: 5,time:2000});
+					}
+				}
+				
+			}
+
+			function myrefresh()
+			{
+			      window.location.reload();
+			}
+			function change(shop_id, rank_id,shop_rank) {
+				if(rank_id==shop_rank){
+					layer.msg('当前等级等于升级等级，不符合升级条件!',{icon: 5,time:1500});
+						//alert("当前等级等于升级等级，不符合升级条件");
+						return false;
+				}
+				if(rank_id<shop_rank){
+						//alert("当前等级大于升级等级，不符合升级条件");
+						layer.msg('当前等级大于升级等级，不符合升级条件',{icon: 5,time:1500});
+						return false;
+				}
+
+			layer.confirm('确认要升级？',function(index){
+				
+				//alert("确认升级？");
+			
+				$.post('__CONTROLLER__/change', 'shop_id=' + shop_id + '&rank_id=' + rank_id, function(re) {
+
+					if(re == 2) {
+
+						layer.msg('升级失败!',{icon: 5,time:1000});
+
+					} else {
+						layer.msg('升级成功!',{icon: 6,time:1000});
+
+						setTimeout('myrefresh()',1000); //指定1秒刷新一次	
+						//window.location.reload();
+					}
+
+				});
+			});
+
+			}
+			
+			$(function(){
+				$('#select').change(function(){
+					url = '__CONTROLLER__/lists/touch_id/'+$(this).val();
+					// alert(url)
+					window.location.href = url;
+				})
+				$('#a{$touch_id}').attr('selected','selected');
+			})
+		</script>
+</html>

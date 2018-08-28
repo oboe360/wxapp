@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>业绩报表</title>
+  <link href="__PUBLIC__/Home/Test/css/ectouch.css" rel="stylesheet" type="text/css" />
+</head>
+<style>
+  
+.item{
+	border: 1px solid #D4D4D4;
+    color: red;
+    margin: 0 10px 10px 0;
+    padding: 10px;
+    position: relative;
+    width: 200px;
+}
+.loading-wrap{
+	bottom: 50px;
+	width: 100%;
+	height: 55px;
+	text-align: center;
+	display: none;
+}
+.loading {
+	padding: 4px 3% 4px 3%;
+	height: 32px;
+	line-height: 0px;
+	color: #FFF;
+	font-size: 12px;
+	border-radius: 5px;
+	background: 10px center rgba(0,0,0,.7);
+}
+.footer{
+	border: 2px solid #D4D4D4;
+}
+
+
+
+	.tuoke_no_data {
+		color: #7c7c7c;
+		font-size: 1.2em;
+		margin: 80px 0;
+		text-align: center;
+	}
+  .tuoke_menus_item {
+      display: inline-block;
+      width: 25%;
+      margin: 0 12%;
+      height: 2.2rem;
+      line-height: 2.2rem;
+      text-align: center;
+  }
+    .active {
+      color: #ffba42;
+      border-bottom: 0.2rem solid #ffba42;
+    }
+  .font_style_black {
+    font-size: 1.2em
+  }
+.list_items{
+	padding: 0px 8px;
+	margin-bottom: 10px;
+	background: #fff;
+	position:relative;
+}
+.mediaL .list_items{
+	padding: 0px 8px 10px;
+}
+</style>
+<body>
+  <div id="page">
+    <header id="header">
+      <div class="header_l">
+        <a class="ico_10" onclick="javascript :history.back(-1);" href="javascript:;"> 返回 </a>
+      </div>
+      <h1> 店铺报表 </h1>
+    </header>
+  </div>
+	<ul class="tab_content fans_lists" id="list_boxs" style="margin-top: 60px;">
+		<li class="tab_contentli mediaL bod" id="fans_list" v-cloak>
+			{if condition="$report_list_data != array()"}
+				<ul class="con_list" id="con_list" >
+					<input type="hidden" id="number_id" value="{$number_id}" />
+					{foreach name='report_list_data' item='vel' key='key'}
+						<li class="list_items font_style_black" id='list_items' style="width:96%">
+							<div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;">
+								<div class="media_left">
+									<img class="icon_name1" src="{empty name="vel.shop_img"}__PUBLIC__/Home/Test/image/default.png{else /}{$vel.shop_img}{/empty}" alt="" />
+								</div>
+								<div class="media_right">
+									<p class="border1" style="padding-top: 12px;">
+										店铺名称：<span style="color: black;font-size: 16px;font-weight: bold;">{$vel.shop_name}</span><span id='shop_id' style="color: #ffba42;float: right;font-size: 13px;">￥{$vel.total_money}</em>
+									</p>
+									<p style="padding:10px 0;">店主帐号：{$vel.user_name}<span id='shop_id' style="color: #444444;float: right;font-size: 13px;">该店业绩</em></p>
+								</div>
+							</div>
+				        </li>
+				    {/foreach}
+				</ul>
+			{else /}
+				<span v-if="tk_fans.length == 0"><p class="tuoke_no_data">暂无数据</p></span>
+			{/if}
+    	</li>
+  	</ul>
+  	<div id="loading" class="loading-wrap">
+		<span class="loading" id="loadingls">加载中，请稍后...</span>
+	</div>
+</body>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/vue.min.js"></script> -->
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery-1.4.4.min.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery.min.js"></script>	
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/masonry-docs.min.js"></script>
+<script>
+	//alert();
+$(function(){
+    //执行瀑布流
+    $('#fans_list_ls').hide();
+    var $container = $('#con_list');
+	  $container.masonry({
+	    itemSelector : '#list_items',
+	    isAnimated: true
+	  });
+
+	var loading = $("#loading").data("on", false);
+	//console.log(loading)
+	$(window).scroll(function(){
+		if(loading.data("on")) return;
+		if($(document).scrollTop() > $(document).height()-$(window).height()-$('#list_items').height()){
+			//加载更多数据
+			loading.data("on", true).fadeIn();
+			// var sn_id = $('#sn_id').val();
+			var number_id = $('#number_id').val();
+			// alert(number_id)
+			$.get(
+				"{:U('Test/performance_report_data?type=1')}",
+				/*{"last_id" : $("#list_items>div:last>input").val()},*/
+				{'last_num':document.getElementById("con_list").getElementsByTagName("li").length,'number_id':number_id},
+				function(data){
+					var html = "";
+					//console.log(data);
+					if(data['error'] == '0'){
+						var arr = data['data'];
+						//console.log(arr);
+						for(i in arr){
+							var h_img = '';
+			                if(arr[i]['shop_img'] == null){
+			                  h_img = "__PUBLIC__/Home/Test/image/default.png";
+			                }else{
+			                  h_img = arr[i]['shop_img'];
+			                }
+							html += '<li class="list_items font_style_black" id="list_items" style="width:96%"><div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;"><div class="media_left"><img class="icon_name1" src="'+h_img+'" alt="" /></div><div class="media_right"><p class="border1" style="padding-top: 12px;">店铺名称：<span style="color: black;font-size: 16px;font-weight: bold;">'+arr[i]['shop_name']+'</span><span id="shop_id" style="color: #ffba42;float: right;font-size: 13px;">￥'+arr[i]['total_money']+'</em></p><p style="padding:10px 0;">店主帐号：'+arr[i]['user_name']+'<span id="shop_id" style="color: #444444;float: right;font-size: 13px;">该店业绩</em></p></div></div></li>'
+						}
+
+						var $newElems = $(html).css({ opacity: 0 }).appendTo($container);
+						$newElems.imagesLoaded(function(){
+							$newElems.animate({ opacity: 1 });
+							$container.masonry( 'appended', $newElems, true ); 
+				        });
+				        loading.data("on", false);
+				        loading.fadeOut();
+					}else{
+						//alert(1)
+						$('#loadingls').html('数据已全部加载！');
+					}
+				},
+				"json"
+			);
+		}
+	});
+});
+function yeji() {
+	alert("业绩报表");
+	javascript:window.location.href='{:U('Home/Test/performance_report')}';
+}
+  function selectItem(ele,index) {
+    var element = $(ele);
+    if(!element.hasClass('active')) {
+      element.addClass('active').siblings().removeClass('active');
+      switch (index) {
+        case 0:
+          $('#fans_list').show();
+          $('#fans_list_ls').hide();
+          break;
+        default:
+          $('#fans_list_ls').show();
+          //$('#fans_list_ls').text(x.left);  
+          $('#fans_list').hide();
+          break;
+      }
+      tab = !!index ?  'right' : 'left';
+    }
+  }
+</script>
+
+
+</html>

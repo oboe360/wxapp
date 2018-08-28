@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <style type="text/css">
+      input {
+        width: 30%;
+      }
+    </style>
+    <title></title>
+    <link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+  </head>
+    <script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+  <body>
+    <form action="" id="form" method="post" style="margin-left: 2%;">
+      <table  class="table table-border table-bordered table-bg mt-20" border="0">
+      <tr>
+        <td style="padding-left: 30%; ">
+            <div>审核留言：</div>
+            <textarea name="is_check_remark" id="" cols="40" rows="10"></textarea>
+        </td>
+      </tr>
+      <input type="hidden" name="id" value="{$data.id}">
+      <input type="hidden" name="is_check" value="{$data.is_check}">
+      <tr>
+        <td style="padding-left: 35%; "><input type="button" class="btn btn-success radius" value="更新审核状态" id="shenhe" /></td>
+      </tr>
+    </table>
+    </form>
+  </body>
+  <script type="text/javascript" src="__PUBLIC__/static/admin/js/1.9.3/layer.js"></script>
+  <script type="text/javascript">
+    $(function(){
+      $('#shenhe').click(function(){
+        $.ajax({
+          'url':"{:U('admin/tixian/isCheckShenhe')}",
+          'type':'post',
+          'data':$('#form').serialize(),
+           success:function(data,err){
+            var data = eval('(' + data + ')'); 
+            if(data.code == 0){
+              layer.msg('更新失败!',{icon: 6,time:1000});
+              return ;
+            }else{
+              layer.msg('更新成功!',{icon: 6,time:1000});
+              window.setTimeout(function(){
+                parent.location.href = "{:U('admin/tixian/lists/is_check/'.$data['is_check'])}";
+              },1000);
+            }
+          }
+        })
+      })
+    })
+  </script>
+</html>

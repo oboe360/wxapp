@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<style type="text/css">
+			input {
+				width: 30%;
+			}
+		</style>
+		<title></title>
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+	</head>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+		<script type="text/javascript">
+			function back(){
+				window.history.go(-1);
+			}
+		</script>
+	<body>
+		<nav class="breadcrumb"><a href="javascript:back()">返回上一页</a> <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<form action="{:U('admin/shoprank/saveEdit')}" method="post">
+			<table   class="table table-border table-bordered table-bg mt-20">
+				<tr>
+					<th colspan="2">后台系统 - 店铺等级列表 - 编辑店铺等级</th>
+				</tr>
+				<tr>
+					<td width="20%"><b>店铺等级名称</b></td>
+					<td width="80%"><input type="text" name="shop_rank_name" value="{$shopRankArr.shop_rank_name}" /></td>
+				</tr>
+			
+				<tsr>
+					<td><b>店铺业绩分佣百分比</b></td>
+					<td><input type="number" name="discount" value="{$shopRankArr.discount}"></td>
+				</tr>
+
+			<tr>
+				<input type="hidden" name="rank_id" value="{$shopRankArr.rank_id}" />
+				<td colspan="2 " style="padding-left: 20%; "><input type="submit"  value="确认编辑" class="btn btn-primary radius"/></td>
+			</tr>
+		</table>
+		</form>
+	</body>
+</html>

@@ -1,0 +1,88 @@
+<div class="tuoke_status_record">
+    <input type="hidden" id="shop_rank" value="{$shop_rank}" />
+    <div class="tuoke_status_record_content" onclick="home();">
+      <!-- <p id="tuoke_fans" class="font_style_white" v-html="tuoke_fans">{$shop_count.shop_user}</p> -->
+      <p class="font_style_light_white" style="color: #7c7c7c;">首页</p>
+    </div>
+    <div class="div_vertical"></div>
+    <div class="tuoke_status_record_content" onclick="fans();">
+      <!-- <p class="font_style_white">{$shop_count.xia_store}</p> -->
+      <p class="font_style_light_white" style="color: #7c7c7c;">粉丝管理</p>
+    </div>
+    <div class="div_vertical"></div>
+    <div class="tuoke_status_record_content" onclick="shop_lower();" >
+				<!-- <p id="tuoke_record" class="font_style_white" v-html="last_tixian_record">暂无记录</p> -->
+      <p class="font_style_light_white" style="color: #7c7c7c;">下级店铺</p>
+    </div>
+<!-- 	    <div class="div_vertical"></div>
+    <div class="tuoke_status_record_content" onclick="showQRCode();">
+      <p class="font_style_white">二维码</p>
+      <p class="font_style_light_white">分享小程序</p>
+    </div> -->
+</div>
+
+<style type="text/css">
+.tuoke_status_record {
+  background: #f4f4f4;
+  text-align: center;
+  margin-top: 30px;
+  /*margin-top: 499px;*/
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 99;
+}
+.font_style_light_white {
+  color: #ffffff;
+  font-size: 1.0em;
+}
+.tuoke_status_record_content {
+  width: 26%;
+  display: inline-block;
+  text-align: center;
+  padding:10px 0;
+}
+.font_style_white {
+  color: white;
+  font-size: 1.2em;
+}
+.font_style_black {
+  font-size: 1.2em
+}
+.font_large {
+  font-size: 50px;
+}
+.div_vertical {
+  display: inline-block;
+  background: rgba(255, 255, 255, 0.4);
+  width: 1px;
+  height: 28px;
+  margin: 0 4%;
+}
+.status {
+	width: 20%;
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+</style>
+<script type="text/javascript">
+  function home(){
+    javascript:window.location.href='{:U('Home/Test/my_tuoke')}';
+  }
+  function fans(){
+    javascript:window.location.href='{:U('Home/Test/tuoke_fans')}';
+  }
+  function modify_tuoke_data(){
+    javascript:window.location.href='{:U('Home/Test/modify_tuoke_data')}';
+  }
+  function shop_lower() {
+    var shop_rank = $('#shop_rank').val();
+    if (shop_rank == 1) {
+      alert("普通店主没有查看下级店铺权限");
+    }else{
+      javascript:window.location.href='{:U('Home/Test/shop_lower')}';      
+    }
+  }
+</script>

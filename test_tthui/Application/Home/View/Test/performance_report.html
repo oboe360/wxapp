@@ -1,0 +1,223 @@
+<!-- {include file="footer" /} -->
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>下级店铺</title>
+  <link href="__PUBLIC__/Home/Test/css/ectouch.css" rel="stylesheet" type="text/css" />
+</head>
+<style>
+  
+	.item{
+		border: 1px solid #D4D4D4;
+	    color: red;
+	    margin: 0 10px 10px 0;
+	    padding: 10px;
+	    position: relative;
+	    width: 200px;
+	}
+	.loading-wrap{
+		bottom: 50px;
+		width: 100%;
+		height: 55px;
+		text-align: center;
+		display: none;
+	}
+	.loading {
+		padding: 4px 3% 4px 3%;
+		height: 32px;
+		line-height: 0px;
+		color: #FFF;
+		font-size: 12px;
+		border-radius: 5px;
+		background: 10px center rgba(0,0,0,.7);
+	}
+	.footer{
+		border: 2px solid #D4D4D4;
+	}
+
+
+
+	.tuoke_no_data {
+		color: #7c7c7c;
+		font-size: 1.2em;
+		margin: 80px 0;
+		text-align: center;
+	}
+  .tuoke_menus_item {
+      display: inline-block;
+      width: 25%;
+      margin: 0 12%;
+      height: 2.2rem;
+      line-height: 2.2rem;
+      text-align: center;
+  }
+    .active {
+      color: #ffba42;
+      border-bottom: 0.2rem solid #ffba42;
+    }
+  .font_style_black {
+    font-size: 1.2em
+  }
+	.pos_b {
+	    position: absolute;
+	    left: : 0;
+	    top: 90%;
+	    margin-top: -4px;
+	    margin-left: 50px;
+	}
+	.por_box{
+		display: flex;
+		align-items: center;
+	}
+	.por_box .num{
+		color: #ffba42;
+		width: 50px;
+	}
+	.por_con {
+		flex: 1;
+	}
+	.por_con div {
+		line-height: 30px;
+		height: 30px;
+    color: 000;
+    font-weight: 500;
+	}
+	.angle {
+		width: 50px;
+	}
+.list_items{
+	padding: 0px 8px;
+	margin-bottom: 10px;
+	background: #fff;
+	position:relative;
+}
+.mediaL .list_items{
+	padding: 0px 8px 10px;
+}
+</style>
+<body>
+  <div id="page">
+    <header id="header">
+      <div class="header_l">
+        <a class="ico_10" onclick="javascript :history.back(-1);" href="javascript:;"> 返回 </a>
+      </div>
+      <h1> 业绩报表 </h1>
+	  <!-- <a onclick="yeji();" style="color: #ffba42; width: 70px; margin-top: 10px; margin-right: 15px;">业绩报表</a> -->
+    </header>
+  </div>
+	<ul class="tab_content fans_lists" id="list_boxs" style="margin-top: 10px;">
+		<li class="tab_contentli mediaL bod" id="fans_list" v-cloak>
+			{if condition="$report_list != array()"}
+				<ul class="con_list" id="con_list" >
+					{foreach name='report_list' item='vel' key='key'}
+						<li class="list_items font_style_black" id='list_items' style="width:96%; padding-top:10; margin: 10px 0;">
+							<a href="javascript:;" class="clearfix">
+								<div class="por_box">
+									<span class="num">{$vel.number}</span>
+									<div class="por_con" onclick="setting({$vel.number})" >
+										<div>本周业绩￥{$vel.total_money}
+											<span id="tel" class="companys">{if condition="$vel.is_tixian eq 1"}已提现{else /}未提现{/if}</span>
+										</div>
+										<div style="color: #7c7c7c;">{$vel.start_time|date="Ymd",###}-{$vel.end_time|date="Ymd",###}</div>
+									</div>
+									<i class="iii pos_r" style="right:10px;"></i>
+								</div>
+							</a>
+		        </li>
+				    {/foreach}
+				</ul>
+			{else /}
+				<span v-if="tk_fans.length == 0"><p class="tuoke_no_data">暂无数据</p></span>
+			{/if}
+    	</li>
+  	</ul>
+  	<div id="loading" class="loading-wrap">
+		<span class="loading" id="loadingls">加载中，请稍后...</span>
+	</div>
+</body>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/vue.min.js"></script> -->
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery-1.4.4.min.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery.min.js"></script>	
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/masonry-docs.min.js"></script>
+<script>
+	//alert();
+$(function(){
+    //执行瀑布流
+    $('#fans_list_ls').hide();
+    var $container = $('#con_list');
+	  $container.masonry({
+	    itemSelector : '#list_items',
+	    isAnimated: true
+	  });
+
+	var loading = $("#loading").data("on", false);
+	//console.log(loading)
+	$(window).scroll(function(){
+		if(loading.data("on")) return;
+		if($(document).scrollTop() > $(document).height()-$(window).height()-$('#list_items').height()){
+			//加载更多数据
+			loading.data("on", true).fadeIn();
+			
+			$.get(
+				"{:U('Test/performance_report?type=1')}",
+				/*{"last_id" : $("#list_items>div:last>input").val()},*/
+				{'last_num':document.getElementById("con_list").getElementsByTagName("li").length},
+				function(data){
+					var html = "";
+					//console.log(data);
+					if(data['error'] == '0'){
+						var arr = data['data'];
+						var last_num =  document.getElementById("con_list").getElementsByTagName("li").length;
+						//console.log(arr);
+						for(i in arr){
+							var rank = Number(last_num)+Number(i)+Number(1)
+							var start = fmtDate(arr[i]['start_time']*1000);
+							var end = fmtDate(arr[i]['end_time']*1000);
+							if (arr[i]['is_tixian'] == 1) {
+								var is_tixian = "已提现";
+							}else if (arr[i]['is_tixian'] == 0) {
+								var is_tixian = "未提现";
+							}
+							html += '<li class="list_items font_style_black" id="list_items" style="width:96%; padding-top:10; margin: 10px 0;"><a href="javascript:;" class="clearfix"><div class="por_box"><span class="num">'+arr[i]['number']+'</span><div class="por_con" onclick="setting('+arr[i]['number']+')" ><div>本周业绩￥'+arr[i]['total_money']+'<span id="tel" class="companys">'+is_tixian+'</span></div><div style="color: #7c7c7c;">'+start+'-'+end+'</div></div><i class="iii pos_r" style="right:10px;"></i></div></a></li>'
+						}
+
+						var $newElems = $(html).css({ opacity: 0 }).appendTo($container);
+						$newElems.imagesLoaded(function(){
+							$newElems.animate({ opacity: 1 });
+							$container.masonry( 'appended', $newElems, true ); 
+				        });
+				        loading.data("on", false);
+				        loading.fadeOut();
+					}else{
+						//alert(1)
+						$('#loadingls').html('数据已全部加载！');
+					}
+				},
+				"json"
+			);
+		}
+	});
+});
+function yeji() {
+	// alert("业绩报表");
+	javascript:window.location.href='{:U('Home/Test/performance_report')}';
+}
+function fmtDate(obj){
+    var date =  new Date(obj);
+    var y = 1900+date.getYear();
+    var m = "0"+(date.getMonth()+1);
+    var d = "0"+date.getDate();
+    return y+m.substring(m.length-2,m.length)+d.substring(d.length-2,d.length);
+}
+function setting(number){
+	// alert(id);
+	javascript:window.location.href='{:U('Home/Test/performance_report_data')}?number='+number;
+}
+</script>
+
+
+</html>

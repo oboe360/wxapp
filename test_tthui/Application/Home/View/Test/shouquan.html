@@ -1,0 +1,292 @@
+ <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0">
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery.min.js"></script>
+    <title></title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        a{
+          text-decoration: none;
+          color:#7c7c7c;
+        }
+
+        img {
+            width: 100%;
+            display: block;
+        }
+
+        .dlbj {
+            background: #fff;
+        }
+        #header {
+            z-index: 999;
+            background: #fff;
+            position: fixed;
+            height: 3rem;
+            display: block;
+            width: 100%;
+            top: 0;
+            left: 0;
+        }
+
+        #header .header_l {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        #header .header_l a {
+          /*  background: url(images/shouquan/jiantou.png) no-repeat 50% 50%;*/
+            -webkit-background-size: 0.8rem 1.2rem;
+            -moz-background-size: 0.8rem 1.2rem;
+            background-size: 0.8rem 1.2rem;       
+            width: 3rem;
+            height: 3rem;
+            display: block;
+            padding: 0 0.2rem;
+            text-indent: -999em;
+            overflow: hidden;
+            color: #8d8d8d;
+            text-decoration: none;
+        }
+        #header h1 {
+            color: #000;
+            font-size: 20px;
+            line-height: 3rem;
+            text-align: center;
+            font-weight: normal;
+        }
+        #header .header_r {
+            position: absolute;
+            top: 0;
+            right: 0px;
+        }
+        #header .header_r a {
+            width: 3rem;
+            height: 3rem;
+            display: block;
+            padding: 0 0.2rem;
+            color: #000;
+            font-size: 16px;
+            line-height: 48px;
+            text-align: center;
+            font-weight: normal;
+            cursor: pointer;
+            overflow: hidden;
+            text-decoration: none;
+        }
+        .con {
+            padding: 0 15px;
+            padding-top: 50px;
+        }
+
+        h2 {
+            color: #000;
+            font-weight: normal;
+            font-size: 34px;
+            margin: 40px 0 10px;
+        }
+
+        .toux {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 60px auto 0;
+            background: #fff;
+        }
+
+        .toux img{
+          width: 70px;
+          height: 70px;
+        }
+
+        .name {
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            color: #fff;
+        }
+        
+      .anzhuo{
+          background:url(images/shouquan/anzhuo.png) no-repeat;
+          background-size: cover;
+        }
+        .ios{
+          background:url(images/shouquan/ios.png) no-repeat;
+          background-size: cover;
+        }
+        .botn{
+          width: 240px;
+          margin: auto;
+        }
+        .btnG{
+          margin-top: 20px;
+        }
+        .user_name,.password{
+          height: 46px;
+          width: 100%;
+          border: 1px solid #ccc;
+          text-indent: .5em;
+          font-size: 16px;
+        }
+        .bd{
+          display: block;
+          width: 100%;
+          height: 44px;
+          margin: auto;
+          border: 0;
+          margin-top: 14px;
+          color: #fff;
+          background: #ffba42;
+          font-size: 16px;
+        }
+        .zcwj{
+          text-align: center;
+          font-size: 13px;
+          color: #7c7c7c;
+          margin-top: 30px;
+        }
+        .shu{
+          display: inline-block;
+          width: 1px;
+          background: #7c7c7c;
+          height: 10px;
+          margin: 0 10%;
+        }
+    </style>
+</head>
+
+<body class="dlbj">
+<!-- 弹窗s -->
+<section class="alert alert-select-multiple">
+    <div class="alert-content">
+      <div class="alert-msg"></div>
+      <div class="alert-action">
+        <a class="action-item" href="#">确定</a>
+      </div>
+    </div>
+  </section>
+<style>
+/*.dlbj {
+    background: url(themes/default/images/bg.png) no-repeat;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+}*/
+.alert {display: none;position: fixed;top: 0;right: 0;bottom: 0;left: 0;z-index: 5000;}
+.alert-action{display: flex;position: absolute;bottom: 0;width: 100%;}
+.alert-msg{text-align: center;margin-top: 34px;padding: 0 10px;font-size: 14px;}
+.alert .alert-content {border-radius: 9px;background-color: white;box-shadow: 0px 0px 51px 0px rgba(0, 0, 0, 0.37);position: absolute;left: 50%;margin-left: -100px; top: 50%;margin-top: -3.4875rem;width: 200px;height: 150px;z-index: 44;overflow: hidden;}
+.alert .action-item {display: inline-block;width: 100%;height: 40px;font-size: 14px;color: #fff;text-align: center;line-height: 40px;background: #e53b3b;}
+</style>
+<script>
+$(".action-item").click(function(){
+  $(".alert-select-multiple").hide();
+})
+</script>
+<!-- 弹窗end -->
+<div id="page">
+    <header id="header">
+      <div class="header_l">
+        <a class="ico_10"  href="javascript:;"> 返回 </a>
+      </div>
+      <!-- {if $act eq 'bang'} -->  
+
+      <!-- {else} -->
+      <div class="header_r">
+        <a class=""  href="{$url}"> 跳过 </a>
+      </div>
+      <!-- {/if} --> 
+    <h1> 绑定账号 </h1>
+    </header>
+  </div>
+    <div class="con">
+        <h2>账号绑定</h2>
+        <p style="color: #7c7c7c;">为了更好的服务，您需要绑定一个美淘账号。</p>
+        <!-- {if $act eq 'bang'} -->  
+        <p style="color: #7c7c7c;">绑定美淘帐号之后，原有的微信帐号订单会清空。请知悉！</p>
+        <!-- {/if} --> 
+        <div style="margin: 30px 0;">
+          <input type="text" style="border-bottom: 0;" class="user_name" placeholder="请输入手机号码" >
+          <input type="password" class="password" placeholder="请输入登录密码" >
+        </div>  
+        <button type="button" class="bd">绑定账号</button>
+        <input class="user_id"  type="hidden" value="{$user_id}">   
+        <div class="zcwj">
+          <a href="wx_register.php?act=wx_register">注册美淘</a><span class="shu"></span><a href="user.php?act=get_password">忘记密码</a>
+        </div>
+        <!-- <div class="btnG">
+          <button type="button">已有账号</button>
+          <button type="button">尚未注册</buttowx_register.phpn>
+          <button type="button">跳过</button>
+        </div> -->
+    </div>
+   <!--  <div class="botn">
+      <a class="anzhuo" href="http://imtt.dd.qq.com/16891/0608966F81068BC24ADCB025DA7CA281.apk?fsname=com.fecmobile.meitaomo_2.0.1_8.apk&csr=1bbd"></a>
+  		<a class="ios" href="https://itunes.apple.com/cn/app/%E7%8E%AF%E7%90%83%E7%BE%8E%E6%B7%98/id1116069060?mt=8"></a>
+    </div> -->
+  <script>
+  $(".bd").click(function(){
+    var user_name = $(".user_name").val();
+    var user_id = $(".user_id").val();//$(".user_id").val()
+    var password = $(".password").val();//$(".user_id").val()
+   
+    if(user_name){
+        $.ajax({
+          url:"bang.php?act=ajax_bang",
+          type:"POST",
+          data:{'user_name':user_name,'user_id':user_id,"password":password},
+          dataType:"json",
+          success:function(data){
+            //alert(data);
+           if(data==2){
+              $(".alert-select-multiple").show();
+              $(".alert-msg").html("绑定成功！");
+                //alert("绑定成功!");
+
+              window.location.href="{$url}";
+           }else if(data==3){
+              $(".alert-select-multiple").show();
+              $(".alert-msg").html("绑定失败！");
+              return false;
+           }else if(data==4){
+              $(".alert-select-multiple").show();
+              $(".alert-msg").html("帐号密码错误");
+               //alert("帐号密码错误");
+               return false;
+           }else if(data==1){
+              $(".alert-select-multiple").show();
+              $(".alert-msg").html("该账号已经绑定过了~！一个美淘帐号只能绑定一个微信帐号哦！");
+               //alert("帐号密码错误");
+               return false;
+           }else if(data==5){
+              $(".alert-select-multiple").show();
+              $(".alert-msg").html("该手机号未注册环球美淘帐号！");
+               //alert("帐号密码错误");
+               return false;
+           }
+
+
+          },
+          error:function(data){
+            //alert(JSON.stringify());
+          }
+
+        })
+
+    }else{
+      alert("账号不能为空 ！");
+      return false;
+    }
+    //console.log(user_name);
+  })
+  </script>
+</body>
+
+</html>

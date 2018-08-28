@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>title</title>
+  <!-- <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/Test/css/api.css"/> -->
+  <link href="__PUBLIC__/Home/Test/css/ectouch.css" rel="stylesheet" type="text/css" />
+  <style>
+    .tuoke_status {
+      background: url(__PUBLIC__/Home/Test/image/bg_1@2x.png);
+      height: 261px;
+      position: relative;
+    }
+    .tuoke_header {
+      color: #ffddd2;
+      z-index: 999;
+      position: fixed;
+      display: block;
+      width: 100%;
+      padding-top: 30px;
+      top: 0;
+      left: 0;
+    }
+    .tuoke_header h1 {
+      font-size: 20px;
+      text-align: center;
+      line-height: 3.0rem;
+    }
+		.tuoke_header a {
+			display: inline-block;
+			position: absolute;
+			width: 36px;
+			height: 18px;
+			top: 46px;
+			left: 15px;
+			background: url(__PUBLIC__/Home/Test/image/back_while@2x.png) center no-repeat;
+		}
+    .tuoke_status_content {
+      text-align: center;
+      padding-top: 78px;
+    }
+    .tuoke_status_record {
+      background: rgba(255, 255, 255, 0.1);
+      text-align: center;
+      margin-top: 30px;
+    }
+    .tuoke_status_record_content {
+      width: 23%;
+      display: inline-block;
+      text-align: center;
+      padding:10px 0;
+    }
+    .tuoke_menus {
+      margin-bottom: 5px;
+    }
+		.tuoke_menus_item {
+			display: inline-block;
+      width: 25%;
+      margin: 0 12%;
+      height: 2.2rem;
+      line-height: 2.2rem;
+      text-align: center;
+		}
+    .active {
+      color: #ff5340;
+      border-bottom: 0.2rem solid #ff5340;
+    }
+    .tuoke_menus_title {
+      padding:10px 10px 10px 15px;
+      border-bottom: 1px solid #dedede;
+      background: white;
+    }
+		.tuoke_no_data {
+			color: #7c7c7c;
+			margin: 20px 0;
+			text-align: center;
+		}
+		.tuoke_menus_title img{
+      width: 17px;
+			height: 14px;
+			margin-right: 8px;
+			vertical-align: middle;
+    }
+    .setup {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border: 0;
+      right: 20px;
+			z-index: 9999;
+      top: 42px;
+    }
+    .font_style_light_white {
+      color: #ffddd2;
+      font-size: 1.0em;
+    }
+		.font_style_white {
+      color: white;
+      font-size: 1.2em;
+    }
+    .font_style_black {
+      font-size: 1.2em
+    }
+    .font_large {
+      font-size: 50px;
+    }
+    .div_vertical {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.4);
+      width: 1px;
+      height: 28px;
+      margin: 0 4%;
+    }
+		.status {
+			width: 20%;
+			position: absolute;
+			right: 0;
+			top: 0;
+		}
+  </style>
+</head>
+<body>
+  <div class="tuoke_status">
+    <header class="tuoke_header">
+			<a onclick="test();"></a>
+			<img class="setup" src="__PUBLIC__/Home/Test/image/icon_Setting@2x.png" onclick="modify_tuoke_data();" />
+      <h1> 我的拓客宝 </h1>
+    </header>
+    <div class="tuoke_status_content">
+      <p id="tuoke_balance" class="font_style_light_white font_large" v-html="tuoke_balance">0</p>
+      <p class="font_style_light_white">我的拓客宝收益(元)</p>
+    </div>
+    <div class="tuoke_status_record">
+        <div class="tuoke_status_record_content" onclick="fans();">
+          <p id="tuoke_fans" class="font_style_white" v-html="tuoke_fans">0</p>
+          <p class="font_style_light_white">粉丝数量(个)</p>
+        </div>
+        <div class="div_vertical"></div>
+        <div class="tuoke_status_record_content" onclick="tuoke_withdraw();" >
+					<p id="tuoke_record" class="font_style_white" v-html="last_tixian_record">暂无记录</p>
+          <p class="font_style_light_white">我要提现</p>
+        </div>
+        <div class="div_vertical"></div>
+        <div class="tuoke_status_record_content" onclick="test1();">
+          <p class="font_style_white">二维码</p>
+          <p class="font_style_light_white">分享小程序</p>
+        </div>
+    </div>
+		<div class="tuoke_menus font_style_black">
+	    <p class="tuoke_menus_title"><img src="__PUBLIC__/Home/Test/image/icon_Order@2x.png" />我的订单</p>
+			<template v-if="user_rank >= 101">
+				<ul style="margin-bottom: 10px; background: white;">
+					<li class="tuoke_menus_item active" onclick="selectItem(this,0);">直属订单</li>
+					<li class="tuoke_menus_item" onclick="selectItem(this,1);">间接订单</li>
+				</ul>
+			</template>
+			<template v-if="test.length == 0"><p class="tuoke_no_data">暂无数据</p></template>
+			<ul class="tab_content fans_lists">
+				<li class="tab_contentli mediaL bod" id="fans_list" v-cloak>
+					<ul class="con_list">
+						<li class="list_items" v-for="item in order_sn">
+							<div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;">
+								<div class="media_left">
+									<img class="icon_name1" :src="item.headimgurl" alt="" />
+								</div>
+								<div class="media_right">
+									<p class="border1" style="padding-top: 12px;">昵称：<span style="color: black;font-size: 16px;font-weight: bold;">{{item.nickname}}</span></p>
+									<p style="padding:10px 0;">账号：{{item.tel}}</p>
+								</div>
+							</div>
+							<div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
+								<span style="color: #444444;float: left;">订单号：{{item.order_sn}}</span>
+								<span style="color: #444444;float: right;">ID: {{item.buyid}}</em>
+							</div>
+							<div class="media_foot">
+								<!-- <span style="color: black; font-size: 1.1em;float: left;">金额: ¥ {{item.money}}</span> -->
+								<span style="color: #ff5340; font-size: 1.1em;float:right;">获利: ¥ {{item.money}}</em>
+							</div>
+							<template v-if="item.is_tixian == 1"><img class="status" src="__PUBLIC__/Home/Test/image/withdrawn.png" /></template>
+							<template v-else><img class="status" src="__PUBLIC__/Home/Test/image/withdraw.png" /></template>
+						</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+  </div>
+</body>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/api.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/ghost.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/vue.min.js"></script>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/loading.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery-1.4.4.min.js"></script>
+<script type="text/javascript">
+	$(window).scroll(function() {
+		if($(this).scrollTop() >= 50 && $(this).scrollTop() <= 150) {
+			$(".tuoke_header").hide();
+		}else if($(this).scrollTop() < 50) {
+			$(".tuoke_header").show();
+		}
+	});
+	apiready = ghostInit(function() {
+		api.addEventListener({
+		    name: '返回'
+		}, function(ret, err){
+		    api.closeToWin({
+		        name: 'root'
+		    });
+		});
+		showLoading();
+		api.ajax({
+			url:phpUrl+"/tk_sale.php?act=tk_info"
+		},function(ret, err) {
+			stopLoading();
+//			alert(JSON.stringify(ret))
+			user_rank = ret.user_rank;
+			if(ret) {
+				shop_id = ret.shop_id;
+				tuoke_order = new Vue({
+					el:".tuoke_status",
+					data:{
+						tuoke_balance:"",
+						tuoke_fans:"",
+						order_sn: [],
+						zhijie_tk_order_sn:[],
+						jianjie_tk_order_sn:[],
+						last_tixian_record:"",
+						user_rank: 0,
+					},
+					created: function() {
+						this.tuoke_balance = ret.tk_income;
+						this.tuoke_fans = ret.tk_fans_num;
+						this.order_sn = ret.zhijie_tk_order_sn;
+						this.zhijie_tk_order_sn = ret.zhijie_tk_order_sn;
+						this.jianjie_tk_order_sn = ret.jianjie_tk_order_sn;
+						this.last_tixian_record = ret.last_tixian_record;
+						this.user_rank = ret.user_rank;
+					}
+				})
+			}else {
+				ghost().toast(err.msg);
+			}
+		});
+	});
+
+	function selectItem(ele,index) {
+		var element = $(ele);
+		if(!element.hasClass('active')) {
+			element.addClass('active').siblings().removeClass('active');
+			switch (index) {
+				case 0:
+					tuoke_order.order_sn = tuoke_order.zhijie_tk_order_sn;
+					break;
+				default:
+					tuoke_order.order_sn = tuoke_order.jianjie_tk_order_sn;
+			}
+		}
+	}
+
+	function test1() {
+		// alert("生成二维码");
+		var shop_id = '946';
+		$.ajax({
+			url: '{:U('Home/Test/create_qrcode')}',
+			type: 'post',
+		    data: {
+		    	path: 'pages/index/index?shop_id=' + shop_id
+			},  
+             success: function(data){
+             	alert('生成成功');
+             	javascript:window.location.href='{:U('Home/Test/showQRCode')}';
+             	// window.location.reload();
+             }
+		})
+	}
+	function fans(){
+		alert('粉丝列表12');
+		javascript:window.location.href='{:U('Home/Test/zhuce')}';
+	}
+	function tuoke_withdraw(){
+		alert('提现');
+		javascript:window.location.href='{:U('Home/Test/tuoke_withdraw')}';
+	}
+	function modify_tuoke_data(){
+		alert('店铺设置');
+		javascript:window.location.href='{:U('Home/Test/modify_tuoke_data')}';
+	}
+	function showQRCode() {
+
+		alert('提现');
+		javascript:window.location.href='{:U('Home/Test/showQRCode')}';
+	}
+</script>
+</html>

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>实名认证</title>
+	<link href="__PUBLIC__/Home/Test//css/ectouch.css" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="__PUBLIC__/Home/Test/css/common.css?v=20160520">
+</head>
+<style type="text/css">
+.nicheng{
+	border: 0;
+    width: 60%;
+    height: 40px;
+    font-size: 13px;
+}
+</style>
+<body>
+	<div id="page">
+		<header id="header">
+			<div class="header_l">
+				<a class="ico_10" onclick="back()" href="javascript:;"> 返回 </a>
+			</div>
+			<h1> 实名认证 </h1>
+		</header>
+	</div>
+	<form  enctype="multipart/form-data" id="tf" method="post" >
+	<div class="list_box padd1 first" id="list_boxs" style="margin-top:90px;">
+		<div class="agroup">
+			<a href="javascript:;" class="clearfix">
+				<div class="portrait_con" >
+					真实姓名&nbsp;<input type="text" id="idname" placeholder="请输入你的真实姓名" onblur="upperCase()" value="" class="nicheng" />
+				</div>
+			</a>
+			<div class="bd1"></div>
+			<a href="javascript:;" class="clearfix">
+				<div class="portrait_con">
+					身份证号码&nbsp;
+					<input type="text" id="idnumber" placeholder="请输入你的身份证号" onblur="upperCase1()" value="" class="nicheng" />
+				</div>
+			</a>
+			<div class="bd1"></div>
+			<a href="javascript:;" class="clearfix">
+			<div class="portrait_con" >
+				身份证照片&nbsp;
+			</div>
+			<div class="portrait_con">
+				<img id="idcard_fornt"  style="margin-left: 31%; width: 150px; height: 100px;" src="__PUBLIC__/Home/Test/image/idcard_fornt.png">
+				<input type="file" name="fileToUpload" id="fileToUpload" accept="image/*" onchange="fileSelected(this,'fornt');" style="position: absolute;left: 31%;z-index: 2; width: 150px; height: 100px;opacity: 0;">
+			</div>
+			<div class="portrait_con">
+				<img id="idcard_back" style="margin-left: 31%; width: 150px; height: 100px;" src="__PUBLIC__/Home/Test/image/idcard_back.png">
+				<input type="file" name="fileToUpload2" id="fileToUpload2" accept="image/*" onchange="fileSelected(this,'back');" style="position: absolute;left: 31%;z-index: 2; width: 150px; height: 100px;opacity: 0;">
+			</div>
+<!-- 			<div class="portrait_con">
+			    <img id="xmTanImg" src="" />
+    			<div id="xmTanDiv"></div>	
+			</div> -->
+			</a>
+			
+		</div>
+	</div>
+	</form>
+	<button onclick="modify();" id="btn3" class="c-btn3 bc" style="margin-top:30px;">保存</button>
+</body>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/api.js"></script> -->
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/ghost.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/masonry-docs.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/alertPopShow.js"></script>
+<script type="text/javascript">
+	function modify() {
+		if ($("#fileToUpload").val()==""||$("#fileToUpload2").val()=="") {
+			webToast("请上传图片","middle",1000);
+		}
+	    var form = new FormData(document.getElementById("tf"));
+	  	var idname = $("#idname").val();
+	  	var idnumber = $("#idnumber").val();
+	    $.ajax({
+	        url:"{:U('Home/Test/idcard_upload')}?idname="+idname+"&idnumber="+idnumber,
+	        type:"post",
+	        data:form,
+	        processData:false,
+	        contentType:false,
+	        success:function(data){
+	        	if (data == 1) {
+	        		// alert('上传成功');
+	        		webToast("上传成功","middle",3000);
+	        		window.setTimeout("window.location='{:U('Home/Test/shop_tixian')}'",2000);
+	        	}else if(data == 2){
+	        		// alert('上传失败')
+	        		webToast("上传成功","middle",3000);
+	        	}
+	            // window.clearInterval(timer);
+	            // console.log("over..");
+	        },
+	        error:function(e){
+	            // alert("错误！！");
+	            webToast("错误！！","middle",3000);
+	            // window.clearInterval(timer);
+	        }
+	    });        
+	    // get();//此处为上传文件的进度条
+	}
+	function upperCase() {
+		$("#btn3").removeAttr("disabled","false");
+	  	var idname = $("#idname").val();
+	  	// var idnumber = $("#idnumber").val();
+	  	var reg = /^[\u4E00-\u9FA5\uf900-\ufa2d·s]{2,20}$/;
+	  	if (reg.test(idname) == false) {
+	  		webToast("请正确填写姓名！","middle",1000);
+	  		$("#btn3").attr("disabled","true");
+
+	  	}
+		// webToast("请正确填写身份证号码！","middle",1000);
+	}
+	function upperCase1() {
+		$("#btn3").removeAttr("disabled","false");
+		var idnumber = $("#idnumber").val();
+		if (idnumber.length < 16 || idnumber.length > 19) {
+			// bounced('银行卡号长度必须在16到19之间!');
+			webToast("身份证号长度必须在15到18之间！","middle",1000);
+			return false;
+		}
+		if(isCardNo(idnumber) == false) {
+			webToast("请正确填写身份证号码！","middle",1000);
+			$("#btn3").attr("disabled","true");
+		}
+	}
+	function isCardNo(card) { 
+	 var pattern = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/; 
+	 return pattern.test(card); 
+	}
+  function fileSelect() {
+    document.getElementById("fileToUpload").click(); 
+  }
+
+  function fileSelected(ss,dd) {
+  // 文件选择后触发次函数
+  	// alert("选择成功")
+  	xmTanUploadImg(ss,dd)
+
+  }
+  function setting(type){
+  	// alert("设置");
+  	javascript:window.location.href='{:U('Home/Test/modify_nickname')}?type='+type;
+  }
+  function back(){
+    // alert('返回');
+    javascript:window.location.href='{:U('Home/Test/my_tuoke')}';
+  }
+  // function idcard_fornt() {
+  // 	document.getElementById("fileToUpload").click();
+  // }
+  // function idcard_back() {
+  // 	document.getElementById("fileToUpload2").click();
+  // }
+  function xmTanUploadImg(obj,dd) {
+    var file = obj.files[0];
+    // console.log(obj);console.log(file);
+    // console.log("file.size = " + file.size);  //file.size 单位为byte
+    var reader = new FileReader();
+
+    //读取文件过程方法
+    // reader.onloadstart = function (e) {
+    //     console.log("开始读取....");
+    // }
+    // reader.onprogress = function (e) {
+    //     console.log("正在读取中....");
+    // }
+    // reader.onabort = function (e) {
+    //     console.log("中断读取....");
+    // }
+    // reader.onerror = function (e) {
+    //     console.log("读取异常....");
+    // }
+    reader.onload = function (e) {
+        console.log("成功读取....");
+
+        // var img = document.getElementById("xmTanImg");
+        // img.src = e.target.result;
+        if (dd == 'fornt') {
+			$('#idcard_fornt').attr('src',e.target.result);        	
+        }else if (dd == 'back') {
+        	$('#idcard_back').attr('src',e.target.result);
+        }
+        //或者 img.src = this.result;  //e.target == this
+    }
+
+    reader.readAsDataURL(file)
+  }
+</script>
+</html>

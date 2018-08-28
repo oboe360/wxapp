@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+		<title></title>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+		<script type="text/javascript">
+		
+			function change(delivery, id) {
+				$.post('__CONTROLLER__/change', 'delivery=' + delivery + '&id=' + id, function(re) {
+					if(re == 2) {
+						alert('操作失败');
+					} else {
+						$('#a' + id + ' img').attr('src', '__PUBLIC__/admin/images/' + re + '.gif');
+						$('#a' + id).attr('href', 'javascript:change(' + re + ',' + id + ')');
+					}
+
+				});
+			}
+		</script>
+	</head>
+
+	<body>
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 后台系统 <span class="c-gray en">&gt;</span> 配置管理 <span class="c-gray en">&gt;</span>  <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+		<a href="{:U('admin/wxconfig/add')}"  class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加配置信息</a>
+		</span> 
+	<!-- 	<span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span>  -->
+	</div>
+		<table class="table table-border table-bordered table-bg mt-20">
+			<tr>
+				<th>微信网页授权ID</th>
+				<th>网页应用的APPID</th>
+				<th>网页应用密钥</th>
+				<th>商户号</th>
+				<th>微信KEY</th>
+				<th>授权类型</th>
+				<th>添加时间</th>
+				<th>操作</th>
+			</tr>
+			{foreach name="wxConfigArr" item="v"}
+			<tr>
+				<td>{$v.id}</td>
+				<td>{$v.appid}</td>
+				<td>{$v.appsecret}</td>
+				<td>{$v.wxmchid}</td>
+				<td>{$v.wxkey}</td>
+				<td>
+				{if condition="$v['type'] == 0"}
+				小程序
+				{elseif condition="$v['type'] == 1" /}
+				公众号
+				{/if}
+				</td>
+				<td>
+					{$v.addtime|date="y-m-d h:i:s",###}
+				</td>
+				<td>
+					<a href="{:U('admin/wxconfig/add/id/'.$v['id'])}"><img src="__PUBLIC__/admin/images/icon_edit.gif" title="编辑"/></a>&nbsp;|&nbsp;
+					<a href="{:U('admin/wxconfig/delete/id/'.$v['id'])}"><img src="__PUBLIC__/admin/images/icon_drop.gif" title="移除"/></a>
+				</td>
+			</tr>
+			{/foreach}
+		</table>
+	</body>
+</html>

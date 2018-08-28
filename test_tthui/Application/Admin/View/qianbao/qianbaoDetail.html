@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+		<title></title>
+		<style type="text/css">
+			.num {
+				margin: 10px 5px;
+			}
+			
+			.num,.next,.prev {
+				text-decoration: none;
+				color: #f00;
+				padding: 0px 8px;
+				border: 1px solid gray;
+			}
+			
+			.current:after {
+				content: '页';
+			}
+			
+			.current:before {
+				content: '第';
+			}
+		</style>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				$('[name="order_sn"]').val('{$data.order_sn}');
+				$('[name="buyid"]').val('{$data.buyid}');
+				$('[name="nickname"]').val('{$data.nickname}');
+				$('[name="income_uid"]').val('{$data.income_uid}');
+				$('[name="start"]').val('{$data.start}');
+				$('[name="end"]').val('{$data.end}');
+				$('#page').blur(function(){
+						var url = window.location.href;
+						var value = $('#page').val();
+						if(value>0){
+							$.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+								url = url+'?'+$('#form').serialize();
+								window.location.href = url;
+							});
+						}
+						
+					});
+				$("#page").keydown(function(event){
+			　　　　if(event.keyCode == 13){
+			　　　　　　var url = window.location.href;
+						var value = $('#page').val();
+						if(value>0){
+							$.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+								url = url+'?'+$('#form').serialize();
+								window.location.href = url;
+							});
+						}
+			　　　　}
+			　　});
+			});
+
+		</script>
+	</head>
+
+	<body>
+		<!-- <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 后台系统 <span class="c-gray en">&gt;</span> 订单管理 <span class="c-gray en">&gt;</span> 用户钱包流水表 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav> -->
+			<div class="pd-20">
+			<form action="{:U('admin/qianbao/qianbaoDetail')}" id="form" method="post">
+				<input type="text" name="order_sn" placeholder="平台订单号"/>
+				<input type="text" name="buyid" placeholder="购买用户ID"/>
+				<input type="text" name="nickname" placeholder="购买用户名称"/>
+				<input type="hidden" name="income_uid" placeholder="收益用户ID"/>
+				开始：<input type="date" name="start" placeholder="开始时间"/>
+				结束：<input type="date" name="end" placeholder="结束时间"/>
+				<input type="submit" value="搜索" class="btn btn-success radius"/>
+			</form>
+			<div class="cl pd-5 bg-1 bk-gray mt-20">
+		<span class="l">
+<!-- 		<a href="{:U('admin/sucai/add')}"  class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加素材分类</a> -->
+当前条件下钱包流水记录总数为 <span style="color:red;">{$count_list.count}</span> , 一级收益总金额为 <span style="color:red;">{$count_list.first_income_money}</span> , 二级收益总金额为 <span style="color:red;">{$count_list.second_income_money}</span>, 收益总金额为 <span style="color:red;">{$count_list['first_income_money']+$count_list['second_income_money']}</span>
+		</span> 
+		<span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span> 
+		</div>
+			<table class="table table-border table-bordered table-bg mt-20">
+			<thead>
+			<tr>
+				<th>序号ID</th>
+				<th>购买用户ID</th>
+				<th>平台订单号</th>
+				<th>订单时间</th>
+				<th>订单类型</th>
+				<th>消费总金额</th>
+				<th>佣金收入</th>
+				<th>会员原收益金额</th>
+				<th>是否提现</th>
+				<th>操作备注</th>
+			</tr>
+		</thead>
+		<tbody>
+			{foreach name="arr" item="v"}
+			<tr>
+				<td>{$v.id}</td>
+				<td>{$v.nickname}({$v.buyid})</td>
+				<td>{$v.order_sn}</td>
+				<td>{$v.order_time|date="Y-m-d H:i:s",###}</td>
+				<td>
+					{if condition="$v.status == 0"}
+					普通商品
+					{elseif condition="$v.status == 1"/}
+					会员礼包
+					{elseif condition="$v.status == 2"/}
+					混合商品 
+					{/if}
+				</td>
+				<td>{$v.money}</td>
+				<td style="color: red;">
+				{if condition="$v.income_status == 1"}
+				(一级佣金)
+				{elseif condition="$v.income_status == 2"/}
+				(二级佣金)
+				{/if}
+				{$v.income_money}
+				</td>
+				<td>{$v.the_money}</td>
+				<td>
+				{if condition="$v.is_tixian == 0"}
+					未提现
+					{elseif condition="$v.is_tixian == 1"/}
+					已提现
+					{elseif condition="$v.is_tixian == 2"/}
+					其他原因 
+				{/if}
+				</td>
+				<td>{$v.remarks}</td>
+			</tr>
+			{/foreach}
+			<tr>
+				<td colspan="14" align="center">
+					{$show}
+
+				</td>
+			</tr>
+			</tbody>
+		</table>
+	</div>
+	</body>
+
+</html>

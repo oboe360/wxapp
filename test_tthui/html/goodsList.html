@@ -1,0 +1,640 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
+<meta http-equiv="pragma" content="no-cache"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<script type="text/javascript" src="lib/PIE_IE678.js"></script>
+<![endif]-->
+<link href="css/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
+<link href="lib/Hui-iconfont/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>商品列表</title>
+<style type="text/css">
+	a:hover{
+		text-decoration: none;
+	}
+	.fff{
+		color: #fff;
+	}
+	.paginate_button{
+		border: 1px solid #ccc;
+	    cursor: pointer;
+	    display: inline-block;
+	    margin-left: 2px;
+	    text-align: center;
+	    text-decoration: none;
+	    color: #666;
+	    height: 26px;
+	    line-height: 26px;
+	    text-decoration: none;
+	    margin: 0 0 6px 6px;
+	    padding: 0 10px;
+	    font-size: 14px;
+	}
+	.dataTables_paginate{
+		text-align: center;
+		margin-top: 20px;
+	}
+	.current{
+		background: #5a98de;
+    	color: #fff;
+	}
+	#loading{position:fixed;top:0;left:0;width:100%;height:100%;opacity:0.6;z-index:15000;}  
+    #loading img{position:absolute;top:45%;left:45%;width:60px;height:60px;margin-top:-30px;margin-left:-30px;background: white;} 
+</style>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 商品设置 <span class="c-gray en">&gt;</span> 商品列表 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.reload(true);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="pd-20">
+	<div class="text-c">  
+		<span class="select-box" style="width:10%;">
+			<select name="cat" id="cat" class="select">
+				<option value="all"> 全部</option>
+				<option value="is_best"> 精品</option>
+				<option value="is_new"> 新品</option>
+				<option value="is_hot"> 热销</option>
+			</select>
+		</span>
+		
+		<span class="select-box" style="width:10%;">
+			<select name="is_on_sale" id="is_on_sale" class="select">
+				<option value="all"> 全部</option>
+				<option value="1"> 上架</option>
+				<option value="0"> 下架</option>
+			</select>
+		</span>
+		<input type="text" name="" id="goods_name" placeholder=" 商品名称" style="width:250px" class="input-text">
+		<input type="text" name="" id="goods_sn" placeholder=" 商品货号" style="width:250px" class="input-text">
+		<button name="" id="share" class="btn btn-success" type="submit"><i class="Hui-iconfont">&#xe665;</i> 搜商品</button>
+		
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"> <a class="btn btn-primary radius" onclick="article_add('添加商品','goodsAdd.html?ran='+Math.random())" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 添加商品</a></span>&emsp;
+	<button name="" id="ztgoods" class="btn btn-primary radius" type="button"><i class="Hui-iconfont">&#xe665;</i> 更新美淘商品</button>&emsp;
+	<button name="" id="ztkucun" class="btn btn-primary radius" type="button"><i class="Hui-iconfont">&#xe665;</i> 更新美淘商品库存</button>
+	<span class="r">每页显示<strong><input type="text" size='5' value="15" id="page"></strong> 条</span> 
+	</div>
+	<div class="mt-20" id="tables">
+		<table class="table table-border table-bordered table-bg">
+			<thead>
+				<tr class="text-c">
+					<th width="25"><input type="checkbox" name="" value=""></th>
+					<th style="width:80px">编号</th>
+					<th style="width:180px">商品名称</th>
+					<th width="80">商品key(美淘中台商品key，不可更改)</th>
+					<th width="80">商品货号</th>
+					<th width="80">商品库存</th>
+					<th width="120">商品销量</th>
+					<th width="120">商品初始销量</th>
+					<th width="75">商品重量</th>
+					<th width="75">市场价格</th>
+					<!-- <th width="120">商品库存</th> -->
+					<th width="120">上架</th>
+					<th width="120">会员礼包</th>
+					<th width="120">新品</th>
+					<th width="120">热销</th>
+					<th width="120">是否为爆款</th>
+					<td width="120">操作</td>
+				</tr>
+			</thead>
+			<tbody id="info">
+			</tbody>
+		</table>
+		<div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table">
+			<div style="display: inline-block;">
+				共 <em class="allnum">0</em> 条，第 <em class="active_page">1</em> 页，共 <em class="numpage">0</em> 页
+			</div>
+			<a class="paginate_button first" id="first_page">首页</a>
+			<a class="paginate_button previous" id="fy_shang">上一页</a>
+			<!-- <span class="pages_list"><a class="paginate_button current fy_zhong">1</a></span> -->
+			<a class="paginate_button next"  id="fy_xia">下一页</a>
+			<a class="paginate_button last"  id="last_page">最后一页</a>
+			<div style="display: inline-block;">
+				跳转到<input class="paginate_button jump_page" style="width: 36px;margin: 4px;padding: 0 6px;cursor: auto;" type="text" name="">页 <a class="paginate_button jump" id="jump">跳转</a>
+			</div>
+			<input type="hidden" value="1" id="fy_n" />
+			<input type="hidden" value="1" id="shera_p" />
+			<input type="hidden" value="" id="pages" />
+			<input type="hidden" value="" id="pages1" />
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="lib/jquery/1.9.1/jquery.min.js"></script> 
+<script type="text/javascript" src="lib/layer/1.9.3/layer.js"></script> 
+<script type="text/javascript" src="lib/My97DatePicker/WdatePicker.js"></script> 
+<script type="text/javascript" src="lib/datatables/1.10.0/jquery.dataTables.min.js"></script> 
+<script type="text/javascript" src="js/vue.min.js"></script> 
+<script type="text/javascript" src="js/H-ui.js"></script> 
+<script type="text/javascript" src="js/H-ui.admin.js"></script>
+
+<script type="text/javascript">
+$(function(){
+
+	function getCookie(value = 0)
+	{	
+
+	    $.get('../admin/index/setCookie',function(data){
+			$('#page').val(data);
+		});
+	}
+ 
+	// 调用函数
+	getCookie();
+	
+	$('#page').blur(function(){
+			var url = window.location.href;
+			var value = $('#page').val();
+			if(value>0){
+				$.get('../admin/index/setCookie','pageshop='+value,function(data){
+					$("#DataTables_Table").addClass('kk')
+					sheras();
+				});
+			}else{
+				getCookie();
+			}
+		});
+	$("#page").keydown(function(event){
+　　　　if(event.keyCode == 13){
+　　　　　　var url = window.location.href;
+			var value = $('#page').val();
+			if(value>0){
+				$.get('../admin/index/setCookie','pageshop='+value,function(data){
+					$("#DataTables_Table").addClass('kk')
+					sheras();
+				});
+			}else{
+				getCookie();
+			}
+　　　　}
+　　});
+});
+// var curWwwPath=window.document.location.href;
+// var pathName=window.document.location.pathname;
+// var pos=curWwwPath.indexOf(pathName);
+// var localhostPaht=curWwwPath.substring(0,pos);
+// var projectName=pathName.substring(0,pathName.substr(1).indexOf('/')+1);
+// var realPath=localhostPaht+projectName;
+// sheras();
+
+	$("#share").click(function(){
+		$("#DataTables_Table").addClass('kk')
+		sheras();
+	})
+	$("#goods_sn").keydown(function(event){
+　　　　if(event.keyCode == 13){
+　　　　　　$("#DataTables_Table").addClass('kk')
+			sheras();
+　　　　}
+　　});
+	$("#goods_name").keydown(function(event){
+　　　　if(event.keyCode == 13){
+　　　　　　$("#DataTables_Table").addClass('kk')
+			sheras();
+　　　　}
+　　});
+	function sheras(){
+		var n = $("#shera_p").val();
+		var is_on_sale=$("#is_on_sale").val()
+		var cat=$("#cat").val()
+		var goods_name=$("#goods_name").val()
+		var goods_sn=$("#goods_sn").val()
+		// alert($goods_name);
+		$.ajax({
+			url:'../Admin/Goods/lists',
+			type:'post',
+			data:{
+				is_on_sale: is_on_sale,
+				goods_name: goods_name,
+				goods_sn: goods_sn,
+				type: cat,
+				p: n
+			},
+			success: function(data){
+				var data= eval('(' + data + ')'); 
+				//console.log(data);
+				if(data.code == 2){
+					parent.location = data.msg;
+					return ;
+				}
+				if(data.code == 0){
+					return ;
+				}
+				if(data.code == 1){
+					data = data.msg;
+				}
+				$("#pages1").val(data[1]);
+				var str='';
+				for(var i=0;i<data[0].length;i++){
+					str+='<tr class="text-c">'
+						+'<td><input type="checkbox" value="" name=""></td>'
+						+'<td>'+ data[0][i].goods_id +'</td>'
+						+'<td>'+ data[0][i].goods_name +'</td>'
+						+'<td>'+ data[0][i].goods_key +'</td>'
+						+'<td>'+ data[0][i].goods_sn +'</td>'
+						+'<td>'+ data[0][i].goods_number +'</td>'
+						+'<td>'+ data[0][i].sales_count +'</td>'
+						+'<td>'+ data[0][i].offline_count +'</td>'
+						+'<td>'+ data[0][i].goods_weight +'</td>'
+						+'<td>'+data[0][i].shop_price+'</td>';
+						if(data[0][i].is_on_sale == 0) {
+							str+='<td class="td-status"><span class="label label-defaunt radius" onClick="article_start(this,'+data[0][i].goods_id+','+data[0][i].is_on_sale+',\'is_on_sale\')"><a class="fff" href="javascript:;">未上架</a></span></td>';
+						}else {
+							str+='<td class="td-status"><span class="label label-success radius" onClick="article_stop(this,'+data[0][i].goods_id+','+data[0][i].is_on_sale+',\'is_on_sale\')"><a class="fff" href="javascript:;">已发布</a></span></td>';
+						}
+
+						if(data[0][i].is_best == 0) {
+							str+='<td class="td-status"><span class="label label-defaunt radius" onClick="article_start(this,'+data[0][i].goods_id+','+data[0][i].is_best+',\'is_best\')"><a class="fff" href="javascript:;">未上架</a></span></td>';
+						}else {
+							str+='<td class="td-status"><span class="label label-success radius" onClick="article_stop(this,'+data[0][i].goods_id+','+data[0][i].is_best+',\'is_best\')"><a class="fff" href="javascript:;">已发布</a></span></td>';
+						}
+
+						if(data[0][i].is_new == 0) {
+							str+='<td class="td-status"><span class="label label-defaunt radius" onClick="article_start(this,'+data[0][i].goods_id+','+data[0][i].is_new+',\'is_new\')"><a class="fff" href="javascript:;">未上架</a></span></td>';
+						}else {
+							str+='<td class="td-status"><span class="label label-success radius" onClick="article_stop(this,'+data[0][i].goods_id+','+data[0][i].is_new+',\'is_new\')"><a class="fff" href="javascript:;">已发布</a></span></td>';
+						}
+
+						if(data[0][i].is_hot == 0) {
+							str+='<td class="td-status"><span class="label label-defaunt radius" onClick="article_start(this,'+data[0][i].goods_id+','+data[0][i].is_hot+',\'is_hot\')"><a class="fff" href="javascript:;">未上架</a></span></td>';
+						}else {
+							str+='<td class="td-status"><span class="label label-success radius" onClick="article_stop(this,'+data[0][i].goods_id+','+data[0][i].is_hot+',\'is_hot\')"><a class="fff" href="javascript:;">已发布</a></span></td>';
+						}
+						if(data[0][i].is_burst == 0) {
+							str+='<td class="td-status"><span class="label label-defaunt radius" onClick="article_start(this,'+data[0][i].goods_id+','+data[0][i].is_burst+',\'is_burst\')"><a class="fff" href="javascript:;">未上架</a></span></td>';
+						}else {
+							str+='<td class="td-status"><span class="label label-success radius" onClick="article_stop(this,'+data[0][i].goods_id+','+data[0][i].is_burst+',\'is_burst\')"><a class="fff" href="javascript:;">已发布</a></span></td>';
+						}
+						// str+='<td>'+data[0][i].goods_number+'</td>';
+						str+="<td class='f-14 td-manage'> <a style='text-decoration:none' onclick='article_edit(\"编辑\",\"goodsDetail.html?ran=" + Math.random()+"&id="+data[0][i].goods_id+"\")' class='ml-5'  href='javascript:;' title='编辑'><i class='Hui-iconfont'>&#xe6df;</i></a> <a style='text-decoration:none' class='ml-5' onClick='article_del(this,\""+data[0][i].goods_id+"\")' href='javascript:;' title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td>";
+				}
+				// $("#info").html(str)
+				// $(".numpage").html(data[1])
+				// $(".allnum").html(data[2])
+				// $(".active_page").html(1)
+				$("#info").html(str)
+				$(".numpage").html(data[1])
+				$(".allnum").html(data[2])
+			}
+		})
+	}
+
+	function suju(){
+		var n = $("#fy_n").val();
+		$.ajax({
+			url:'../Admin/Goods/lists',
+			type:'post',
+			data:{
+				p: n
+			},
+			dataType:'json',
+			success: function(data){
+				if(data.code == 2){
+					parent.location = data.msg;
+					return ;
+				}
+				if(data.code == 0){
+					return ;
+				}
+				if(data.code == 1){
+					data = data.msg;
+				}
+				$("#pages").val(data[1]);
+				var str='';
+				for(var i=0;i<data[0].length;i++){
+					str+='<tr class="text-c">'
+						+'<td><input type="checkbox" value="" name=""></td>'
+						+'<td>'+ data[0][i].goods_id +'</td>'
+						+'<td>'+ data[0][i].goods_name +'</td>'
+						+'<td>'+ data[0][i].goods_key +'</td>'
+						+'<td>'+ data[0][i].goods_sn +'</td>'
+						+'<td>'+ data[0][i].goods_number +'</td>'
+						+'<td>'+ data[0][i].sales_count +'</td>'
+						+'<td>'+ data[0][i].offline_count +'</td>'
+						+'<td>'+ data[0][i].goods_weight +'</td>'
+						+'<td>'+data[0][i].shop_price+'</td>';
+						if(data[0][i].is_on_sale == 0) {
+							str+='<td class="td-status"><span class="label label-defaunt radius" onClick="article_start(this,'+data[0][i].goods_id+','+data[0][i].is_on_sale+',\'is_on_sale\')"><a class="fff" href="javascript:;">未上架</a></span></td>';
+						}else {
+							str+='<td class="td-status"><span class="label label-success radius" onClick="article_stop(this,'+data[0][i].goods_id+','+data[0][i].is_on_sale+',\'is_on_sale\')"><a class="fff" href="javascript:;">已发布</a></span></td>';
+						}
+
+						if(data[0][i].is_best == 0) {
+							str+='<td class="td-status"><span class="label label-defaunt radius" onClick="article_start(this,'+data[0][i].goods_id+','+data[0][i].is_best+',\'is_best\')"><a class="fff" href="javascript:;">未上架</a></span></td>';
+						}else {
+							str+='<td class="td-status"><span class="label label-success radius" onClick="article_stop(this,'+data[0][i].goods_id+','+data[0][i].is_best+',\'is_best\')"><a class="fff" href="javascript:;">已发布</a></span></td>';
+						}
+
+						if(data[0][i].is_new == 0) {
+							str+='<td class="td-status"><span class="label label-defaunt radius" onClick="article_start(this,'+data[0][i].goods_id+','+data[0][i].is_new+',\'is_new\')"><a class="fff" href="javascript:;">未上架</a></span></td>';
+						}else {
+							str+='<td class="td-status"><span class="label label-success radius" onClick="article_stop(this,'+data[0][i].goods_id+','+data[0][i].is_new+',\'is_new\')"><a class="fff" href="javascript:;">已发布</a></span></td>';
+						}
+
+						if(data[0][i].is_hot == 0) {
+							str+='<td class="td-status"><span class="label label-defaunt radius" onClick="article_start(this,'+data[0][i].goods_id+','+data[0][i].is_hot+',\'is_hot\')"><a class="fff" href="javascript:;">未上架</a></span></td>';
+						}else {
+							str+='<td class="td-status"><span class="label label-success radius" onClick="article_stop(this,'+data[0][i].goods_id+','+data[0][i].is_hot+',\'is_hot\')"><a class="fff" href="javascript:;">已发布</a></span></td>';
+						}
+						if(data[0][i].is_burst == 0) {
+							str+='<td class="td-status"><span class="label label-defaunt radius" onClick="article_start(this,'+data[0][i].goods_id+','+data[0][i].is_burst+',\'is_burst\')"><a class="fff" href="javascript:;">未上架</a></span></td>';
+						}else {
+							str+='<td class="td-status"><span class="label label-success radius" onClick="article_stop(this,'+data[0][i].goods_id+','+data[0][i].is_burst+',\'is_burst\')"><a class="fff" href="javascript:;">已发布</a></span></td>';
+						}
+						// str+='<td>'+data[0][i].goods_number+'</td>';
+						str+="<td class='f-14 td-manage'> <a style='text-decoration:none' onclick='article_edit(\"编辑\",\"goodsDetail.html?ran=" + Math.random()+"&id="+data[0][i].goods_id+"\")' class='ml-5'  href='javascript:;' title='编辑'><i class='Hui-iconfont'>&#xe6df;</i></a> <a style='text-decoration:none' class='ml-5' onClick='article_del(this,\""+data[0][i].goods_id+"\")' href='javascript:;' title='删除'><i class='Hui-iconfont'>&#xe6e2;</i></a></td>";
+				}
+				$("#info").html(str)
+				$(".numpage").html(data[1])
+				$(".allnum").html(data[2])
+			}
+		})
+	}
+	
+	suju();
+
+	$("#fy_shang").click(function(){ //上一页   
+		if($("#DataTables_Table").hasClass('kk')){
+			var n = $("#shera_p").val(); 
+	　　　　if(n>1){
+	　　　　　　n--;
+	　　　　}else{
+	　　　　　　n=1;
+	　　　　}
+	　　　　$("#shera_p").val(n);
+			$(".active_page").html(n)
+			sheras()
+		}else{
+			var n = $("#fy_n").val(); 
+	　　　　if(n>1){
+	　　　　　　n--;
+	　　　　}else{
+	　　　　　　n=1;
+	　　　　}
+	　　　　$("#fy_n").val(n);
+			$(".active_page").html(n)
+	　　　　//加载数据
+			suju();
+		}　　　　
+　　})
+　　$("#fy_xia").click(function(){	//下一页   
+		if($("#DataTables_Table").hasClass('kk')){
+			var n = $("#shera_p").val(); 
+			var zys=$("#pages1").val();
+	　　　　if(n<zys)
+	　　　　{
+	　　　　　　n++;
+	　　　　}
+	　　　　else
+	　　　　{
+	　　　　　　n=zys;
+	　　　　}
+	　　　　$("#shera_p").val(n);
+			$(".active_page").html(n)
+			sheras()
+		}else{
+			var zys=$("#pages").val();
+	　　　　var n = $("#fy_n").val(); 
+	　　　　if(n<zys)
+	　　　　{
+	　　　　　　n++;
+	　　　　}
+	　　　　else
+	　　　　{
+	　　　　　　n=zys;
+	　　　　}
+	　　　　$("#fy_n").val(n);
+			$(".active_page").html(n)
+	　　　　//加载数据
+			suju();
+		}　　　　
+		
+　　})
+　　function fy_zhong(n){
+　　　　$("#fy_n").val(n);
+		$(".active_page").html(n)
+　　　　//加载数据
+		 suju();
+　　}
+	$("#first_page").click(function(){ //第一页   
+		var n=1;
+		if($("#DataTables_Table").hasClass('kk')){
+			$("#shera_p").val(n);
+			$(".active_page").html(n)
+			sheras()
+		}else{
+			$("#fy_n").val(n);
+			$(".active_page").html(n)
+	　　　　//加载数据
+			 suju();
+		}
+	})
+	$("#last_page").click(function(){ //最后一页   
+		var n=$(".numpage").html();
+		if($("#DataTables_Table").hasClass('kk')){
+			$("#shera_p").val(n);
+			$(".active_page").html(n)
+			sheras()
+		}else{
+			$("#fy_n").val(n);
+			$(".active_page").html(n)
+	　　　　//加载数据
+			 suju();
+		}
+	})
+	$("#jump").click(function(){ //跳转页 
+		var n=parseFloat($(".jump_page").val());
+		var m=parseFloat($(".numpage").html());
+		if(n > m){
+			return;
+		}
+		if($("#DataTables_Table").hasClass('kk')){
+			$("#shera_p").val(n);
+			$(".active_page").html(n)
+			sheras()
+		}else{
+			$("#fy_n").val(n);
+			$(".active_page").html(n)
+	　　　　//加载数据
+			 suju();
+		}
+	})
+	function article_add(title,url,w,h){
+		var index = layer.open({
+			type: 2,
+			title: title,
+			content: url
+		});
+		layer.full(index);
+	}
+	function article_edit(title,url,id,w,h){
+		var index = layer.open({
+			type: 2,
+			title: title,
+			content: url
+		});
+		layer.full(index);
+	}
+	/*资讯-删除*/
+	function article_del(obj,id){
+		//console.log(id)
+		layer.confirm('确认要删除吗？',function(index){
+			$.ajax({
+				url:'../Admin/Goods/delete',
+				type:'post',
+				data:{
+					goods_id:id
+				},
+				dataType:'json',
+				success: function(data){
+					if(data.code == 2){
+						parent.location = data.msg;
+						return ;
+					}
+					if(data.code == 0){
+						return ;
+					}
+					if(data.code == 1){
+						data = data.msg;
+					}
+					if(data==1){
+						$(obj).parents("tr").remove();
+						layer.msg('已删除!',{icon: 5,time:1000});
+						suju()
+					}else{
+						layer.msg('删除失败!',{icon: 5,time:1000});
+					}
+				}
+			})
+		});
+	}
+	function article_stop(obj,id,state,types){
+		data = {};	
+		data["goods_id"] = id;
+		data[types] = state;
+		// console.log(data);
+		// return
+		layer.confirm('确认要下架吗？',function(index){
+			//console.log(data)
+			$.ajax({
+				url:'../Admin/Goods/saveEdit',
+				type:'post',
+				data:data,
+				dataType:'json',
+				success: function(data){
+					if(data.code == 2){
+						parent.location = data.msg;
+						return ;
+					}
+					if(data.code == 0){
+						return ;
+					}
+					if(data.code == 1){
+						data = data.msg;
+					}
+					if(data != 0){
+						$(obj).parents("td").html('<span class="label label-defaunt radius" onclick="article_start(this,'+id+','+data.value+',\''+types+'\')"><a href="javascript:;">已下架</a></span>');			
+						layer.msg('已下架!',{icon: 5,time:1000});
+						//suju()
+					}else{
+						layer.msg('操作失败!',{icon: 5,time:1000});
+					}
+				}
+			})
+		});
+	}
+	function article_start(obj,id,state,types){	
+		data = {};	
+		data["goods_id"] = id;
+		data[types] = state;
+		//console.log(data)	
+		layer.confirm('确认要发布吗？',function(index){
+			$.ajax({
+				url:'../Admin/Goods/saveEdit',
+				type:'post',
+				data:data,
+				dataType:'json',
+				success: function(data){
+					if(data.code == 2){
+						parent.location = data.msg;
+						return ;
+					}
+					if(data.code == 0){
+						return ;
+					}
+					if(data.code == 1){
+						data = data.msg;
+					}
+					if(data != 0){
+						$(obj).parents("td").html('<span class="label label-success radius" onclick="article_stop(this,'+id+','+data.value+',\''+types+'\')"><a href="javascript:;" class="fff">已发布</a></span>');
+			 			layer.msg('已发布!',{icon: 6,time:1000});
+						//suju()
+					}else{
+						layer.msg('操作失败!',{icon: 5,time:1000});
+					}
+				}
+			})
+			
+		});
+	}
+	$("#ztkucun").click(function(){
+   loading();
+   $.ajax({
+      url:"../Admin/Goods/goodsKucun",
+      type:"post",
+      Datatype:"json",
+      success:function(data){
+        $('#loading').remove();
+        var res = JSON.parse(data);
+        if(res.code==1){
+          alert(res.msg);
+          location.reload();
+        }else{
+          alert(res.msg);
+          // window.href.location.reload();
+        }
+        //console.log(data);
+
+      }
+
+   })
+});
+$("#ztgoods").click(function(){
+   loading();
+   $.ajax({
+      url:"../Admin/Goods/goodsData",
+      type:"post",
+      Datatype:"json",
+      success:function(data){
+        $('#loading').remove();
+        var res = JSON.parse(data);
+        if(res.code==1){
+          alert(res.msg);
+          location.reload();
+        }else{
+          alert(res.msg);
+          // window.href.location.reload();
+        }
+        //console.log(data);
+
+      }
+
+   })
+});
+function loading(){
+  var loading = '<div id="loading"><img src="images/loading.gif"></div>';  
+      $('body').append($(loading)); 
+}
+</script>

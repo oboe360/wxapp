@@ -1,0 +1,24 @@
+
+		<table width="100%" height="100%" class="table table-border table-bordered table-bg table-hover table-sort">
+					<tr>
+						<td class="text-c">商品名称</td>
+						<td class="text-c">商品封面图</td>
+						<td class="text-c">货号</td>
+						<td class="text-c">商品KEY</td>
+						<td class="text-c">价格</td>
+						<td class="text-c">数量</td>
+						<td class="text-c">重量</td>
+					</tr>
+					{foreach name="goods" item="good"}
+					<tr>
+						<td>{$good.goods_name}</td>
+						<td>
+						<img src="{$good.goods_img}" alt="封面图" width="100" height="100"></td>
+						<td>{$good.goods_sn}</td>
+						<td>{$good.goods_key}</td>
+						<td>{$good.goods_price}</td>
+						<td>{$good.goods_number}</td>
+						<td>{$good.goods_weight}</td>
+					</tr>
+					{/foreach}
+			</table>

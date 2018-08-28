@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+
+    <title></title>
+    <style type="text/css">
+      .num {
+        margin: 10px 5px;
+      }
+      
+      .num,.next,.prev {
+        text-decoration: none;
+        color: #f00;
+        padding: 0px 8px;
+        border: 1px solid gray;
+      }
+      
+      .current:after {
+        content: '页';
+      }
+      
+      .current:before {
+        content: '第';
+      }
+      #form input{
+        width: 250px;
+      }
+      .edit:hover{
+        color: rgb(255,0,0);
+        /*font-size: 20px;*/
+      }
+    </style>
+    <script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        $('[name="all_order_sn"]').val('{$data.all_order_sn}');
+        $('[name="uid"]').val('{$data.uid}');
+        $('[name="user_name"]').val('{$data.user_name}');
+        $('[name="start"]').val('{$data.start}');
+        $('[name="end"]').val('{$data.end}');
+        $('#a{$data.status}').attr('selected','selected');
+        $('#b{$data.is_check}').attr('selected','selected');
+        $('#page').blur(function(){
+            var url = window.location.href;
+            var value = $('#page').val();
+            if(value>0){
+              $.get('{:U('Admin/Index/setCookie')}','pageshop='+value,function(data){
+                url = url+'?'+$('#form').serialize();
+                window.location.href = url;
+              });
+            }
+            
+          });
+        $("#page").keydown(function(event){
+      　　　　if(event.keyCode == 13){
+      　　　　　　var url = window.location.href;
+                  var value = $('#page').val();
+                  if(value>0){
+                    $.get('{:U('Admin/Index/setCookie')}','pageshop='+value,function(data){
+                      url = url+'?'+$('#form').serialize();
+                      window.location.href = url;
+                    });
+                  }
+      　　　　}
+      　　});
+       
+      
+        // 使用outerHTML属性获取整个table元素的HTML代码（包括<table>标签），然后包装成一个完整的HTML文档，设置charset为urf-8以防止中文乱码
+          // var html = "<html><head><meta charset='utf-8' /></head><body>" + document.getElementsByTagName("table")[0].outerHTML + "</body></html>";
+          // console.log(html);
+          // 实例化一个Blob对象，其构造函数的第一个参数是包含文件内容的数组，第二个参数是包含文件类型属性的对象
+          /*var blob = new Blob([html], { type: "application/vnd.ms-excel" });
+          var a = $('.btn-primary');
+          // alert(a);
+          // console.log(a);
+          // return ;
+          // 利用URL.createObjectURL()方法为a元素生成blob URL
+          a.attr('href', URL.createObjectURL(blob));
+          a.attr('download', "提现审核列表.xls");*/
+      });
+         //修改订单信息
+      function edit(obj, key, id, idval){
+        var that = $('#'+obj);
+        var val = that.html();
+        var parent = that.parent();
+        that.html('');
+        that.after('<input type="text" name="'+key+'" value="'+val+'" autofocus="autofocus">');
+        $('#'+obj).siblings('[name="'+key+'"]').focus();
+        update(obj, key, id, idval, val);
+        // return false;
+      }
+      //请求更新
+      function update(obj, key, id, idval, value){
+        $('#'+obj).siblings('[name="'+key+'"]').blur(function(){
+          var val = $('#'+obj).siblings('[name="'+key+'"]').val();
+          // alert(val)
+          // return;
+          $.post('{:U('Admin/Tixian/update')}',key+'='+val+'&'+id+'='+idval,function(res){
+            $('#'+obj).siblings('[name="'+key+'"]').remove();
+            // var res = JSON.parse(res);
+            if(res == 1){
+              $('#'+obj).html(val);
+            }else{
+              $('#'+obj).html(value);
+            }
+          });
+        })
+        $('#'+obj).siblings('[name="'+key+'"]').keydown(function(event){
+        　　　　if(event.keyCode == 13){
+            var val = $('#'+obj).siblings('[name="'+key+'"]').val();
+            // alert(val)
+            // return;
+            $.post('{:U('Admin/Tixian/update')}',key+'='+val+'&'+id+'='+idval,function(res){
+              $('#'+obj).siblings('[name="'+key+'"]').remove();
+              // var res = JSON.parse(res);
+              if(res == 1){
+                $('#'+obj).html(val);
+              }else{
+                $('#'+obj).html(value);
+              }
+            });
+        // 　　　　　　var url = window.location.href;
+            return false;
+        　　　　}
+      　　});
+        // $(document).on('change','#'+obj+' [name="'+key+'"]',function(){
+          
+        // });
+      }
+    </script>
+  </head>
+
+  <body>
+  <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 后台系统 <span class="c-gray en">&gt;</span> 订单管理 <span class="c-gray en">&gt;</span> 提现列表 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+  <div class="pd-20">
+      <form action="{:U('admin/tixian/lists')}" id="form" method="post">
+        提现转帐审核：<select name="status" id="status" style="width: 100px;" class="input-text">
+                    <option value="0" id="a0">全部</option>
+                    <option value="1" id="a1">未审核</option>
+                    <option value="2" id="a2">已审核</option>
+                  </select>
+        提现信息审核：<select name="is_check" id="is_check" style="width: 100px;" class="input-text">
+          <option value="" id="b">全部</option>
+          <option value="0" id="b0">未审核</option>
+          <option value="1" id="b1">已审核</option>
+        </select>
+        <input type="text" name="all_order_sn" placeholder="平台订单号" class="input-text"/>
+        <input type="text" name="user_name" placeholder="开户名称" class="input-text"/>
+        <input type="text" name="uid" id="uid" placeholder="收款用户ID" class="input-text"/></br></br>
+        开始：<input type="datetime-local" name="start" placeholder="开始时间" class="input-text"/>
+        结束：<input type="datetime-local" name="end" placeholder="结束时间" class="input-text"/>
+        <input type="submit" value="搜索" style="width: 100px;" class="btn btn-success radius"/>
+      </form>
+    <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+    <a class="btn btn-primary radius"  onclick="exports()" id="dayin"><i class="Hui-iconfont">&#xe600;</i> 导出数据</a>
+    &nbsp;&nbsp;&nbsp;
+      当前条件下提现总数为 <span style="color:red;">{$count_list.count}</span> , 客户原提现总金额为 <span style="color:red;">{$count_list.money}</span> , 手续费总金额为 <span style="color:red;">{$count_list.procedure}</span>, 实际提现总金额为 <span style="color:red;">{$count_list.truemoney}</span>
+    </span> 
+    <span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span> 
+    </div>
+
+      <table class="table table-border table-bordered table-bg mt-20">
+        <thead>
+      <tr>
+          <th> <input onclick='selectAll(this)' type="checkbox" />
+              编号 </th>
+          <th>用户ID</th>
+          <th>开户名称</th>
+          <th>手机号码</th>
+          <th>银行卡号</th>
+          <th>开户的所属城市</th>
+          <th>支行名称</th> 
+          <th>开户地址</th>
+          <th>客户提现金额</th>
+          <th>提现手续费</th>
+          <th>实际需要转账金额</th>
+          <th>提现类型</th>
+          <th>提现单号</th>
+          <th>订单总笔数</th>
+          <th>身份证正面照</th>
+          <th>身份证反面照</th>
+          <th>身份证姓名</th>
+          <th>身份证号</th>
+          <th>提现备注</th>
+          <th>提现时间</th>
+          <!-- <th>提现状态</th> -->
+          <th>信息审核操作</th>
+          <th>转账操作</th>
+        </tr>
+        </thead>
+        <tbody>
+      {foreach name="arr" item="suppliers"}
+      <tr>
+          <td>{$suppliers.id}</td>
+          <td><div style="width: 80px;">{$suppliers.nickname}({$suppliers.uid})</div></td>
+          <td>
+              <span class="edit" id="user_name{$suppliers.id}" style="cursor: pointer;" onClick="edit('user_name{$suppliers.id}','user_name','id','{$suppliers.id}')">{$suppliers['user_name']?:'没有数据'}</span>
+          </td>
+          <td>
+              <span class="edit" id="bank_phone{$suppliers.id}" style="cursor: pointer;" onClick="edit('bank_phone{$suppliers.id}','bank_phone','id','{$suppliers.id}')">{$suppliers['bank_phone']?:'没有数据'}</span>
+          </td>
+          <td>
+              <span class="edit" id="coop_bank{$suppliers.id}" style="cursor: pointer;" onClick="edit('coop_bank{$suppliers.id}','coop_bank','id','{$suppliers.id}')">{$suppliers['coop_bank']?:'没有数据'}</span>
+          </td>
+          <td>
+              <span class="edit" id="bank_city{$suppliers.id}" style="cursor: pointer;" onClick="edit('bank_city{$suppliers.id}','bank_city','id','{$suppliers.id}')">{$suppliers['bank_city']?:'没有数据'}</span>
+          </td>
+          <td>
+              <span class="edit" id="bank_name{$suppliers.id}" style="cursor: pointer;" onClick="edit('bank_name{$suppliers.id}','bank_name','id','{$suppliers.id}')">{$suppliers['bank_name']?:'没有数据'}</span>
+          </td>
+          
+          <td>
+              <span class="edit" id="bank_address{$suppliers.id}" style="cursor: pointer;" onClick="edit('bank_address{$suppliers.id}','bank_address','id','{$suppliers.id}')">{$suppliers['bank_address']?:'没有数据'}</span>
+          </td>
+          
+          <td style="color: red;">{$suppliers.money}</td>
+          <td style="color: red;">{$suppliers.procedure}</td>
+          <td style="color: red;">{$suppliers.truemoney}</td>
+          <td>{$suppliers.type}</td>
+          <td>
+          <div style="width: 100px;max-height: 100px;overflow: auto;">
+          
+          <a href="javascript:member_edit('钱包流水详情','{:U('admin/tixian/qianbaoList')}?all_order_sn={$suppliers.all_order_sn}&income_uid={$suppliers.uid}&income_name={$suppliers.nickname}')">{$suppliers.all_order_sn}
+          </a>
+          </div>
+          </td>
+          <td>{$suppliers.order_number}</td>
+          <td>
+            <img src="{$suppliers.face_photo}" alt="正面照" width="150" height="100">
+          </td>
+          <td>
+            <img src="{$suppliers.reverse_photo}" alt="正面照" width="150" height="100">
+          </td>
+          <td>{$suppliers.real_name}</td>
+          <td>{$suppliers.id_card_no}</td>
+          <td>{$suppliers.remarks}</td>
+          <!-- <td>{$suppliers.audit_remarks}</td> -->
+          <!-- <td></td> -->
+          <td>{$suppliers.add_time|date="y-m-d h:i:s",###}</td>
+          <td align="center">
+            <!-- <a href="suppliers.php?act=edit&id={$suppliers.suppliers_id}" title="{$lang.edit}">{$lang.edit}</a> | -->
+            {if condition="$suppliers.is_check == 0"}
+            <!-- <a href="javascript:">通过审核</a> -->
+            <button  class="btn btn-success radius" onclick="member_edit('审核留言','{:U('admin/tixian/isCheckShenhe')}?id={$suppliers.id}&is_check=1')">
+            <i>核对订单正确</i>
+            </button>
+            <br/><br/>
+            <!-- <a href="javascript:">拒绝审核</a> -->
+            <button  class="btn btn-danger radius" onclick="member_edit('审核留言','{:U('admin/tixian/isCheckShenhe')}?id={$suppliers.id}&is_check=2')">
+            <i>核对订单错误</i>
+            </button>
+            {elseif  condition="$suppliers.is_check == 1"/}
+             <span style="color: green;">核对订单正确(备注：{$suppliers.is_check_remark})</span>
+            {elseif  condition="$suppliers.is_check == 2"/}
+             <span style="color: red;">核对订单错误(备注：{$suppliers.is_check_remark})</span>
+            {/if}
+          </td>
+          <td align="center">
+            <!-- <a href="suppliers.php?act=edit&id={$suppliers.suppliers_id}" title="{$lang.edit}">{$lang.edit}</a> | -->
+            {if condition="$suppliers.status == 1 && $suppliers.is_check == 1"}
+            <!-- <a href="javascript:">通过审核</a> -->
+            <button  class="btn btn-success radius" onclick="member_edit('审核留言','{:U('admin/tixian/shenhe')}?id={$suppliers.id}&order_sn={$suppliers.all_order_sn}&status=2')">
+            <i>转帐成功</i>
+            </button>
+            <br/><br/>
+            <!-- <a href="javascript:">拒绝审核</a> -->
+            <button  class="btn btn-danger radius" onclick="member_edit('审核留言','{:U('admin/tixian/shenhe')}?id={$suppliers.id}&order_sn={$suppliers.all_order_sn}&status=3')">
+            <i>转帐失败</i>
+            </button>
+            {elseif  condition="$suppliers.status == 2"/}
+             <span style="color: green;">转帐成功(备注：{$suppliers.audit_remarks})</span>
+            {elseif  condition="$suppliers.status == 3"/}
+             <span style="color: red;">转帐失败(备注：{$suppliers.audit_remarks})</span>
+            {/if}
+          </td>
+      {/foreach}
+      <tr>
+        <td colspan="30" align="right">
+          {$show}
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  </body>
+  <script type="text/javascript" src="__PUBLIC__/static/admin/js/1.9.3/layer.js"></script>
+ 
+  <script type="text/javascript">
+    /*用户-编辑*/
+      function member_edit(title, url){
+        var index = layer.open({
+          type: 2,
+          title: title,
+          content: url
+        });
+        layer.full(index);
+      }
+      function together(){
+        var wher = new Array();
+        wher.status = $('#status').val();
+        wher.all_order_sn = $('#all_order_sn').val();
+        wher.uid = $('#uid').val();
+        wher.sta_time = $('input[name=start]').val();
+        wher.end_time = $('input[name=end]').val();
+        //alert(bank_name);
+        return wher;
+      }
+
+      function exports(){
+        var togethers = together();
+        //console.log(togethers);
+        window.location.href = "{:U('Admin/tixian/tixian_exprets')}?exports=exports&status="+togethers['status']+"&all_order_sn="+togethers['all_order_sn']+"&uid="+togethers['uid']+"&sta_time="+togethers['sta_time']+"&end_time="+togethers['end_time'];
+      }
+  </script>
+</html>

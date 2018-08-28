@@ -1,0 +1,140 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<style type="text/css">
+.red{
+  color: rgb(255,0,0);
+}
+</style>
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<script type="text/javascript" src="lib/PIE_IE678.js"></script>
+<![endif]-->
+<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+
+<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="lib/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>我的桌面</title>
+</head>
+<body>
+  <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> {:C('BRAND_NAME')}后台系统 <span class="c-gray en">&gt;</span> 首页 <span class="c-gray en">&gt;</span> 首页一览 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="pd-20" style="padding-top:20px;">
+  <p class="f-20 text-success">欢迎使用{:C('BRAND_NAME')}后台系统 </p>
+  <table class="table table-border table-bordered table-bg">
+    <thead>
+      <tr>
+        <th colspan="8" scope="col">订单统计</th>
+      </tr>
+      <tr class="text-c">
+        <th>订单分类</th>
+        <th>未确认付款订单</th>
+        <th>已付款订单</th>
+        <th>取消的订单</th>
+        <th>退货的订单</th>
+       <th>今日订单数量</th>
+        <th>订单总数</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="text-c">
+        <td>商品订单</td>
+        <td ><a href="{:U('admin/order/lists/postsign/weifk')}">{$data.uncomfirmed}</a></td>
+        <td><a  class="red" href="{:U('admin/order/lists/postsign/all')}">{$data.payed}</a></td>
+        <td >{$data.cancel}</td>
+        <td class="red">{$data.return}</td>
+        <td  class="red">{$arr.order_today}</td>
+        <td class="red">{$data.count}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-border table-bordered table-bg">
+    <thead>
+      <tr>
+        <th colspan="8" scope="col" align="center">用户统计</th>
+      </tr>
+      <tr class="text-c">
+        <th>店主总数量</th>
+        <th>会员总数量</th>
+        <th>普通用户总数量</th>
+        <th>每日新增店主数量</th>
+        <th>每日新增会员数量</th>
+        <th>每日新增普通用户数量</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="text-c">
+        <td>{$arr.store_count}</td>
+        <td>{$arr.vip_count}</td>
+        <td>{$arr.pt_count}</td>
+        <td class="red">{$arr.store_today}</td>
+        <td class="red">{$arr.vip_today}</td>
+        <td class="red">{$arr.pt_today}</td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table table-border table-bordered table-bg mt-20">
+    <thead>
+      <tr>
+        <th colspan="2" scope="col">服务器信息</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th width="200">服务器计算机名</th>
+        <td><span id="lbServerName">{$Think.server.HTTP_HOST}</span></td>
+      </tr>
+      <tr>
+        <td>服务器IP地址</td>
+        <td>{$Think.server.SERVER_ADDR}</td>
+      </tr>
+      <tr>
+        <td>服务器域名</td>
+        <td>{$Think.server.HTTP_HOST}</td>
+      </tr>
+      <tr>
+        <td>本文件所在文件夹 </td>
+        <td>{$Think.server.CONTEXT_DOCUMENT_ROOT}</td>
+      </tr>
+      <tr>
+        <td>服务器操作系统 </td>
+        <td>{$Think.server.HTTP_USER_AGENT}</td>
+      </tr>
+      <tr>
+        <td>服务器当前时间 </td>
+        <td>{$time|date="y-m-d H:i:s",###}</td>
+      </tr>
+      <tr>
+    </tbody>
+  </table>
+</div>
+<script type="text/javascript" src="__PUBLIC__/static/admin/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/static/admin/js/H-ui.js"></script>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "//hm.baidu.com/hm.js?080836300300be57b7f34f4b3e97d911";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+var _bdhmProtocol = (("https:" == document.location.protocol) ? " https://" : " http://");
+document.write(unescape("%3Cscript src='" + _bdhmProtocol + "hm.baidu.com/h.js%3F080836300300be57b7f34f4b3e97d911' type='text/javascript'%3E%3C/script%3E"));
+$(function(){
+  // setInterval(function(){
+  //     // console.log(11);
+  //     location.replace(location.href);
+  // },60000);
+});
+</script>
+</body>
+</html>

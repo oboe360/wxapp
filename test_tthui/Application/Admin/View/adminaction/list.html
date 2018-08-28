@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+		<title></title>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+	</head>
+	
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 中台系统 <span class="c-gray en">&gt;</span> 管理员管理 <span class="c-gray en">&gt;</span> 栏目管理 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+		<a href="{:U('admin/adminaction/add')}"  class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加栏目</a>
+		</span> 
+<!-- 		<span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span>  -->
+		</div>
+		<table class="table table-border table-bordered table-bg mt-20">
+<!-- 			<tr>
+				<th colspan="6">商品中台 - 权限管理 - 栏目列表</th>
+			</tr> -->
+			<tr>
+				<th>权限ID</th>
+				<th>上级ID</th>
+				<th>栏目名称</th>
+				<th>栏目链接</th>
+				<th>排序</th>
+				<th>操作</th>
+			</tr>
+			{foreach name="list" item="v"}
+			<tr>
+				<td>{$v.action_id}</td>
+				<td>{$v.parent_id}</td>
+				<td>{$v.action_name}</td>
+				<td>{$v.action_code}</td>
+				<td>{$v.desc}</td>
+				<td>
+					<!--<a href="{:U('admin/adminaction/priv/action_id/'.$v['action_id'])}"><img src="__PUBLIC__/admin/images/icon_priv.gif" title="分派权限"/></a>&nbsp;&nbsp;-->
+					<!--<a href="{:U('admin/adminaction/view/action_id/'.$v['action_id'])}"><img src="__PUBLIC__/admin/images/icon_view.gif" title="查看日志"/></a>&nbsp;&nbsp;-->
+					<a href="{:U('admin/adminaction/edit/action_id/'.$v['action_id'])}"><img src="__PUBLIC__/admin/images/icon_edit.gif" title="编辑"/></a>&nbsp;&nbsp;
+					<a href="{:U('admin/adminaction/delete/action_id/'.$v['action_id'])}"><img src="__PUBLIC__/admin/images/icon_drop.gif" title="移除"/></a>
+				</td>
+			</tr>
+			{foreach name="v.child" item="v1"}
+			<tr>
+				<td>{$v1.action_id}</td>
+				<td>--{$v1.parent_id}</td>
+				<td>--{$v1.action_name}</td>
+				<td>--{$v1.action_code}</td>
+				<td>{$v1.desc}</td>
+				<td>
+					<!--<a href="{:U('admin/adminaction/priv/action_id/'.$v['action_id'])}"><img src="__PUBLIC__/admin/images/icon_priv.gif" title="分派权限"/></a>&nbsp;&nbsp;-->
+					<!--<a href="{:U('admin/adminaction/view/action_id/'.$v1['action_id'])}"><img src="__PUBLIC__/admin/images/icon_view.gif" title="查看日志"/></a>&nbsp;&nbsp;-->
+					<a href="{:U('admin/adminaction/edit/action_id/'.$v1['action_id'])}"><img src="__PUBLIC__/admin/images/icon_edit.gif" title="编辑"/></a>&nbsp;&nbsp;
+					<a href="{:U('admin/adminaction/delete/action_id/'.$v1['action_id'])}"><img src="__PUBLIC__/admin/images/icon_drop.gif" title="移除"/></a>
+				</td>
+			</tr>
+			{/foreach}
+			{/foreach}
+			<tr>
+				<td colspan="6" align="center">
+					{$show}
+				</td>
+			</tr>
+		</table>
+	</body>
+
+</html>

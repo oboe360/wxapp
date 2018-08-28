@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>title</title>
+  <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+  <link href="../css/ectouch.css" rel="stylesheet" type="text/css" />
+  <style>
+		#tuoke_withdraw_content {
+			margin-top: 95px;
+		}
+    .tuoke_balance {
+			padding: 15px 0;
+			background: white;
+			font-size: 1.5em;
+			color: black;
+			padding-left: 10px;
+			margin-bottom: 5px;
+    }
+		.tuoke_withdraw_item {
+			padding: 15px 10px;
+			background: white;
+			margin-bottom: 5px;
+		}
+		.tuoke_withdraw_info {
+			display: inline-block;
+		}
+		.tuoke_withdraw_info p {
+			font-size: 1.1em;
+		}
+		.tuoke_withdraw_info span {
+			font-size: 1.2em;
+			color: #ffba42;
+		}
+		.tuoke_withdraw_status {
+			float: right;
+			font-size: 1.3em;
+			margin-right: 5px;
+			color: #ffba42;
+		}
+		.tuoke_remarks {
+			/*display: none;*/
+			background: #eeeeee;
+			padding: 8px 8px 8px 10px;
+			margin-top: 5px;
+			margin-right: 5px;
+		}
+		#tuoke_balance_money {
+			color: #ffba42;
+			margin: 0 5px;
+			font-size: 1.8em;
+		}
+		#yuan {
+			font-size: 0.9em;
+			color: #dddddd;
+		}
+		.bc1 {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 48px;
+			border-radius: 0;
+		}
+  </style>
+</head>
+<body>
+  <div id="page">
+		<header id="header">
+			<div class="header_l">
+					<a class="ico_10" onclick="api.closeWin();" href="javascript:;"> 返回 </a>
+			</div>
+			<h1> 我的提现记录 </h1>
+		</header>
+	</div>
+	<div id="tuoke_withdraw_content">
+		<p class="tuoke_balance">我的拓客宝余额: <span id="tuoke_balance_money" v-cloak>{{tixian_income}} </span><span id="yuan">元</span></p>
+		<ul style="margin-bottom: 53px;">
+	    <li class="tuoke_withdraw_item" v-for="item in tixian_record" v-cloak>
+				<div>
+					<div class="tuoke_withdraw_info">
+						<p>提现时间: {{item.add_time}}</p>
+			      <p>提现金额: <span>{{item.money}}</span></p>
+					</div>
+					<template v-if="item.status == 1">
+						<span class="tuoke_withdraw_status">待审核</span>
+					</template>
+					<template v-else-if="item.status == 2">
+						<span class="tuoke_withdraw_status">待收款</span>
+					</template>
+					<template v-else-if="item.status == 3">
+						<span class="tuoke_withdraw_status">已到账</span>
+					</template>
+					<template v-else>
+						<span class="tuoke_withdraw_status">拒绝</span>
+					</template>
+				</div>
+				<timplate v-if="item.status == 4">
+					<p class="tuoke_remarks">备注: <span style="margin-left: 5px;font-size:1.1em;">{{item.remarks}}</span></p>
+				</template>
+	    </li>
+	  </ul>
+	</div>
+	<button class="c-btn3 bc1" onclick="withdrawTuoke();">我要提现</button>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/ghost.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script>
+  apiready = ghostInit(function() {
+		var header = $api.dom('header');
+		var headerH = $api.fixStatusBar(header);//这里会返回整个header的高度
+		// $api.fixStatusBar($api.byId('header'));
+		$api.byId('tuoke_withdraw_content').style.marginTop = headerH + 10 + 'px';
+		api.ajax({
+      	url: phpUrl + '/tk_sale.php?act=tk_tixian_record'
+    },function(ret, err){
+        if(ret) {
+            new Vue({
+    					el: "#tuoke_withdraw_content",
+    					data:{
+								tixian_income: "",
+    						tixian_record:[]
+    					},
+    					created: function() {
+								tixian_income = ret.tk_income;
+								this.tixian_income = tixian_income;
+    						this.tixian_record = ret.tixian_record;
+    					}
+    				})
+        }else {
+            ghost().toast(err.msg);
+        }
+    });
+  });
+
+	function withdrawTuoke() {
+		api.ajax({
+		    url: phpUrl + '/tk_sale.php?act=bank_info'
+		},function(ret, err){
+		    if(ret) {
+					if(ret.code != 3 && tixian_income <= 1.5) {
+						ghost().toast('余额小于1.5元,无法进行提现');
+						return;
+					}
+		      switch (ret.code) {
+		        case 1:
+							ghost().win({
+								name: 'tuoke_withdraw_money',
+								url: 'tuoke_withdraw_money.html',
+								pageParam: {
+									tixian_income: tixian_income
+								}
+							});
+		        	break;
+						case 2:
+							ghost().toast(ret.msg);
+							setTimeout(function() {
+								ghost().win({
+									name: 'tuoke_bank_card',
+									url: 'tuoke_bank_card.html',
+									pageParam: {
+										tixian_income: tixian_income
+									}
+								});
+							},500)
+							break;
+						case 3:
+							ghost().toast(ret.msg);
+							break;
+		      }
+		  }else {
+		      ghost().toast(err.msg);
+		  }
+		});
+	}
+</script>
+</html>

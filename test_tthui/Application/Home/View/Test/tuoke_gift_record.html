@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>转让记录</title>
+  <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+  <link href="../css/ectouch.css" rel="stylesheet" type="text/css" />
+</head>
+<style>
+	.tuoke_no_data {
+		color: #7c7c7c;
+		font-size: 1.2em;
+		margin: 80px 0;
+		text-align: center;
+	}
+  .active {
+    color: #ff5340;
+  }
+  .font_style_black {
+    font-size: 1.2em
+  }
+</style>
+<body>
+  <div id="page">
+    <header id="header">
+      <div class="header_l">
+        <a class="ico_10" onclick="api.closeWin()" href="javascript:;"> 返回 </a>
+      </div>
+      <h1> 转让记录 </h1>
+    </header>
+  </div>
+	<ul class="tab_content fans_lists" id="list_boxs" style="margin-top: 95px;">
+		<li class="tab_contentli mediaL bod" id="fans_list" v-cloak>
+			<template v-if="courecord.length == 0"><p class="tuoke_no_data">暂无数据</p></template>
+			<ul class="con_list">
+				<li class="list_items font_style_black" v-for="item in courecord">
+					<div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;">
+						<div class="media_left">
+							<img class="icon_name1" :src="item.header_img" alt="" />
+						</div>
+						<div class="media_right">
+							<p class="border1" style="padding-top: 12px;">账号：<span style="color: black;font-size: 16px;font-weight: bold;">{{item.user_name}}</span></p>
+							<p style="padding:10px 0;">时间：{{item.time}}</p>
+						</div>
+					</div>
+					<div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
+						<span style="color: #444444;float: left;">订单号：<em style="color: #ff5340; font-size: 1.1em;">{{item.order_sn}}</em></span>
+						<span style="color: #444444;float: right;">数量: {{item.num}}</em>
+          </div>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/ghost.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script type="text/javascript" src="../script/loading.js"></script>
+<script>
+  apiready = ghostInit(function() {
+		var header = $api.dom('header');
+		var headerH = $api.fixStatusBar(header);//这里会返回整个header的高度
+		// $api.fixStatusBar($api.byId('header'));
+		$api.byId('list_boxs').style.marginTop = headerH + 10 + 'px';
+  	api.ajax({
+	      url: phpUrl + '/tk_sale.php?act=user_giving_record'
+      },function(ret,err){
+      	//coding...
+//    	console.log(JSON.stringify(ret));
+      	if(ret) {
+      		new Vue({
+      			el: "#fans_list",
+      			data: {
+      				courecord: []
+      			},
+      			created: function() {
+      				if(ret.code == 0) this.courecord = ret.courecord;
+      			}
+      		})
+      	}
+      });
+  });
+</script>
+</html>

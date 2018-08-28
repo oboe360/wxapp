@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+		<title></title>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+		<script type="text/javascript">
+		
+			function change(start, ship_id) {
+				$.post('__CONTROLLER__/change', 'start=' + start + '&ship_id=' + ship_id, function(re) {
+					if(re == 2) {
+						alert('操作失败');
+					} else {
+						$('#a' + ship_id + ' img').attr('src', '__PUBLIC__/admin/images/' + re + '.gif');
+						$('#a' + ship_id).attr('href', 'javascript:change(' + re + ',' + ship_id + ')');
+					}
+
+				});
+			}
+			$(function(){
+				$('#select').change(function(){
+					url = '__CONTROLLER__/lists/touch_id/'+$(this).val();
+					// alert(url)
+					window.location.href = url;
+				})
+				$('#b{$touch_id}').attr('selected','selected');
+			})
+		</script>
+	</head>
+
+	<body>
+	<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 后台系统 <span class="c-gray en">&gt;</span> 配送管理 <span class="c-gray en">&gt;</span> 运费列表 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+	<div style="margin: 10px;">
+		快递类型：<select name="touch_id" id="select">
+					<option value="0" id="b0" >全部</option>
+				{foreach name="touchShipArr" item="v"}
+					<option value="{$v.touch_id}" id="b{$v.touch_id}">{$v.shipping_name}</option>
+				{/foreach}
+		</select>
+	</div>
+	
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+		<a href="{:U('admin/ship/add')}"  class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加配送区域</a>
+		</span> 
+	<!-- 	<span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span>  -->
+	</div>
+		<table class="table table-border table-bordered table-bg mt-20">
+			<tr>
+				<th>序号</th>
+				<th>快递名称</th>
+				<th>配送省份</th>
+				<th>配送城市</th>
+				<th>首重(KG)</th>
+				<th>首重价格(元)</th>
+				<th>续重价格(元)</th>
+				<th>是否启动</th>
+				<th>操作</th>
+			</tr>
+			{foreach name="shipArr" item="v"}
+			<tr>
+				<td>{$v.ship_id}</td>
+				<td>{$v.shipping_name}</td>
+				<td>{$v.province}</td>
+				<td>{$v.city}</td>
+				<td>{$v.first_weigt}</td>
+				<td>{$v.first_price}</td>
+				<td>{$v.con_price}</td>
+				<td>
+					<a href="javascript:change({$v.start},{$v.ship_id})" id="a{$v.ship_id}"><img src="__PUBLIC__/admin/images/{$v.start}.gif" /></a>
+				</td>
+				<td>
+					<a href="{:U('admin/ship/edit/ship_id/'.$v['ship_id'])}"><img src="__PUBLIC__/admin/images/icon_edit.gif" title="编辑"/></a>&nbsp;|&nbsp;
+					<a href="{:U('admin/ship/delete/ship_id/'.$v['ship_id'])}"><img src="__PUBLIC__/admin/images/icon_drop.gif" title="移除"/></a>
+				</td>
+			</tr>
+			{/foreach}
+		</table>
+	</body>
+</html>

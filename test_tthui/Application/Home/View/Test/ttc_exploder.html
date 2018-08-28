@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>title</title>
+  <!-- <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/Test/css/api.css"/> -->
+  <link href="__PUBLIC__/Home/Test/css/ectouch.css" rel="stylesheet" type="text/css" />
+</head>
+<style>
+  /*.tuoke_menus {
+    border-top: 1px solid #dedede;
+    margin-top: 68px;
+    background: white;
+    margin-bottom: 5px;
+  }
+  .tuoke_menus li {
+    display: inline-block;
+    width: 48%;
+    height: 2.5rem;
+    line-height: 2.5rem;
+    text-align: center;
+  }*/
+	.tuoke_no_data {
+		color: #7c7c7c;
+		font-size: 1.2em;
+		margin: 80px 0;
+		text-align: center;
+	}
+  .active {
+    color: #ff5340;
+  }
+  .font_style_black {
+    font-size: 1.2em
+  }
+  .loading-wrap{
+    bottom: 50px;
+    width: 100%;
+    height: 35px;
+    text-align: center;
+    display: none;
+  }
+  .loading {
+    padding: 4px 3% 4px 3%;
+    height: 32px;
+    line-height: 28px;
+    color: #FFF;
+    font-size: 12px;
+    border-radius: 5px;
+    background: 10px center rgba(0,0,0,.7);
+  }
+</style>
+<body>
+  <div id="page">
+    <header id="header">
+      <div class="header_l">
+        <a class="ico_10" onclick="back()" href="javascript:;"> 返回 </a>
+      </div>
+      <h1> 交易记录</h1>
+    </header>
+  </div>
+  <!-- <div class="tuoke_menus font_style_black">
+		<ul>
+			<li class="active">直接粉丝</li>
+			<li>间接粉丝</li>
+		</ul>
+  </div> -->
+
+	<ul class="tab_content fans_lists" id="list_boxs" style="margin-top: 95px;">
+    <empty name="fans_list">
+      <p class="tuoke_no_data">暂无数据</p>
+    <else /> 
+		<li class="tab_contentli mediaL bod" id="fans_list" v-cloak>
+			<ul class="con_list" id="con_list">
+        <foreach name="fans_list" item="vo" >
+				<li id="list_items" class="list_items font_style_black" style="width:95%" v-for="item in tk_fans">
+					<div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;">
+						<div class="media_right">
+							<p class="border1" style="padding-top: 12px;">发起方：<span style="color: black;font-size: 16px;font-weight: bold;">{$vo.src_account}</span></p>
+              <p class="border1" style="padding-top: 12px;">接收方：<span style="color: black;font-size: 16px;font-weight: bold;">{$vo.dst_account}
+              <p class="border1" style="padding-top: 12px;">数量：<span style="color: black;font-size: 16px;font-weight: bold;">{$vo.amount}
+              <p class="border1" style="padding-top: 12px;">上链时间：<span style="color: black;font-size: 16px;font-weight: bold;">{$vo.trans_time}
+              <p class="border1" style="padding-top: 12px;">交易哈希值：<span style="color: black;font-size: 16px;font-weight: bold;">{$vo.hash}
+              <p class="border1" style="padding-top: 12px;">交易流水号：<span style="color: black;font-size: 16px;font-weight: bold;">{$vo.transaction_id}
+              </span></p>
+						</div>
+					</div>
+        </li>
+        </foreach>
+      </ul>
+      </empty>
+    </li>
+  </ul>
+  <div id="loading" class="loading-wrap">
+    <span class="loading" id="loadingls">加载中，请稍后...</span>
+  </div>
+</body>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/api.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/vue.min.js"></script>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/loading.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/masonry-docs.min.js"></script>
+<script>
+$(function(){
+    //执行瀑布流
+    var $container = $('#con_list');
+    $container.masonry({
+      itemSelector : '#list_items',
+      isAnimated: true
+    });
+
+  var loading = $("#loading").data("on", false);
+  //console.log(loading)
+  $(window).scroll(function(){
+    if(loading.data("on")) return;
+    if($(document).scrollTop() > $(document).height()-$(window).height()-$('#list_items').height()){
+      // console.log(loading)
+      //加载更多数据
+      loading.data("on", true).fadeIn();
+      
+      $.get(
+        "{:U('Test/tuoke_fans_pubu')}",
+        /*{"last_id" : $("#list_items>div:last>input").val()},*/
+        {'last_num':document.getElementById("con_list").getElementsByTagName("li").length},
+        function(data){
+          var html = "";
+          // console.log(data);
+          if(data['error'] == '0'){
+            var arr = data['data'];
+            // console.log(arr);
+            for(i in arr){
+              html += '<li id="list_items" class="list_items font_style_black" style="width:95%" v-for="item in tk_fans"><div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;"><div class="media_right"><p class="border1" style="padding-top: 12px;">发起方：<span style="color: black;font-size: 16px;font-weight: bold;">'+arr[i]['src_account']+'</span></p><p class="border1" style="padding-top: 12px;">接收方：<span style="color: black;font-size: 16px;font-weight: bold;">'+arr[i]['dst_account']+'<p class="border1" style="padding-top: 12px;">数量：<span style="color: black;font-size: 16px;font-weight: bold;">'+arr[i]['amount']+'<p class="border1" style="padding-top: 12px;">上链时间：<span style="color: black;font-size: 16px;font-weight: bold;">'+arr[i]['trans_time']+'<p class="border1" style="padding-top: 12px;">交易哈希值：<span style="color: black;font-size: 16px;font-weight: bold;">'+arr[i]['hash']+'<p class="border1" style="padding-top: 12px;">交易流水号：<span style="color: black;font-size: 16px;font-weight: bold;">'+arr[i]['transaction_id']+'</span></p></div></div></li>'
+            }
+            // console.log(html);
+            var $newElems = $(html).css({ opacity: 0 }).appendTo($container);
+            $newElems.imagesLoaded(function(){
+              $newElems.animate({ opacity: 1 });
+              $container.masonry( 'appended', $newElems, true ); 
+                });
+                loading.data("on", false);
+                loading.fadeOut();
+          }else{
+            //alert(1)
+            $('#loadingls').html('没数据了！还拉你妈呢！');
+          }
+        },
+        "json"
+      );
+    }
+  });
+});
+  function back(){
+    // alert('返回');
+    javascript:window.location.href='http://localhost/test/index.php/Home/Test/my_tuoke';
+  }
+</script>
+</html>

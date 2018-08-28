@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<!--[if lt IE 9]>
+<script type="text/javascript" src="lib/html5.js"></script>
+<script type="text/javascript" src="lib/respond.min.js"></script>
+<script type="text/javascript" src="lib/PIE_IE678.js"></script>
+<![endif]-->
+<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+<!--[if IE 6]>
+<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
+<script>DD_belatedPNG.fix('*');</script>
+<![endif]-->
+<title>订单详情</title>
+<style type="text/css">
+	.fff{
+		color: #fff;
+	}
+	.btnn{
+		display: inline-block;
+		padding: 6px 12px;
+		background: none;
+		border: 1px solid #eee;
+		border-radius: 4px;
+		cursor: pointer;
+	}
+</style>
+</head>
+<body>
+	<div class="pd-20">
+		<form action="" method="post" class="form form-horizontal" id="form-article-add">
+			<table class="table table-border table-bordered table-bg table-hover table-sort">
+				<thead>
+					<tr>
+						<th colspan="4" class="text-c">基本信息</th>
+					</tr>
+					<tr>
+						<td width="18%" class="text-r">订单号：</td>
+						<td width="34%" class="text-l">{$orderArr.order_sn}</td>
+						<td width="15%" class="text-r">订单状态：</td>
+						<td width="33%" class="text-l">{$orderArr.postsign}-{$orderArr.pay_status}-{$orderArr.shipping_status}</td>
+					</tr>
+					<tr>
+						<td width="18%" class="text-r">购货人：</td>
+						<td width="34%" class="text-l">{$orderArr.user_id}({$orderArr.nickname})</td>
+						<td width="15%" class="text-r">下单时间：</td>
+						<td class="text-l">{$orderArr.add_time}</td>
+					</tr>
+					<tr>
+						<td width="18%" class="text-r">支付方式：</td>
+						<td width="34%" class="text-l">{$orderArr['pay_type']?'代付':'微信支付'}</td>
+						<td width="15%" class="text-r">付款时间：</td>
+						<td class="text-l">{$orderArr.pay_time|date='Y-m-d H:i:s',###}</td>
+					</tr>
+					<tr>
+						<td width="18%" class="text-r">配送方式：</td>
+						<td width="34%" class="text-l">{$orderArr.shipping_name}</td>
+						<td width="15%" class="text-r">发货时间：</td>
+						<td class="text-l"></td>
+					</tr>
+					<tr>
+						<td width="18%" class="text-r">发货单号：</td>
+						<td width="34%" class="text-l">{$orderArr.shipping_num}</td>
+						<td width="15%" class="text-r">订单来源：</td>
+						<td class="text-l">本站</td>
+					</tr>
+					<tr>
+						<th colspan="4" class="text-c">收货人信息</th>
+					</tr>
+					<tr>
+						<td width="18%" class="text-r">收货人：</td>
+						<td width="34%" class="text-l">{$orderArr.consignee}</td>
+						<td width="15%" class="text-r">电子邮件：</td>
+						<td class="text-l"></td>
+					</tr>
+					<tr>
+						<td width="18%" class="text-r">详细地址：</td>
+						<td width="34%" class="text-l">{$orderArr.province}-{$orderArr.city}-{$orderArr.district}-{$orderArr.address}</td>
+						<td width="15%" class="text-r">邮编：</td>
+						<td class="text-l"></td>
+					</tr>
+					<tr>
+						<td width="18%" class="text-r">电话：</td>
+						<td width="34%" class="text-l">{$orderArr.tel}</td>
+						<td width="15%" class="text-r">手机：</td>
+							<td width="34%" class="text-l">{$orderArr.tel}</td>
+					</tr>
+				</thead>
+			</table>
+			<table class="table table-border table-bordered table-bg table-hover table-sort">
+				<thead>
+					<tr>
+						<th colspan="8" class="text-c">商品信息</th>
+					</tr>
+					<tr>
+						<td class="text-c">商品名称</td>
+						<td class="text-c">商品封面图</td>
+						<td class="text-c">货号</td>
+						<td class="text-c">商品KEY</td>
+						<td class="text-c">价格</td>
+						<td class="text-c">数量</td>
+						<td class="text-c">重量</td>
+						<td class="text-c">小计</td>
+					</tr>
+					{foreach name="goods" item="good"}
+					<tr v-for="item in info.goods" class="text-c">
+						<td>{$good.goods_name}</td>
+						<td><img src="{$good.goods_img}" alt="封面图" width="100" height="100"></td>
+						<td>{$good.goods_sn}</td>
+						<td>{$good.goods_key}</td>
+						<td>{$good.goods_price}</td>
+						<td>{$good.goods_number}</td>
+						<td>{$good.goods_weight}</td>
+						<td>{$good['goods_price']*$good['goods_number']}</td>
+					</tr>
+					{/foreach}
+					<tr>
+					    <td></td>
+					    <td align="right">&nbsp;</td>
+					    <td align="right">&nbsp;</td>
+					    <td>&nbsp;</td>
+					    <td>&nbsp;</td>
+					    <td>&nbsp;</td>
+					    <td align="right"><strong>运费合计：</strong></td>
+					    <td align="right">{$orderArr.shipping_fee}</td>
+					</tr>
+				</thead>
+			</table>
+			
+		</form>
+	</div>
+</body>
+</html>
+
+</script>

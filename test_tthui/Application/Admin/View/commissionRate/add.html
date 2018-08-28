@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <style type="text/css">
+      input {
+        width: 30%;
+      }
+    </style>
+    <title></title>
+    <link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+  </head>
+    <script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+    <script type="text/javascript">
+      function back(){
+        window.history.go(-1);
+      }
+    </script>
+  <body>
+    <nav class="breadcrumb"><a href="javascript:back()">返回上一页</a> <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <form action="{:U('admin/commissionrate/saveAdd')}" method="post" style="margin-left: 2%;">
+      <table  class="table table-border table-bordered table-bg mt-20">
+        <tr>
+          <th colspan="2">后台系统 - 用户管理 - 用户分佣列表</th>
+        </tr>
+        <tr>
+          <td><b>用户等级</b></td>
+          <td>
+            <input type="text" name="user_rank" value="{$brand_list.user_rank}">
+            <input type="hidden" name="rate_id" value="{$brand_list.rate_id}"/>
+          </td>
+        </tr>
+        <tr>
+          <td><b>等级名称</b></td>
+          <td>
+            <input type="text" name="rank_name" value="{$brand_list.rank_name}">
+          </td>
+        </tr>
+        <tr>
+          <td><b>商品类型</b></td>
+          <td>
+            <select name="goods_type" id="goods_type">
+              <option value="0" {if condition="$brand_list['goods_type'] eq 0"}selected{/if}>普通商品</option>
+              <option value="1" {if condition="$brand_list['goods_type'] eq 1"}selected{/if}>会员礼包</option>
+            </select>
+          </td>
+        </tr>
+       <!--  <tr>
+          <td><b>一级分佣</b></td>
+          <td>
+            <input type="text" name="first_comm" value="{$brand_list.first_comm}">%
+          </td>
+        </tr>
+        <tr>
+          <td><b>二级分佣</b></td>
+          <td>
+            <input type="text" name="second_comm" value="{$brand_list.second_comm}">%
+          </td>
+        </tr>
+        <tr>
+          <td><b>会员分佣百分比例</b></td>
+          <td>
+            <input type="text" name="member_comm" value="{$brand_list.member_comm}">
+          </td>
+        </tr>
+        <tr>
+          <td><b>店长分佣百分比例</b></td>
+          <td>
+            <input type="text" name="shop_comm" value="{$brand_list.shop_comm}">
+          </td>
+        </tr> -->
+      <tr>
+        <td colspan="2"  style="padding-left: 40%; "><input type="submit" class="btn btn-success radius" value="确认编辑" /></td>
+      </tr>
+    </table>
+    </form>
+  </body>
+</html>

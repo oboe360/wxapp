@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="UTF-8">
+    <link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+    <link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+    <title></title>
+    <style type="text/css">
+      .num {
+        margin: 10px 5px;
+      }
+      
+      .num,.next,.prev {
+        text-decoration: none;
+        color: #f00;
+        padding: 0px 8px;
+        border: 1px solid gray;
+      }
+      
+      .current:after {
+        content: '页';
+      }
+      
+      .current:before {
+        content: '第';
+      }
+    </style>
+    <script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        // $('[name="ip_address"]').val('{$data.ip_address}');
+        // $('[name="start"]').val('{$data.start}');
+        // $('[name="end"]').val('{$data.end}');
+        // $('[name="user_id"]').val('{$data.user_id}');
+        $('#page').blur(function(){
+            var url = window.location.href;
+            var value = $('#page').val();
+            if(value>0){
+              $.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+                window.location.href = url;
+              });
+            }
+            
+          });
+        $("#page").keydown(function(event){
+      　　　　if(event.keyCode == 13){
+      　　　　　　var url = window.location.href;
+            var value = $('#page').val();
+            if(value>0){
+              $.get('{:U('admin/index/setCookie')}','pageshop='+value,function(data){
+                window.location.href = url;
+              });
+            }
+      　　　　}
+      　　});
+      });
+
+    </script>
+  </head>
+
+  <body>
+  <nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 后台系统 <span class="c-gray en">&gt;</span> 商品管理 <span class="c-gray en">&gt;</span> 商品分类 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+    <div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l">
+    <a href="{:U('admin/category/add')}"  class="btn btn-primary radius"><i class="Hui-iconfont">&#xe600;</i> 添加商品分类</a>
+    </span> 
+    <span class="r">每页显示<strong><input type="text" size='5' value="{$Think.cookie.pageshop}" id="page"></strong> 条</span> 
+    </div>
+
+      <table class="table table-border table-bordered table-bg mt-20">
+      <tr>
+          <th>编号</th>
+          <th>分类名称</th>
+          <th>分类关键字</th>
+          <th>类型排序</th>
+          <th>父类ID</th>
+          <th>操作</th>
+        </tr>
+      {foreach name="arr" item="suppliers"}
+      <tr>
+          <td>{$suppliers.cat_id}</td>
+          <td>{$suppliers.cat_name}</td>
+          <td>{$suppliers.keywords}</td>
+          <td>{$suppliers.cat_desc}</td>
+          <td>{$suppliers.parent_id}</td>
+          <td align="center">
+            <!-- <a href="suppliers.php?act=edit&id={$suppliers.suppliers_id}" title="{$lang.edit}">{$lang.edit}</a> | -->
+            <a href="{:U('admin/category/remove')}?cat_id={$suppliers.cat_id}" ><img src="__PUBLIC__/admin/images/icon_drop.gif" title="移除"/></a><br/><a href="{:U('admin/category/add')}?cat_id={$suppliers.cat_id}"><img src="__PUBLIC__/admin/images/icon_edit.gif" title="编辑"/></a>
+            </td>
+      {/foreach}
+      <tr>
+        <td colspan="12" align="right">
+          {$show}
+        </td>
+      </tr>
+    </table>
+
+  </body>
+</html>

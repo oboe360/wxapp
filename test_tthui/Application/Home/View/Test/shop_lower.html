@@ -1,0 +1,323 @@
+{include file="footer" /}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+  <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+  <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+  <title>下级店铺</title>
+  <link href="__PUBLIC__/Home/Test/css/ectouch.css" rel="stylesheet" type="text/css" />
+</head>
+<style>
+  
+.item{
+	border: 1px solid #D4D4D4;
+    color: red;
+    margin: 0 10px 10px 0;
+    padding: 10px;
+    position: relative;
+    width: 200px;
+}
+.loading-wrap{
+	bottom: 50px;
+	width: 100%;
+	height: 55px;
+	text-align: center;
+	display: none;
+}
+/*.loading {
+	padding: 4px 3% 4px 3%;
+	height: 32px;
+	line-height: 0px;
+	color: #FFF;
+	font-size: 12px;
+	border-radius: 5px;
+	background: 10px center rgba(0,0,0,.7);
+}*/
+	.tuoke_status_record_content:nth-of-type(5) .font_style_light_white{
+  		color: #ffba42 !important;
+  		font-size: 1.0em;
+	}
+.footer{
+	border: 2px solid #D4D4D4;
+}
+
+
+
+	.tuoke_no_data {
+		color: #7c7c7c;
+		font-size: 1.2em;
+		margin: 80px 0;
+		text-align: center;
+	}
+  .tuoke_menus_item {
+      display: inline-block;
+      width: 25%;
+      margin: 0 12%;
+      height: 2.2rem;
+      line-height: 2.2rem;
+      text-align: center;
+  }
+    .active {
+      color: #ffba42;
+      border-bottom: 0.2rem solid #ffba42;
+    }
+  .font_style_black {
+    font-size: 1.2em
+  }
+.loading , .loading_ls{
+	padding: 4px 3% 4px 3%;
+	height: 32px;
+	line-height: 0px;
+	color: #FFF;
+	font-size: 12px;
+	border-radius: 5px;
+	background: 10px center rgba(0,0,0,.7);
+}
+.list_items{
+	padding: 0px 8px;
+	margin-bottom: 10px;
+	background: #fff;
+	position:relative;
+}
+.mediaL .list_items{
+	padding: 0px 8px 10px;
+}
+</style>
+<body>
+  <div id="page">
+    <header id="header">
+      <div class="header_l">
+        <a class="ico_10" onclick="javascript :history.back(-1);" href="javascript:;"> 返回 </a>
+      </div>
+      <h1> 下级店铺 </h1>
+	  <a onclick="yeji();" style="color: #ffba42; width: 70px; margin-top: 10px; margin-right: 15px;">业绩报表</a>
+    </header>
+  </div>
+	<ul style="margin-top: 48px; background: white;">
+		<li class="tuoke_menus_item active" onclick="selectItem(this,0);">{$rank_list[0].shop_rank_name}</li>
+		<li class="tuoke_menus_item" onclick="selectItem(this,1);">{$rank_list[1].shop_rank_name}</li>
+	</ul>
+	<ul class="tab_content fans_lists" id="list_boxs" style="margin-top: 10px;">
+		<li class="tab_contentli mediaL bod" id="fans_list" v-cloak>
+			{if condition="$shop_lower != array()"}
+				<ul class="con_list" id="con_list" >
+					{foreach name='shop_lower' item='vel' key='key'}
+						<li class="list_items font_style_black" id='list_items' style="width:96%">
+							<div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;">
+								<div class="media_left">
+									<img class="icon_name1" src="{empty name="vel.shop_img"}__PUBLIC__/Home/Test/image/default.png{else /}{$vel.shop_img}{/empty}" alt="" />
+								</div>
+								<div class="media_right">
+									<p class="border1" style="padding-top: 12px;">
+										店铺名称：<span style="color: black;font-size: 16px;font-weight: bold;">{$vel.shop_name}</span>
+									</p>
+									<p style="padding:10px 0;">店主帐号：{$vel.user_name}</p>
+								</div>
+							</div>
+							<div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
+								<span style="color: #444444;float: left;">ID：{$vel.id}</span>
+								<span style="color: #444444;float: right;font-size: 13px;">粉丝数量: {$vel.count_user}</em>
+				          </div>
+							<div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
+								<!-- <span style="color: #444444;float: left;">店铺业绩：{$vel.count_user}</span> -->
+								<span style="color: #444444;float: right;font-size: 13px;">店铺业绩:{$vel.total_count}</em>
+				          </div>
+				        </li>
+				    {/foreach}
+				</ul>
+			{else /}
+				<span v-if="tk_fans.length == 0"><p class="tuoke_no_data">暂无数据</p></span>
+			{/if}
+            <div id="loading" class="loading-wrap">
+              <span class="loading" id="loadingls">加载中，请稍后...</span>
+            </div>
+    	</li>
+
+		<li class="tab_contentli mediaL bod" id="fans_list_ls" v-cloak>
+			{if condition="$shop_lower_ls != array()"}
+				<ul class="con_list" id="con_list_ls" >
+					{foreach name='shop_lower_ls' item='vel' key='key'}
+						<li class="list_items font_style_black" id='list_items_ls' style="width:96%">
+							<div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;">
+								<div class="media_left">
+									<img class="icon_name1" src="{empty name="vel.shop_img"}__PUBLIC__/Home/Test/image/default.png{else /}{$shop_info.shop_img}{/empty}" alt="" />
+								</div>
+								<div class="media_right">
+									<p class="border1" style="padding-top: 12px;">
+										店铺名称：<span style="color: black;font-size: 16px;font-weight: bold;">{$vel.shop_name}</span>
+									</p>
+									<p style="padding:10px 0;">店主帐号：{$vel.user_name}<span id='shop_id' style="color: #444444;float: right;font-size: 13px;">ID: {$vel.id}</em></p>
+								</div>
+							</div>
+							<div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
+								<span style="color: #444444;float: left;">ID：{$vel.id}</span>
+								<span style="color: #444444;float: right;font-size: 13px;">粉丝数量: {$vel.count_user}</em>
+				          </div>
+						  <div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
+								<!-- <span style="color: #444444;float: left;">店铺业绩：{$vel.count_user}</span> -->
+								<span style="color: #444444;float: right;font-size: 13px;">店铺业绩:{$vel.total_count}</em> </em>
+				          </div>
+				        </li>
+				    {/foreach}
+				</ul>
+			{else /}
+				<span v-if="tk_fans.length == 0"><p class="tuoke_no_data">暂无数据</p></span>
+			{/if}
+    	</li>
+  	</ul>
+  	<div id="loading_ls" class="loading-wrap">
+		<span class="loading" id="loadingls_ls">加载中，请稍后...</span>
+	</div>
+</body>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/vue.min.js"></script> -->
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery-1.4.4.min.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery.min.js"></script>	
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/masonry-docs.min.js"></script>
+<script>
+	//alert();
+  window.left_in='0';
+  window.right_in='0';
+  function dob (fn) {
+    var timer = null;
+    return function () {
+      if (!!timer) {
+          window.clearTimeout(timer);
+      }
+      timer = setTimeout(fn, 500);
+    }
+  }
+  var tab='left';
+$(function(){
+    //执行瀑布流
+    $('#fans_list_ls').hide();
+    var $container = $('#con_list');
+	  $container.masonry({
+	    itemSelector : '#list_items',
+	    isAnimated: true
+	  });
+
+	var loading = $("#loading_ls").data("on", false);
+	//console.log(loading)
+	var scrollFn = dob(function(){
+		// alert(tab)
+		if (tab == 'left') {
+			var loading = $("#loading").data("on", false);
+			if(left_in == '1') return;
+			if(loading.data("on")) return;
+			if($(document).scrollTop() >= $(document).height()-$(window).height() && $('#list_items').height() !=null){
+				//加载更多数据
+				loading.data("on", true).fadeIn();
+				
+				$.get(
+					"{:U('Test/shop_lower_return')}",
+					/*{"last_id" : $("#list_items>div:last>input").val()},*/
+					{'last_num':document.getElementById("con_list").getElementsByTagName("li").length,'type':'1'},
+					function(data){
+						var html = "";
+						//console.log(data);
+						if(data['error'] == '0'){
+							var arr = data['data'];
+							//console.log(arr);
+							for(i in arr){
+								var h_img = '';
+				                if(arr[i]['shop_img'] == null){
+				                  h_img = "__PUBLIC__/Home/Test/image/default.png";
+				                }else{
+				                  h_img = arr[i]['shop_img'];
+				                }
+								html += '<li class="list_items font_style_black" id="list_items" v-for="item in tk_fans"  style="width:96%"><div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;"><div class="media_left"><img class="icon_name1" src="'+h_img+'" alt="" /></div><div class="media_right"><p class="border1" style="padding-top: 12px;">店铺名称：<span style="color: black;font-size: 16px;font-weight: bold;">'+arr[i]['shop_name']+'</span></p><p style="padding:10px 0;">店主帐号：'+arr[i]['user_name']+'<span id="shop_id" style="color: #444444;float: right;font-size: 13px;">ID: '+arr[i]['id']+'</em></p></div></div><div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;"><span style="color: #444444;float: left;">ID：'+arr[i]['id']+'</span><span style="color: #444444;float: right;font-size: 13px;">粉丝数量: '+arr[i]['count_user']+'</em></div><div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;"></span><span style="color: #444444;float: right;font-size: 13px;">店铺业绩: '+arr[i]['total_count']+'</em></div></li>'
+							}
+
+							var $newElems = $(html).css({ opacity: 0 }).appendTo($container);
+							$newElems.imagesLoaded(function(){
+								$newElems.animate({ opacity: 1 });
+								$container.masonry( 'appended', $newElems, true ); 
+					        });
+					        loading.data("on", false);
+					        loading.fadeOut();
+						}else{
+							//alert(1)
+							left_in = '1';
+							$('#loadingls').html('数据已全部加载！');
+						}
+					},
+					"json"
+				);
+			}
+		}else if(tab == 'right'){
+			loading = $("#loading_ls").data("on", false);
+			if(right_in == '1') return;
+			if(loading.data("on")) return;
+			if($(document).scrollTop() >= $(document).height()-$(window).height() && $('#list_items_ls').height() !=null){
+				//加载更多数据
+				loading.data("on", true).fadeIn();
+				$.get(
+					"{:U('Test/shop_lower_return')}",
+					/*{"last_id" : $("#list_items>div:last>input").val()},*/
+					{'last_num':document.getElementById("con_list_ls").getElementsByTagName("li").length,'type':'2'},
+					function(data){
+						var html = "";
+						//console.log(data);
+						if(data['error'] == '0'){
+							var arr = data['data'];
+							//console.log(arr);
+							for(i in arr){
+								var h_img = '';
+				                if(arr[i]['shop_img'] == null){
+				                  h_img = "__PUBLIC__/Home/Test/image/default.png";
+				                }else{
+				                  h_img = arr[i]['shop_img'];
+				                }
+								html += '<li class="list_items font_style_black" id="list_items_ls" v-for="item in tk_fans"  style="width:96%"><div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;"><div class="media_left"><img class="icon_name1" src="'+h_img+'" alt="" /></div><div class="media_right"><p class="border1" style="padding-top: 12px;">店铺名称：<span style="color: black;font-size: 16px;font-weight: bold;">'+arr[i]['shop_name']+'</span></p><p style="padding:10px 0;">店主帐号：'+arr[i]['user_name']+'<span id="shop_id" style="color: #444444;float: right;font-size: 13px;">ID: '+arr[i]['id']+'</em></p></div></div><div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;"><span style="color: #444444;float: left;">ID：'+arr[i]['id']+'</span><span style="color: #444444;float: right;font-size: 13px;">粉丝数量: '+arr[i]['count_user']+'</em></div><div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;"></span><span style="color: #444444;float: right;font-size: 13px;">店铺业绩:'+arr[i]['total_count']+'</em></div></li>'
+							}
+							$("#con_list_ls").append(html);
+							// var $newElems = $(html).css({ opacity: 0 }).appendTo($container);
+							// $newElems.imagesLoaded(function(){
+							// 	$newElems.animate({ opacity: 1 });
+							// 	$container.masonry( 'appended', $newElems, true ); 
+					  //       });
+					        loading.data("on", false);
+					        loading.fadeOut();
+						}else{
+							//alert(1)
+							right_in = '1';
+							$('#loadingls_ls').html('数据已全部加载！');
+						}
+					},
+					"json"
+				);
+			}
+		}
+	});
+  $(window).scroll(function() {
+    scrollFn();
+  });
+});
+function yeji() {
+	// alert("业绩报表");
+	javascript:window.location.href='{:U('Home/Test/performance_report')}';
+}
+  function selectItem(ele,index) {
+    var element = $(ele);
+    if(!element.hasClass('active')) {
+      element.addClass('active').siblings().removeClass('active');
+      switch (index) {
+        case 0:
+          $('#fans_list').show();
+          $('#fans_list_ls').hide();
+          break;
+        default:
+          $('#fans_list_ls').show();
+          //$('#fans_list_ls').text(x.left);  
+          $('#fans_list').hide();
+          break;
+      }
+      tab = !!index ?  'right' : 'left';
+    }
+  }
+</script>
+
+
+</html>

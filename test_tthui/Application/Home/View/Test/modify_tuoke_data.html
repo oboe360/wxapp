@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>设置店铺信息</title>
+	<!-- <link rel="stylesheet" type="text/css" href="__PUBLIC__/Home/Test//css/api.css" /> -->
+	<link href="__PUBLIC__/Home/Test//css/ectouch.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	<div id="page">
+		<header id="header">
+			<div class="header_l">
+				<a class="ico_10" onclick="back()" href="javascript:;"> 返回 </a>
+			</div>
+			<h1> 修改资料 </h1>
+		</header>
+	</div>
+	<div class="list_box padd1 first" id="list_boxs" style="margin-top:90px;">
+		<div class="agroup">
+			<a href="javascript:;" class="clearfix">
+				<div class="portrait_con" onclick="setting('shopname')" >
+					<span>店铺名称</span>
+					<span id="shop_name" class="companys">{$shop_info.shop_name}</span>
+					<i class="iii pos_r"></i>
+				</div>
+			</a>
+			<div class="bd1"></div>
+			<a href="javascript:;" class="clearfix">
+				<div class="portrait_con" onclick="setting('tuoke_tel')">
+					<span>手机号</span>
+					<span id="tel" class="companys">{$shop_info.shop_phone}</span>
+					<i class="iii pos_r"></i>
+				</div>
+			</a>
+			<div class="bd1"></div>
+			<a href="javascript:;" class="clearfix">
+				<div class="portrait_con" onclick="setting('tuoke_shop_notice')" >
+					<span>店铺公告</span>
+					<span id="tel" class="companys">{$shop_info.shop_notice}</span>
+					<i class="iii pos_r"></i>
+				</div>
+			</a>
+			<div class="bd1"></div>
+			<a href="javascript:;" class="clearfix">
+				<div class="portrait_con" onclick="setting('tuoke_shop_img')" >
+					<span>店铺头像</span>
+					<span id="tel" class="companys"><img src="{empty name="shop_info.shop_img"}__PUBLIC__/Home/Test/image/default.png{else /}{$shop_info.shop_img}{/empty}"/></span>
+					<i class="iii pos_r"></i>
+				</div>
+			</a>
+		</div>
+	</div>
+</body>
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/api.js"></script> -->
+<!-- <script type="text/javascript" src="__PUBLIC__/Home/Test/script/ghost.js"></script> -->
+<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.0.0.min.js"></script>
+<script type="text/javascript">
+// $(document).ready(function(){
+// 	$(".portrait_con").click(function(){
+// 		alert("123")
+//         // var username = $("#username").val();
+//         // var password = $("#password").val();
+//         // $.ajax({
+//         //      url: "ajax.php",  
+//         //      type: "POST",
+//         //      data:{name:username,pwd:password},
+//         //      dataType: "json",
+//         //      error: function(err){  
+//         //          console.log(err)  
+//         //      },  
+//         //      success: function(data,status){//如果调用php成功 
+//         //         alert(status);
+//         //         alert(data);
+//         //         // $('.con').html("用户名:"+data[0]+"密码:"+data[1]+data[2]);
+//         //      }
+//         // });
+//     })
+// })
+  function setting(type){
+  	// alert("设置");
+  	javascript:window.location.href='{:U('Home/Test/modify_nickname')}?type='+type;
+  }
+  function back(){
+    // alert('返回');
+    javascript:window.location.href='{:U('Home/Test/my_tuoke')}';
+  }
+</script>
+</html>
+<!-- 	apiready = ghostInit(function() {
+		var header = $api.dom('header');
+		var headerH = $api.fixStatusBar(header);//这里会返回整个header的高度
+		// $api.fixStatusBar($api.byId('header'));
+		$api.byId('list_boxs').style.marginTop = headerH + 10 + 'px';
+		api.ajax({
+		    url: phpUrl + '/tk_sale.php?act=tk_shop_info',
+		},function(ret, err){
+		    if(ret) {
+		        // alert(JSON.stringify(ret));
+				shopname = ret.shop_info.shopname;
+				tel = ret.shop_info.tel;
+				document.getElementById('shop_name').innerHTML = shopname;
+				document.getElementById('tel').innerHTML = tel;
+		    }else {
+				ghost().toast(err.msg)
+		    }
+		});
+	}); -->

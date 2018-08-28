@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0"/>
+    <meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+    <title> 赠送拓客宝 </title>
+    <link rel="stylesheet" type="text/css" href="../css/api.css"/>
+    <link href="../css/ectouch.css" rel="stylesheet" type="text/css">
+    <style>
+    	body{
+    		padding: 88px 10px;
+    	}
+
+    	.tuoke_num,#recommend_code,#user_rank {
+    		font-size: 1.2em;
+    		color: #7c7c7c;
+    	}
+
+    	.tuoke_num span {
+    		font-size: 1.15em;
+    		color: #ffba42;
+    		margin: 0 5px;
+    	}
+
+    	.tuoke_info {
+    		background: white;
+    		padding: 15px 10px;
+    		box-shadow: 2px 2px 3px #cccccc;
+    	}
+
+    	.tuoke_info label {
+    		font-size: 1.5em;
+    		display: block;
+    	}
+
+    	.tuoke_info label input {
+    		font-size: 0.9em;
+    	}
+
+    	.tuoke_info_tel {
+    		padding-bottom: 15px;
+    		border-bottom: 1px solid #dedede;
+    	}
+
+    	.tuoke_info_tel input{
+    		float: right;
+    		padding-top: 5px;
+    		border: 0;
+    	}
+
+    	#tel {
+    		width: 55%;
+    		text-align: left;
+    	}
+
+    	.tuoke_info_num {
+    		padding-top: 15px;
+    	}
+
+    	.tuoke_info_num button {
+    		display:inline-block;
+    		background: white;
+    		width: 29px;
+    		height: 29px;
+    		border: 1px solid #999999;
+    		text-align: center;
+    	}
+
+    	#changeNum {
+    		vertical-align: top;
+    		width: 40px;
+    		height: 27px;
+    		border: 1px solid #999999;
+    		text-align: center;
+    	}
+
+    	.selector {
+    		display: inline-block;
+    		float: right;
+    		width: 55%;
+    		text-align: left;
+    	}
+
+    	#confirm {
+			display: block;
+			margin: 20px auto 0 auto;
+			background: #ff5340;
+			color: white;
+			width: 80%;
+			height: 40px;
+			border-radius: 0;
+			border: 0;
+			font-size: 1.2em;
+		}
+
+		.gift_target_info {
+			margin-top: 10px;
+			display: none;
+		}
+    </style>
+</head>
+<body>
+	<div id="page">
+		<header id="header">
+			<div class="header_l">
+				<a class="ico_10" onclick="api.closeWin();" href="javascript:;"> 返回 </a>
+			</div>
+			<h1 style="text-indent: 2rem;"> 赠送拓客宝 </h1>
+			<div class="header_r" style="margin-right: 5px;">
+				<a style="font-size: 1.4em;color: black;width: 5rem;" onclick="ghost().win('tuoke_gift_record');" href="javascript:;"> 转让记录 </a>
+			</div>
+		</header>
+	</div>
+	<p class="tuoke_num">当前拓客宝的数量为<span id="my_inventory">0</span>个</p>
+	<div class="tuoke_info">
+		<label class="tuoke_info_tel">赠送账户：<input id="tel" type="number" placeholder="请输入对方的手机号码" oninput="onInput(this)" /></label>
+		<label class="tuoke_info_num">赠送数量：<div class="selector"><button id="minus">-</button><input id="changeNum" type="number" value="1" /><button id="add">+</button></div></label>
+	</div>
+	<div class="gift_target_info"><span id="recommend_code">推荐号：</span><span id="user_rank" style="margin-left: 20px;">用户等级：</span></div>
+	<button id="confirm" onclick="gift();">确认赠送</button>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/ghost.js"></script>
+<script type="text/javascript" src="../script/loading.js"></script>
+<script type="text/javascript" src="../script/jquery-1.4.4.min.js"></script>
+<script type="text/javascript" src="../script/selector.js"></script>
+<script type="text/javascript">
+	apiready = ghostInit(function(){
+		$api.fixStatusBar($api.byId('header'));
+		isGiving = false;
+		user_id = "";
+		new Selector({
+			add: "#add",
+			num: "#changeNum",
+			minus: "#minus"
+		}).init();
+		$("#my_inventory").html(api.pageParam.myInventory);
+	});
+
+	// 用户输入电话号码监听，以确定赠送目标用户id和等级
+	function onInput(obj) {
+		api.ajax({
+	        url: phpUrl + '/tk_sale.php?act=giving_record_ajax',
+	        method: 'post',
+	        data: {
+	        	values: {
+	        		phone: obj.value
+	        	}
+	        }
+        },function(ret,err){
+        	//coding...
+        	if(ret) {
+        		switch(ret.code) {
+        		case "0":
+        			$(".gift_target_info").show();
+        			user_id = ret.user_id;
+        			$("#recommend_code").html("推荐号：" + ret.user_id);
+        			$("#user_rank").html("用户等级：" + ret.rank);
+        			break;
+        		case "2":
+        			if(obj.value.length == 11) ghost().toast(ret.msg);
+        			$(".gift_target_info").hide();
+        			break;
+        		case "1":
+        		case "3":
+        			ghost().toast(ret.msg);
+        			break;
+
+        		}
+        	}else {
+        		ghost().toast(err.msg);
+        	}
+        });
+	}
+
+	// 赠送拓客宝
+	function gift() {
+		if(isGiving) return;
+		var giving_num = $("#changeNum").val();// 获取赠送数量
+		var tel = $("#tel").val();// 获取手机号码
+		if (tel && /^1[3|4|5|6|7|8|9]\d{9}$/.test(tel)) {
+			//对的
+			// alert(21)
+		} else {
+			//不对
+			ghost().toast('请填写正确的手机号码');
+			return ;
+		}
+		isGiving = true;
+		showLoading();
+		api.ajax({
+	        url: phpUrl + '/tk_sale.php?act=determine',
+	        method: 'post',
+	        data: {
+	        	values: {
+	        		user_id: user_id, // 赠送目标用户user_id
+	        		giving_num: giving_num, // 赠送数量
+	        		tel: tel
+	        	}
+	        }
+        },function(ret,err){
+        	//coding...
+        	stopLoading();
+        	if(ret) {
+        		switch(ret.code) {
+        			case　"0":
+        				ghost().toast("赠送成功");
+        				setTimeout(function() {
+        					isGiving = false;
+        					api.openWin({
+        						name: 'tuoke_gift_success',
+        						url: 'tuoke_gift_success.html',
+        						slidBackEnabled: false,
+        						pageParam: {
+        							user_name: ret.user_name,
+        							header_img: ret.header_img
+        						}
+        					});
+        				},1000);
+        				break;
+        			default:
+        				isGiving = false;
+        				ghost().toast(ret.msg);
+        				break;
+        		}
+        	}else {
+        		isGiving = false;
+        		ghost().toast(err.msg)
+        	}
+        });
+	}
+</script>
+</html>

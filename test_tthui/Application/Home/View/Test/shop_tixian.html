@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>提现</title>
+	<link href="__PUBLIC__/Home/Test/css/ectouch.css" rel="stylesheet" type="text/css" />
+	<link rel="stylesheet" href="__PUBLIC__/Home/Test/css/common.css?v=20160520">
+  	<script type="text/javascript" src="__PUBLIC__/Home/Test/script/jquery-1.10.1.min.js"></script>
+  	<script type="text/javascript" src="__PUBLIC__/Home/Test/script/alertPopShow.js"></script>
+	<style>
+		.tuoke_withdraw_money_bg {
+			margin-top: 54px;
+		}
+
+		.tuoke_withdraw_money_content {
+			padding: 15px 15px;
+			margin-bottom: 10px;
+			background: white;
+			font-size: 1.2em;
+		}
+
+	    .tuoke_withdraw_money_content_info {
+			color: #7c7c7c;
+			float: right;
+	    }
+
+		.tuoke_bank_card_num_info {
+			font-size: 0.9em;
+			float: right;
+			color: red;
+		}
+
+		.tuoke_withdraw_money_explanation {
+			text-align: right;
+			padding: 5px 0;
+			padding-right: 11px;
+			color: #7c7c7c;
+			font-size:1.1em;
+		}
+
+		.tuoke_withdraw_money_contact {
+			font-size: 1.1em;
+			color: #999999;
+			text-align: center;
+		}
+
+		.withdraw_bc {
+			width: 80%;
+			margin: 0 auto;
+			margin-top: 10px;
+		}
+		.box {
+			display: flex;
+			background-color: #fff;
+			margin-bottom: 10px;
+		}
+		.box .item {
+			flex: 1;
+			text-align: center;
+			padding: 10px 0;
+		}
+		.box .item .num {
+			color: #ffba42;
+			height: 30px;
+			line-height: 30px;
+			font-size: 16px;
+		}
+
+	</style>
+</head>
+<body>
+  <div id="page">
+  	<header id="header">
+  		<div class="header_l">
+  			<!-- <a class="ico_10" onclick="javascript :history.back(-1);" href="javascript:;"> 返回 </a> -->
+  			<a class="ico_10" href="{:U('Home/Test/my_tuoke')}"> 返回 </a>
+  		</div>
+  		<h1> 我要提现 </h1>
+  		<a onclick="shop_tixian_list();" style="color: #ffba42; width: 70px; margin-top: 10px; margin-right: 15px;">提现记录</a>
+  	</header>
+  </div>
+	<div class="tuoke_withdraw_money_bg" id="list_boxs">
+		<div class="box">
+			<div class="item">
+				<p class="num">￥{$earnings.money}</p>
+				<p class="label">你的店铺收益</p>
+			</div>
+			<div class="item">
+				<p class="num">￥{$performance_money}</p>
+				<p class="label">下级店铺提成</p>		
+			</div>
+			<div class="item">
+				<p class="num">￥{$sum_money}</p>
+				<p class="label">总收益</p>	
+			</div>
+		</div>
+		<p class="tuoke_withdraw_money_content">现有收益金额<span id="tuoke_withdraw_money" class="tuoke_withdraw_money_content_info">{$sum_money}元</span></p>
+		<p class="tuoke_withdraw_money_content">
+			提现金额<span id="tuoke_withdraw_money" class="tuoke_withdraw_money_content_info">{$sum_money} 元<!-- <i>&nbsp;*&nbsp;</i> <a style="color:red"; href="{:U('Home/Test/shop_tixian_order')}">按订单提现</a> --></span>
+		</p>
+		<p class="tuoke_withdraw_money_content" style="margin-bottom: 0;">
+			实际到账金额<span id="tuoke_withdraw_actual_money" class="tuoke_withdraw_money_content_info">{$earnings.account} 元</span>
+		</p>
+		<p class="tuoke_withdraw_money_explanation">手续费计算公式为：<span style="color:red;">提现总额 X {$arr[0]}-{$arr[1]}</span></p>
+		{empty name="idcard_info"}<p class="tuoke_withdraw_money_content">
+			实名认证<a href="javascript:tuoke_idcard()" id="tuoke_bank_card_num" class="tuoke_bank_card_num_info">请实名认证</a>
+		</p>{else /}{/empty}
+		<p class="tuoke_withdraw_money_content">
+			提现银行卡<a href="javascript:tuoke_bank()" id="tuoke_bank_card_num" class="tuoke_bank_card_num_info">{if condition="$bank_card.coop_bank eq 0 "}请添加银行卡
+			{else /} {$bank_card.coop_bank}
+			{/if}</a>
+		</p>
+		<p class="tuoke_withdraw_money_contact">如有任何疑问请联系客服:  {$customer_tel}</p>
+		<button class="c-btn3 withdraw_bc" onclick="confirm_bank();">确认提现</button>
+	</div>
+</body>
+
+<script type="text/javascript">
+	$("button").click(function(){
+	    $(this).attr("disabled","disabled");    
+	});
+	function tuoke_withdraw_money(order_number, all_order_sn, money){
+		$.ajax({
+			type: "POST",
+	        url:"{:U('Home/Test/shop_tixian')}",
+	        data: {'type':'tixian', 'order_number':order_number, 'all_order_sn':all_order_sn, 'money':money},
+	        //dataType: "json",
+	        success: function(data){
+	        	//console.log(data);return ;
+			   	if(data.error == '0') {
+			   		setInterval(go_url, 5000); 
+			      	popTipShow.alert('提现成功!', data.str, ['确定!'],
+						function(e){
+						  //callback 处理按钮事件		  
+						  var button = $(e.target).attr('class');
+						  if(button == 'ok'){
+							window.location.href="{:U('Home/Test/shop_tixian_list')}";
+						  }	
+						}
+					);
+				}else{
+					$("button").attr("disabled",false); 
+				    bounced(data.str, '1500');
+					return;
+				}
+			}
+		});
+	}
+	function go_url(){  
+		location.href="{:U('Home/Test/shop_tixian_list')}"; 
+	} 
+	function shop_tixian_list(){ 
+		location.href="{:U('Home/Test/shop_tixian_list')}"; 
+	} 
+	function tuoke_bank(){
+		// alert(123)
+		var bank_card = transArr({$bank_card|json_encode=true});
+		// console.log(bank_card);
+		bounced_list('确定银行卡信息', '银行卡号 : '+bank_card.coop_bank+'<br />姓名 : '+bank_card.bank_name+'<br />绑定号码 : '+bank_card.bank_phone+'<br />开户详细地址 : '+bank_card.coop_bank+'<br />开户市 : '+bank_card.bank_city);
+	}
+	function tuoke_idcard(){
+		window.location.href="{:U('Home/Test/tuoke_idcard')}";
+	}
+	function confirm_bank(){
+		var bank_card = transArr({$bank_card|json_encode=true});
+		//console.log(bank_card);
+		bounced_list2('确定银行卡信息', '银行卡号 : '+bank_card.coop_bank+'<br />姓名 : '+bank_card.bank_name+'<br />绑定号码 : '+bank_card.bank_phone+'<br />开户详细地址 : '+bank_card.coop_bank+'<br />开户市 : '+bank_card.bank_city);
+	}
+	//弹框提示信息
+	function bounced(str, str_time=3000){
+		webToast(str,"middle",str_time);
+	}
+	//信息框
+	function bounced_list(title, content, lsok = '确定', canels = '去修改'){
+		popTipShow.confirm(title,content,[lsok,canels],
+			function(e){
+			  //callback 处理按钮事件
+			  var button = $(e.target).attr('class');
+			  if(button == 'ok'){
+				//按下确定按钮执行的操作
+				this.hide();
+			  }
+			  if(button == 'cancel') {
+				this.hide();
+				window.location.href="{:U('Home/Test/bank_card')}";
+			  }
+			}
+		);
+	}
+	function bounced_list2(title, content, lsok = '确定', canels = '去修改'){
+		popTipShow.confirm(title,content,[lsok,canels],
+			function(e){
+			  //callback 处理按钮事件
+			  var button = $(e.target).attr('class');
+			  if(button == 'ok'){
+				//按下确定按钮执行的操作
+				tuoke_withdraw_money('{$earnings.earnings_record}', '{$earnings.ti_order}', '{$earnings.tixian}');
+				this.hide();
+			  }
+			  if(button == 'cancel') {
+				this.hide();
+				window.location.href="{:U('Home/Test/bank_card')}";
+			  }
+			}
+		);
+	}
+	
+	//将php 数组转换成js数组
+	function transArr(obj) {
+	        var tem=[];
+	        $.each(obj, function(i) {
+	            tem[i]=obj[i];
+	        });
+	        return tem;
+	}
+</script>
+</html>

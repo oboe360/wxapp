@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<style type="text/css">
+			/*input {
+				width: 30%;
+			}*/
+		</style>
+		<title></title>
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+	</head>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+		<script type="text/javascript">
+			function back(){
+				window.history.go(-1);
+			}
+			function check(obj,id){
+				alert(id);
+				$('.a'+id).attr('checked',obj.checked);
+			}
+		</script>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> <a href="javascript:back()">返回上一页</a> <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<form action="{:U('admin/adminuser/saveedit')}" method="post">
+			<table  class="table table-border table-bordered table-bg mt-20">
+				<tr>
+					<th colspan="2">商品中台 - 管理员列表 - 编辑管理员</th>
+				</tr>
+				<tr>
+					<td width="10%"><b>用户名</b></td>
+					<td width="90%">
+						<input type="text" name="user_name" value="{$adminlist.user_name}"/>
+						<input type="hidden" name="user_id" value="{$adminlist.user_id}"/>
+					</td>
+				</tr>
+				<tr>
+					<td><b>旧密码</b></td>
+					<td><input type="password" name="oldpassword" value="{$adminlist.password}"/></td>
+				</tr>
+				<tr>
+					<td><b>新密码</b></td>
+					<td><input type="password" name="newpassword" /></td>
+				</tr>
+				<tr>
+					<td><b>权限列表</b></td>
+					<td>
+					{foreach name="list" item="v"}
+					<input type="checkbox" name="" onclick="check(this,{$v.action_id})"/><b>{$v.action_name}:</b>&nbsp;&nbsp;
+					{foreach name="v['child']" item="v1"}
+					<input type="checkbox" name="priv[{$v.action_id}][]" id='a{$v1.action_id}' class="a{$v.action_id}" style="margin: 0;" value="{$v1.action_id}"/>{$v1.action_name}&nbsp;&nbsp;
+					{/foreach}
+					<br />
+					{/foreach}
+					</td>
+				</tr>
+			<tr>
+				<td colspan="2" style="padding-left: 10%; "><input type="submit"  value="确认修改" class="btn btn-primary radius"/></td>
+			</tr>
+		</table>
+		</form>
+	</body>
+	<script type="text/javascript">
+		function check(obj,id){
+				var bool = obj.checked;
+				if(bool){
+					$('.a'+id).prop('checked',true);
+				}else{
+					$('.a'+id).prop('checked',false);
+				}
+				
+			}
+		$(function(){
+			{foreach name="nav_list" item="v"}
+			{foreach name="v" item="v1"}
+			$('#a{$v1}').prop('checked',true);
+			{/foreach}
+			{/foreach}
+		});
+	</script>
+</html>

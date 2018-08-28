@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="maximum-scale=1.0,minimum-scale=1.0,user-scalable=0,width=device-width,initial-scale=1.0" />
+	<meta name="format-detection" content="telephone=no,email=no,date=no,address=no">
+	<title>收益</title>
+	<link rel="stylesheet" type="text/css" href="../css/api.css" />
+	<link href="../css/ectouch.css" rel="stylesheet" type="text/css" />
+</head>
+<style>
+	.font_style_black {
+		font-size: 1.2em
+	}
+</style>
+<body>
+	<div id="page">
+		<header id="header">
+			<div class="header_l">
+				<a class="ico_10" onclick="api.closeWin();" href="javascript:;"> 返回 </a>
+			</div>
+			<h1> 累计收益 </h1>
+		</header>
+	</div>
+	<ul class="tab_content fans_lists" id="list_boxs" style="margin-top: 95px;">
+		<li class="tab_contentli mediaL bod" id="fans_list" v-cloak>
+			<ul class="con_list">
+				<li class="list_items font_style_black" v-for="item in history_income">
+					<div class="media" style="border-bottom: 1px solid #eee;padding-bottom: 0;">
+						<div class="media_left">
+							<img class="icon_name1" :src="item.headimgurl" alt="" />
+						</div>
+						<div class="media_right">
+							<p class="border1" style="padding-top: 12px;">微信昵称：<span style="color: black;font-size: 16px;font-weight: bold;">{{item.nickname}}</span></p>
+							<p style="padding:10px 0;">账号：{{item.wxusername}}</p>
+						</div>
+					</div>
+					<div class="media_foot" style="border-bottom: 1px solid #eee;padding-bottom: 10px;">
+						<span style="color: #444444;float: left;">收益金额：<em style="color: #ff5340; font-size: 1.1em;">¥{{item.money}}</em></span>
+						<span style="color: #444444;float: right;">数量: {{item.num}}</em>
+          </div>
+            <!-- <div class="media_foot">
+              <span style="color: black; font-size: 1.1em;float: left;font-weight: bold;">金额: ¥{{item.money}}</span>
+						<span style="color: #ff5340; font-size: 1.1em;float:right;font-weight: bold;">获利: ¥{{item.money}}</em>
+            </div> -->
+        </li>
+      </ul>
+    </li>
+  </ul>
+</body>
+<script type="text/javascript" src="../script/api.js"></script>
+<script type="text/javascript" src="../script/ghost.js"></script>
+<script type="text/javascript" src="../script/vue.min.js"></script>
+<script>
+  apiready = ghostInit(function() {
+		var header = $api.dom('header');
+		var headerH = $api.fixStatusBar(header);//这里会返回整个header的高度
+		// $api.fixStatusBar($api.byId('header'));
+		$api.byId('list_boxs').style.marginTop = headerH + 10 + 'px';
+    api.ajax({
+        url: phpUrl + '/tk_sale.php?act=history_income'
+    },function(ret, err){
+        if(ret) {
+            // alert(JSON.stringify(ret));
+            new Vue({
+    					el:"#fans_list",
+    					data:{
+    						history_income:[]
+    					},
+    					created: function() {
+    						this.history_income = ret.history_income;
+    					}
+    				})
+        }else {
+            ghost().toast(err.msg);
+        }
+    });
+
+  });
+</script>
+</html>

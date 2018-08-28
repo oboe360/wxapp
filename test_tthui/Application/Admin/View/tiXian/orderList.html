@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/style.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+		<title></title>
+		<style type="text/css">
+			#form input{
+				width: 250px;
+			}
+			.popover {position: absolute;top: 0;left: 0;z-index: 1060;display: none;max-width: 900px;padding: 1px;font-size: 14px;font-weight: normal;line-height: 1.42857143;text-align: left;white-space: normal;background-color: #fff;-webkit-background-clip: padding-box;background-clip: padding-box;border: 1px solid #ccc;border: 1px solid rgba(0, 0, 0, .2);border-radius: 6px;-webkit-box-shadow: 0 5px 10px rgba(0, 0, 0, .2);box-shadow: 0 5px 10px rgba(0, 0, 0, .2)
+			.popover.top {margin-top: -10px}
+			.popover.right {margin-left: 10px}
+			.popover.bottom {margin-top: 10px}
+			.popover.left {margin-left: -10px}
+			.popover-title {padding: 8px 14px;margin: 0;font-size: 14px;background-color: #f7f7f7;border-bottom: 1px solid #ebebeb;border-radius: 5px 5px 0 0}
+			.popover-content {padding: 9px 14px}
+			.popover > .arrow,.popover > .arrow:after {position: absolute;display: block;width: 0;height: 0;border-color: transparent;border-style: solid}
+			.popover > .arrow {border-width: 11px}
+			.popover > .arrow:after {content: "";border-width: 10px}
+			.popover.top > .arrow {bottom: -11px;left: 50%;margin-left: -11px;border-top-color: #999;border-top-color: rgba(0, 0, 0, .25);border-bottom-width: 0}
+			.popover.top > .arrow:after {bottom: 1px;margin-left: -10px;content: " ";border-top-color: #fff;border-bottom-width: 0}
+			.popover.right > .arrow {top: 50%;left: -11px;margin-top: -11px;border-right-color: #999;border-right-color: rgba(0, 0, 0, .25);border-left-width: 0}
+			.popover.right > .arrow:after {bottom: -10px;left: 1px;content: " ";border-right-color: #fff;border-left-width: 0}
+			.popover.bottom > .arrow {top: -11px;left: 50%;margin-left: -11px;border-top-width: 0;border-bottom-color: #999;border-bottom-color: rgba(0, 0, 0, .25)}
+			.popover.bottom > .arrow:after {top: 1px;margin-left: -10px;content: " ";border-top-width: 0;border-bottom-color: #fff}
+			.popover.left > .arrow {top: 50%;right: -11px;margin-top: -11px;border-right-width: 0;border-left-color: #999;border-left-color: rgba(0, 0, 0, .25)}
+			.popover.left > .arrow:after {right: 1px;bottom: -10px;content: " ";border-right-width: 0;border-left-color: #fff}
+
+		</style>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+		<script type="text/javascript" src="__PUBLIC__/static/admin/js/1.9.3/layer.js"></script> 
+		<script type="text/javascript" src="__PUBLIC__/static/admin/js/H-ui.js"></script> 
+		<script type="text/javascript" src="__PUBLIC__/static/admin/js/H-ui.admin.js"></script>
+		<!-- <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script> -->
+		<script src="__PUBLIC__/static/admin/js/bootstrap.min.js"></script>
+		<script type="text/javascript">
+			$(function() {
+				//商品详情popover浮层
+				$("[data-toggle='popover']").popover();
+				
+				$($("[data-toggle='popover']")).each(function(){
+			    	var obj = this;
+			    	$.get($(obj).attr('data-url'),function(data){
+						// alert(res);
+						$(obj).attr('data-content',data);
+					});
+			    });
+			    //搜索赋值
+				$('[name="start"]').val('{$data.start}');
+				$('[name="end"]').val('{$data.end}');
+				$('[name="shop_id"]').val('{$data.shop_id}');
+				$('[name="user_id"]').val('{$data.user_id}');
+				$('[name="consignee"]').val('{$data.consignee}');
+				// $('[name="order_sn"]').val('{$data.order_sn}');
+			});
+			//订单详情
+			function order_detail(title, url){
+				var index = layer.open({
+					type: 2,
+					title: title,
+					content: url
+				});
+				layer.full(index);
+			}
+			//导出订单
+			function exports(){
+				var url = "{:U('admin/tixian/exports')}?all_order_sn={$all_order_sn}&exports=1&{$data|http_build_query}";
+				window.location.href = url;
+			}
+		</script>
+	</head>
+	<body>
+		<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 后台系统 <span class="c-gray en">&gt;</span> 提现列表 <span class="c-gray en">&gt;</span> 流水订单明细 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<div class="pd-20">
+			<form id="form" action="{:U('admin/tixian/orderList')}" method="post">
+				<!-- <input type="text" name="order_sn" placeholder="订单号" class="input-text"/> -->
+				<input type="hidden" name="all_order_sn" placeholder="订单号" value="{$all_order_sn}" class="input-text"/>
+				<input type="text" name="shop_id" placeholder="店铺ID" class="input-text"/>
+				<input type="text" name="user_id" placeholder="用户ID" class="input-text"/>
+				<input type="text" name="consignee" placeholder="收货人名称" class="input-text"/></br></br>
+				开始：<input type="date" name="start" placeholder="开始时间" class="input-text"/>
+				结束：<input type="date" name="end" placeholder="结束时间" class="input-text"/>
+				<input type="submit" value="搜索" style="width: 100px;"  class="btn btn-success radius"/>
+			</form>
+			
+			<div  class="cl pd-5 bg-1 bk-gray mt-20">
+		<span class="l">
+			<button name="" onclick="exports()" id="export" class="btn btn-primary radius" type="button"><i class="Hui-iconfont">&#xe665;</i> 导出数据</button>
+		</span> 
+		</div>
+		<table  class="table table-border table-bordered table-bg mt-20">
+			<thead>
+			<tr>
+				<th>订单ID</th>
+				<th>订单号</th>
+				<th>用户ID</th>
+				<th>店铺ID</th>
+				<th>店铺收益</th>
+				<th>收货人名称</th>
+				<th>收货人电话</th>
+				<th>配送省份-配送城市-配送区域</th>
+				<th>是否已提交中台</th>
+				<th>订单付款状态</th>
+				<th>订单发货状态</th>
+				<th>快递类型</th>
+				<th>快递单号</th>
+				<th>商品总运费</th>
+				<th>订单总金额</th>
+				<th>上级UID</th>
+				<th>上级收益</th>
+				<th>上上级Uid</th>
+				<th>上上级收益</th>
+				<th>下单时间</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody id="info">
+			{foreach name="arr" item="v"}
+			<tr>
+				<td>
+				{$v.order_id}
+				</td>
+				<td>
+					<a onClick="order_detail('订单详情','{:U('admin/order/order_detail/order_id/'.$v['order_id'])}')"  type="button"  data-url="{:U('admin/order/order_goods')}?order_id={$v.order_id}" id="a{$v.order_sn}" title="商品信息"  
+			data-container="body" data-toggle="popover" data-trigger="hover" data-placement="auto right" data-placement="right" 
+			data-content="" data-html="true">
+					{$v.order_sn}
+					</a>	
+				</td>
+				<td>
+				{$v.user_id}({$v[$v['user_id']]['nickname']})
+				</td>
+				<td>{$v.shop_id}({$v.shop_name})</td>
+				<td>{$v.shop_money}</td>
+				<td>{$v.consignee}</td>
+				<td>{$v.tel}</td>
+				<td>{$v.province}-{$v.city}-{$v.district}</td>
+				<td>
+					{$v.postsign}
+				</td>
+				<td>
+					{$v.pay_status}
+				</td>
+				<td>
+					{$v.shipping_status}
+				</td>
+				<td>{$v.shipping_name}</td>
+				<td>{$v.invoice_no}</td>
+				<td>{$v.shipping_fee}</td>
+				<td>{$v.order_amount}</td>
+				<td>{$v.sj_uid}({$v[$v['sj_uid']]['nickname']})</td>
+				<td>{$v.sj_money}</td>
+				<td>{$v.ssj_uid}({$v[$v['ssj_uid']]['nickname']})</td>
+				<td>{$v.ssj_money}</td>
+				<td>{$v.add_time}</td>
+				<td>
+					<a onClick="order_detail('订单详情','{:U('admin/order/order_detail/order_id/'.$v['order_id'])}')"><img src="__PUBLIC__/admin/images/icon_view.gif" title="查看订单详情"/></a>
+				</td>
+			</tr>
+			{/foreach}
+			<tr>
+				<td colspan="20" align="center">
+					{$show}
+				</td>
+			</tr>
+		</tbody>
+		</table>
+	</div>
+	</body>
+
+</html>

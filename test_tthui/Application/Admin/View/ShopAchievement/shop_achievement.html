@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="renderer" content="webkit|ie-comp|ie-stand">
+<!-- <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> -->
+<meta http-equiv="pragma" content="no-cache"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/static/admin/css/style.css" rel="stylesheet" type="text/css" />
+<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+<title>店铺收益</title>
+<style type="text/css">
+	a:hover{
+		text-decoration: none;
+	}
+	.fff{
+		color: #fff;
+	}
+	.paginate_button{
+		border: 1px solid #ccc;
+	    cursor: pointer;
+	    display: inline-block;
+	    margin-left: 2px;
+	    text-align: center;
+	    text-decoration: none
+	    color: #666;
+	    height: 26px;
+	    line-height: 26px;
+	    text-decoration: none;
+	    margin: 0 0 6px 6px;
+	    padding: 0 10px;
+	    font-size: 14px;
+	}
+	.dataTables_paginate{
+		text-align: center;
+		margin-top: 20px;
+	}
+	.current{
+		background: #5a98de;
+    	color: #fff;
+	}
+	#loading{position:fixed;top:0;left:0;width:100%;height:100%;opacity:0.6;z-index:15000;}  
+    #loading img{position:absolute;top:45%;left:45%;width:60px;height:60px;margin-top:-30px;margin-left:-30px;background: white;} 
+    .mouse_color{ 
+		background-color: #f8f8f8; 
+	} 
+</style>
+</head>
+<body>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 店铺管理 <span class="c-gray en">&gt;</span> 店铺业绩收益 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.reload(true);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<div class="pd-20">
+	<div class="text-c">  
+		<!-- <span class="select-box" style="width:10%;">
+			<select name="status" id="status" class="select">
+				<option value="">店铺类型</option>
+				<option value="0">纯app</option>
+				<option value="1">纯wed</option>
+				<option value="2">已结合</option>
+			</select>
+		</span> -->
+		<input type="text" name="" id="shop_id" placeholder=" 店铺id" style="width:250px" class="input-text">
+		<input type="text" name="" id="shop_name" placeholder="店铺名称" style="width:250px" class="input-text">
+		<input type="text" name="" id="user_name" placeholder="登录电话" style="width:250px" class="input-text">
+		<input type="date" name="sta_time" id="time" placeholder="开始时间" style="width:250px" class="input-text"/>
+		<input type="date" name="end_time" id="time" placeholder="结束时间" style="width:250px" class="input-text"/>
+		<button name="" id="share" class="btn btn-success" onclick="url_get('the_page', 1)"><i class="Hui-iconfont">&#xe665;</i> 搜索</button>
+		
+	</div>
+	<div class="cl pd-5 bg-1 bk-gray mt-20"> <span class="l"> <!-- <a class="btn btn-primary radius" onclick="article_add('添加商品','goodsAdd.html?ran='+Math.random())" href="javascript:;"><i class="Hui-iconfont">&#xe600;</i> 导出</a> --></span>&emsp;
+	<!-- <button name="" id="ztgoods" class="btn btn-primary radius" type="button"><i class="Hui-iconfont">&#xe665;</i> 更新美淘商品</button>&emsp;
+	<button name="" id="ztkucun" class="btn btn-primary radius" type="button"><i class="Hui-iconfont">&#xe665;</i> 更新美淘商品库存</button> -->
+	<span class="r">每页显示<strong><input type="text" size='5' value="15" id="page_num"></strong> 条</span> 
+	</div>
+	<div class="mt-20" id="tables">
+		<table class="table table-border table-bordered table-bg">
+			<thead>
+				<tr class="text-c">
+					<th>店铺id</th>
+					<th>店铺名称</th>
+					<th>店铺等级</th>
+					<th>登录电话</th>
+					<th>现有店铺业绩提成收益</th>
+					<th>店铺业绩提成总收益</th>
+					<th>店铺业绩收益末提现金额</th>
+					<th>店铺业绩收益已提现金额</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+			<tbody id="info">
+				{empty name="shop_earnings"}
+					<tr class="odd"><td valign="top" colspan="10" class="dataTables_empty">没有查询到数据！</td></tr>
+				{else /}
+					{foreach name="shop_earnings" item="val" key='key'}
+						<tr class="text-c">
+						  <td>{$val.shop_id}</td>
+						  <td>{$val.shop_name}</td>
+						  <td>{$val.shop_rank_name}</td>
+						  <td>{$val.user_name}</td>
+						  <td>{$val.notx_money}</td>
+						  <td>{$val.total_money}</td>
+						  <td>{$val.notx_money}</td>
+						  <td>{$val.tx_money}</td>
+						 
+						  <td class="f-14 td-manage">
+						    <button class="btn btn-primary radius" onclick="article_edit(&quot;周期报表详情&quot;,'{:U(\'admin/ShopAchievement/shop_achievement_list\', array('shop_id'=>$val[shop_id]))}')" class="ml-5" href="javascript:;" title="详情">
+						      <i class="Hui-iconfont"></i>周期报表详情</button>
+						  </td>
+						</tr>
+					{/foreach}
+				{/empty}
+			</tbody>
+		</table>
+		<div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table">
+			<div style="display: inline-block;">
+				共 <em class="allnum" id="allnum">{$limit.count}</em> 条，第 <em class="active_page" id="active_page">{$limit.page}</em> 页，共 <em class="numpage" id="numpage">{$limit.page_mun}</em> 页
+			</div>
+			<span id="limit">
+				<a class="paginate_button first" href="javascript:void(0);" onclick="url_get('the_page', 1)" id="first_page">首页</a>
+				<a class="paginate_button previous" onclick="url_get('the_page', <?php echo $limit['page']-1;?>)" id="fy_shang">上一页</a>
+				<a class="paginate_button next" href="javascript:void(0);" onclick="url_get('the_page', <?php echo $limit['page']+1;?>)" id="fy_xia">下一页</a>
+				<a class="paginate_button last" onclick="url_get('the_page', {$limit.page_mun})" id="last_page">最后一页</a>
+			</span>
+			<div style="display: inline-block;">
+				跳转到<input class="paginate_button jump_page" style="width: 36px;margin: 4px;padding: 0 6px;cursor: auto;" id="jump_page" type="text" name="">页 <a class="paginate_button jump" onclick="url_get('jump_page', {$limit.page_mun})" id="jump">跳转</a>
+			</div>
+			<input type="hidden" value="1" id="fy_n" />
+			<input type="hidden" value="1" id="shera_p" />
+			<input type="hidden" value="" id="pages" />
+			<input type="hidden" value="" id="pages1" />
+		</div>
+	</div>
+</div>
+</body>
+</html>
+<script type="text/javascript" src="__PUBLIC__/static/admin/js/jquery.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/static/admin/js/1.9.3/layer.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/static/admin/js/1.2/laypage.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/static/admin/js/vue.min.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/static/admin/js/H-ui.js"></script> 
+<script type="text/javascript" src="__PUBLIC__/static/admin/js/H-ui.admin.js"></script>
+
+<script type="text/javascript">
+
+	function article_edit(title,url,id,w,h){
+		var index = layer.open({
+			type: 2,
+			title: title,
+			content: url
+		});
+		layer.full(index);
+	}
+
+	//分页查询
+	function url_get(type, page){
+		if(page < 1){
+			return '';
+		}
+		if(page > $('.numpage').html() && $('.numpage').html() != 0){
+			return '';
+		}
+		if(type == 'jump_page'){
+			var jump_page = $("#jump_page").val();
+			var re = /^[0-9]+.?[0-9]*/;
+		　　if (!re.test(jump_page)) { 
+		　　　　return '';
+		　　}
+			if(jump_page <= page && jump_page > '0'){
+				page = jump_page;
+			}
+			if(jump_page < 1){
+				page = 1;
+			}
+		}
+		//alert(123);
+		//console.log(isNaN(jump_page));return ;+'&page:'+page
+		var togethers = together();
+		//console.log(togethers);
+		$.ajax({
+			type: "POST",
+	        url:"{:U('ShopAchievement/earnings_query')}",
+	        data: {'status':togethers.status, 'shop_id':togethers.shop_id, 'shop_name':togethers.shop_name, 'bank_name':togethers.bank_name, 'sta_time':togethers.sta_time, 'end_time':togethers.end_time, 'page_num':togethers.page_num, 'user_name':togethers.user_name, 'page':page},
+	        //dataType: "json",
+	        success: function(data){
+	        	//alert(data);
+	        	//return false;
+	        	var tixian_list = data.shop_earnings;
+	        	var html = '';
+		   		$("#info").html('');
+		   		//console.log(tixian_list);
+		   		if(tixian_list != '') {
+			   		for(var i in tixian_list){
+			   			html += '<tr class="text-c"><td>'+tixian_list[i]['shop_id']+'</td><td>'+tixian_list[i]['shop_name']+'</td><td>'+tixian_list[i]['user_name']+'</td><td>'+tixian_list[i]['notx_money']+'</td><td>'+tixian_list[i]['total_money']+'</td><td>'+tixian_list[i]['notx_money']+'</td><td>'+tixian_list[i]['tx_money']+'</td>'+'<td class="f-14 td-manage"><button class="btn btn-primary radius" onclick="article_edit(&quot;周期报表详情&quot;,\'{:U(\'admin/ShopAchievement/shop_achievement_list\', array(\'shop_id\'=>$val[shop_id]))}\')" class="ml-5" href="javascript:;" title="详情"><i class="Hui-iconfont"></i>周期报表详情</button></td></tr>';
+			   		}
+			   	}else{
+			   		html = '<tr class="odd"><td valign="top" colspan="10" class="dataTables_empty">没有查询到数据！</td></tr>';
+			   	}
+		   		//console.log(html);
+		   		$("#info").html(html);
+
+		   		var limit = data.limit;
+		   		//console.log(limit);
+		   		$("#active_page").html(limit.page);
+		   		$("#numpage").html(limit.page_mun)
+		   		$("#allnum").html(limit.count)
+		   		var li_page = parseInt(limit.page)-1;
+		   		var add_page = parseInt(limit.page)+1;
+		   		var limi = '<a class="paginate_button first" href="javascript:void(0);" onclick="url_get(\'the_page\', 1)" id="first_page">首页</a><a class="paginate_button previous" onclick="url_get(\'the_page\', '+li_page+')" id="fy_shang">上一页</a><a class="paginate_button next" href="javascript:void(0);" onclick="url_get(\'the_page\', '+add_page+')" id="fy_xia">下一页</a><a class="paginate_button last" onclick="url_get(\'the_page\', '+limit.page_mun+')" id="last_page">最后一页</a>';
+		   		$("#limit").html(limi);
+				//}
+			}
+		});
+	}
+	$(function(){
+		$('#page_num').blur(function(){
+			var value = $('#page_num').val();
+			if(value>0){
+				url_get('the_page', 1);
+			}
+		});
+		$("#page_num").keydown(function(event){
+	　　　　if(event.keyCode == 13){
+	　　　　　　url_get('the_page', 1);
+	　　　　}
+	　　});
+	});
+
+//alert(together());
+
+function together(){
+	var wher = new Array();
+	wher.status = $('#status').val();
+	wher.shop_id = $('#shop_id').val();
+	wher.shop_name = $('#shop_name').val();
+	wher.user_name = $('#user_name').val();
+	wher.sta_time = $('input[name=sta_time]').val();
+	wher.end_time = $('input[name=end_time]').val();
+	wher.page_num = $('#page_num').val();
+	if(wher.page_num < 1){
+		wher.page_num = 15;
+	}
+	//alert(bank_name);
+	return wher;
+}
+
+//tr移动变色
+$("#info").delegate('tr', 'mouseover',function(){
+	$(this).find("td").addClass("mouse_color"); 
+});
+
+$("#info").delegate('tr', 'mouseout',function(){
+	$(this).find("td").removeClass("mouse_color"); 
+});
+
+</script>

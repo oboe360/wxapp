@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<style type="text/css">
+			input {
+				width: 30%;
+			}
+		</style>
+		<title></title>
+		<link href="__PUBLIC__/static/admin/css/H-ui.min.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
+		<link href="__PUBLIC__/static/admin/css/1.0.1/iconfont.css" rel="stylesheet" type="text/css" />
+	</head>
+		<script type="text/javascript" src="__PUBLIC__/admin/js/jquery.js"></script>
+		<script type="text/javascript">
+			function back(){
+				window.history.go(-1);
+			}
+		</script>
+	<body>
+		<nav class="breadcrumb"><a href="javascript:back()">返回上一页</a> <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+		<form action="{:U('admin/wxconfig/saveAdd')}" method="post">
+			<table   class="table table-border table-bordered table-bg mt-20">
+				<tr>
+					<th colspan="2">后台系统 - 配置管理 - 添加配置信息</th>
+				</tr>
+				<tr>
+					<td width="20%"><b>网页应用的APPID</b></td>
+					<td width="80%"><input type="text" name="appid" value="{$wxConfigArr.appid}"/></td>
+				</tr>
+				<tr>
+					<td><b>网页应用密钥</b></td>
+					<td><input type="text" name="appsecret" value="{$wxConfigArr.appsecret}" /></td>
+					<td><input type="hidden" name="id" value="{$wxConfigArr.id}" /></td>
+				</tr>
+				<tr>
+					<td><b>商户号</b></td>
+					<td><input type="text" name="wxmchid" value="{$wxConfigArr.wxmchid}"></td>
+				</tr>
+				<tr>
+					<td><b>微信KEY</b></td>
+					<td>
+						<input type="text" name="wxkey" value="{$wxConfigArr.wxkey}"/></td>
+			</tr>
+			<tr>
+				<td><b>授权类型</b></td>
+				<td style="padding-left: 0 ">
+				<input type="radio" name="type" {if condition="$wxConfigArr['type'] eq 0"}checked="checked"{/if} value="0">
+				<label>小程序</label>
+				<br/>
+				<input type="radio" name="type" {if condition="$wxConfigArr['type'] eq 1"}checked="checked"{/if} value="1">
+				<label>公众号</label>
+				<br/>
+				</td>
+			</tr>
+			<tr>
+				<td colspan="2 " style="padding-left: 20%; "><input type="submit"  value="确认" class="btn btn-primary radius"/></td>
+			</tr>
+		</table>
+		</form>
+	</body>
+</html>
